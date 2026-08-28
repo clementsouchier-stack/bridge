@@ -1,0 +1,61 @@
+name: Import Bridge prototypes
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target
+        uses: actions/checkout@v4
+
+      - name: Clone source repository
+        run: git clone --depth 1 https://github.com/clementsouchier-stack/bridge-tools.git /tmp/bridge-tools
+
+      - name: Build target structure
+        run: |
+          set -e
+          SRC=/tmp/bridge-tools/bridge-features
+
+          rm -rf pricing paywalls analytics search shared-pages \
+                 all-medias new-player tabs messages csv tabs-messages edito \
+                 newplus hubs-contact
+
+          cp -a "$SRC/pricing" ./pricing
+          cp -a "$SRC/paywalls" ./paywalls
+          cp -a "$SRC/analytics" ./analytics
+          cp -a "$SRC/search" ./search
+          cp -a "$SRC/shared-pages" ./shared-pages
+
+          cp -a "$SRC/product-ui/all-medias" ./all-medias
+          cp -a "$SRC/product-ui/new-player" ./new-player
+          cp -a "$SRC/product-ui/tabs" ./tabs
+          cp -a "$SRC/product-ui/messages" ./messages
+          cp -a "$SRC/product-ui/csv" ./csv
+          cp -a "$SRC/product-ui/tabs-messages" ./tabs-messages
+          cp -a "$SRC/product-ui/edito" ./edito
+
+          cp -a "$SRC/newplus" ./newplus
+          cp -a "$SRC/hubs-contact" ./hubs-contact
+
+          touch .nojekyll
+
+      - name: Commit imported structure
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Import organized Bridge prototypes"
+          git push
