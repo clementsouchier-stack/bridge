@@ -9179,6 +9179,11 @@
         gap: 12px;
         overflow: visible;
       }
+      .content-cards:focus-visible {
+        outline: 2px solid var(--accentBorder, #1260eb);
+        outline-offset: 4px;
+        border-radius: 12px;
+      }
       .activity-card {
         width: 315px;
         min-width: 0;
@@ -9200,8 +9205,7 @@
         width: 100%;
         grid-template-columns:
           24px minmax(170px, 2fr) minmax(150px, 2fr)
-          86px minmax(150px, 1fr) minmax(96px, 1fr) minmax(96px, 1fr)
-          52px !important;
+          86px minmax(150px, 1fr) minmax(96px, 1fr) 52px !important;
         transition: background-color 0.15s ease;
       }
       .analytics-track-row.hidden {
@@ -9220,12 +9224,10 @@
         color: inherit;
         background: transparent;
       }
-      #sort-display,
-      #sort-activity {
+      #sort-display {
         cursor: pointer;
       }
-      #sort-display:hover,
-      #sort-activity:hover {
+      #sort-display:hover {
         color: #1260eb;
       }
       .sort-control[data-direction="ascending"] .sort-arrow {
@@ -9263,7 +9265,7 @@
       .section-show:focus-visible,
       .sort-control:focus-visible,
       #hub-filter:focus-visible,
-      .activity-help:focus-visible {
+      #top-tracks-hub-filter:focus-visible {
         outline: 2px solid #1260eb;
         outline-offset: 2px;
       }
@@ -9273,83 +9275,106 @@
         justify-content: flex-end;
         gap: 8px;
       }
-      .hub-filter-shell {
+      .date-filter-shell {
         position: relative;
         display: flex;
-        height: 48px;
-        min-width: 224px;
+        height: 40px;
+        min-width: 132px;
         align-items: center;
         border: 1px solid var(--secondaryBorder, #e5e5e5);
-        border-radius: 4px;
-        background: var(--neutralSofterBg, #f7f7f8);
+        border-radius: 8px;
+        background: var(--secondarySurface, #fff);
+        transition:
+          border-color 0.15s ease,
+          box-shadow 0.15s ease;
       }
-      .hub-filter-shell label {
-        pointer-events: none;
-        position: absolute;
-        left: 12px;
-        top: 6px;
-        color: var(--secondaryContent, #666);
-        font-size: 10px;
-        font-weight: 600;
+      .date-filter-shell:focus-within {
+        border-color: var(--accentBorder, #1260eb);
+        box-shadow: 0 0 0 2px rgba(18, 96, 235, 0.1);
       }
-      #hub-filter {
-        height: 100%;
+      #period-filter {
         width: 100%;
+        height: 100%;
+        appearance: auto;
         border: 0;
-        border-radius: 4px;
-        background-color: transparent;
-        padding: 18px 36px 4px 12px;
+        border-radius: 8px;
+        background: transparent;
+        padding: 0 12px;
         color: var(--primaryDarkContent, #071331);
         font-size: 13px;
         font-weight: 600;
       }
-      .activity-help-wrap {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
+      #period-filter:focus-visible {
+        outline: 2px solid #1260eb;
+        outline-offset: 2px;
       }
-      .activity-help {
-        display: inline-flex;
-        height: 16px;
-        width: 16px;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid var(--tertiaryBorder, #9ca1ad) !important;
-        border-radius: 999px;
-        color: var(--secondaryContent, #666) !important;
+      .discovery-card-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .hub-scope-control {
+        flex: 0 0 auto;
+      }
+      .hub-scope-caption {
+        margin: 0 0 4px 2px;
+        color: var(--secondaryContent, #666);
         font-size: 10px;
-        font-weight: 700;
-        line-height: 1;
-      }
-      .activity-tooltip {
-        pointer-events: none;
-        position: absolute;
-        left: 0;
-        bottom: calc(100% + 8px);
-        z-index: 30;
-        display: none;
-        width: 286px;
-        border-radius: 8px;
-        background: #071331;
-        padding: 10px 12px;
-        color: #fff;
-        font-size: 11px;
         font-weight: 500;
-        line-height: 1.45;
-        white-space: normal;
-        box-shadow: 0 8px 24px rgba(7, 19, 49, 0.16);
+        line-height: 1.2;
+        text-align: right;
       }
-      .activity-help-wrap:hover .activity-tooltip,
-      .activity-help-wrap:focus-within .activity-tooltip,
-      .activity-help-wrap.is-open .activity-tooltip {
-        display: block;
+      .top-tracks-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
       }
-      #sort-activity .activity-tooltip {
-        top: calc(100% + 8px);
-        right: 0;
-        bottom: auto;
-        left: auto;
+      .top-tracks-filter-wrap {
+        flex: 0 0 auto;
+      }
+      .hub-filter-shell {
+        position: relative;
+        display: flex;
+        height: 36px;
+        min-width: 164px;
+        align-items: center;
+        border: 1px solid var(--secondaryBorder, #e5e5e5);
+        border-radius: 8px;
+        background: var(--secondarySurface, #fff);
+        padding-left: 12px;
+        transition:
+          border-color 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+      .hub-filter-shell:focus-within {
+        border-color: var(--accentBorder, #1260eb);
+        box-shadow: 0 0 0 2px rgba(18, 96, 235, 0.1);
+      }
+      .hub-filter-shell label {
+        flex: 0 0 auto;
+        color: var(--primaryDarkContent, #071331);
+        font-size: 11px;
+        font-weight: 600;
+      }
+      #hub-filter,
+      #top-tracks-hub-filter {
+        height: 100%;
+        min-width: 0;
+        flex: 1 1 auto;
+        border: 0;
+        border-radius: 8px;
+        background-color: transparent;
+        padding: 0 24px 0 5px;
+        color: var(--primaryDarkContent, #071331);
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .discovery-title-line {
+        display: flex;
+        align-items: center;
+        gap: 7px;
       }
       .extra-card.hidden {
         display: none !important;
@@ -9358,7 +9383,128 @@
         height: 72px !important;
         padding: 12px 16px !important;
       }
+      .mobile-track-toolbar {
+        display: none;
+      }
+      .mobile-carousel-cue {
+        display: none;
+      }
+      .mobile-carousel-cue[hidden] {
+        display: none !important;
+      }
+      .mobile-nav-header {
+        display: none;
+      }
       @media (max-width: 767px) {
+        body.mobile-menu-open {
+          overflow: hidden;
+        }
+        .app-shell {
+          grid-template:
+            "header" auto
+            "subHeader" auto
+            "view" minmax(0, 1fr)
+            "player" auto / minmax(0, 1fr) !important;
+        }
+        #primary-navigation {
+          display: none !important;
+        }
+        #primary-navigation.mobile-nav-open {
+          position: fixed;
+          inset: 0;
+          z-index: 100;
+          display: flex !important;
+          width: 100vw;
+          height: 100dvh;
+          flex-direction: column;
+          overflow-y: auto;
+          overscroll-behavior-y: contain;
+          -webkit-overflow-scrolling: touch;
+          background: var(--primarySurface, #f0f2f4);
+          padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+        .mobile-nav-header {
+          position: sticky;
+          top: 0;
+          z-index: 2;
+          display: flex;
+          min-height: calc(64px + env(safe-area-inset-top, 0px));
+          align-items: center;
+          justify-content: space-between;
+          border-bottom: 1px solid var(--secondaryBorder, #e5e5e5);
+          background: var(--primarySurface, #f0f2f4);
+          padding: env(safe-area-inset-top, 0px) 16px 0;
+        }
+        .mobile-nav-title {
+          color: var(--primaryDarkContent, #071331);
+          font-size: 16px;
+          font-weight: 700;
+        }
+        .mobile-nav-close {
+          display: inline-flex;
+          width: 40px;
+          height: 40px;
+          align-items: center;
+          justify-content: center;
+          border-radius: 8px;
+          color: var(--primaryDarkContent, #071331);
+        }
+        .mobile-nav-close:hover,
+        .mobile-nav-close:focus-visible {
+          background: var(--neutralSoftBg, #e9ebee);
+        }
+        #primary-navigation.mobile-nav-open > .shrink-0 {
+          padding-top: 4px;
+        }
+        #primary-navigation.mobile-nav-open > .shrink-0 > div {
+          width: 80px;
+          margin: 12px 0 8px 16px;
+          padding: 0;
+        }
+        #primary-navigation.mobile-nav-open .grow {
+          overflow: visible;
+          padding: 0 12px 20px;
+        }
+        #primary-navigation.mobile-nav-open .grow > .relative {
+          margin-top: 8px;
+        }
+        #primary-navigation.mobile-nav-open .grow .mb-4 > a {
+          height: 52px;
+          margin-bottom: 4px;
+          flex-direction: row;
+          justify-content: flex-start;
+          border-radius: 10px;
+          padding: 0 8px;
+        }
+        #primary-navigation.mobile-nav-open .grow .mb-4 > a:hover,
+        #primary-navigation.mobile-nav-open .grow .mb-4 > a:focus-visible {
+          background: var(--neutralSoftBg, #e9ebee);
+        }
+        #primary-navigation.mobile-nav-open .grow .mb-4 > a.font-semibold {
+          background: var(--secondarySurface, #fff);
+        }
+        #primary-navigation.mobile-nav-open .grow .mb-4 > a > div:first-child {
+          flex: 0 0 40px;
+        }
+        #primary-navigation.mobile-nav-open .grow .mb-4 > a > .mt-1 {
+          margin-top: 0;
+          margin-left: 10px;
+          text-align: left;
+        }
+        #primary-navigation.mobile-nav-open .grow .mb-4 > a > .absolute {
+          top: 8px;
+          right: 12px;
+        }
+        #primary-navigation.mobile-nav-open > hr {
+          margin-right: 16px;
+          margin-left: 16px;
+        }
+        #primary-navigation.mobile-nav-open > .m-4 {
+          min-height: 56px;
+          justify-content: flex-start;
+          gap: 24px;
+          padding: 0 8px;
+        }
         .analytics-grid {
           grid-template-columns: minmax(0, 1fr);
         }
@@ -9369,32 +9515,240 @@
           padding-right: 16px !important;
         }
         .content-cards {
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 8px;
+          display: grid;
+          grid-auto-columns: min(276px, calc(100vw - 54px));
+          grid-auto-flow: column;
+          grid-template-columns: none;
+          justify-content: start;
+          gap: 10px;
+          overflow-x: auto;
+          overscroll-behavior-inline: contain;
+          padding: 2px 2px 8px;
+          scroll-snap-type: inline mandatory;
+          scroll-padding-inline: 2px;
+          scrollbar-width: none;
+        }
+        .content-cards::-webkit-scrollbar {
+          display: none;
         }
         .content-cards:not(.is-expanded) .activity-card:nth-child(n + 4) {
           display: none !important;
         }
         .activity-card {
-          width: auto;
+          width: 100%;
           max-width: none;
           font-size: 11px;
+          scroll-snap-align: start;
         }
         .activity-card > div {
           padding-left: 8px !important;
           padding-right: 8px !important;
         }
+        .mobile-carousel-cue {
+          display: flex;
+          width: max-content;
+          min-height: 28px;
+          align-items: center;
+          gap: 5px;
+          margin: 2px 0 0 auto;
+          border-radius: 999px;
+          padding: 0 8px;
+          color: var(--secondaryContent, #666);
+          font-size: 10px;
+          font-weight: 600;
+        }
+        .mobile-carousel-cue:hover,
+        .mobile-carousel-cue:focus-visible {
+          background: var(--neutralSoftBg, #e9ebee);
+          color: var(--primaryDarkContent, #071331);
+        }
+        .mobile-carousel-cue svg {
+          width: 13px;
+          height: 13px;
+        }
         .chart-wrap {
           height: 120px;
         }
-        .analytics-header-filters,
-        .hub-filter-shell {
+        .analytics-header-filters {
+          width: 100%;
+          display: grid;
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .date-filter-shell {
           width: 100%;
         }
-        .activity-tooltip {
-          left: auto;
-          right: 0;
-          width: min(286px, calc(100vw - 48px));
+        .discovery-card-header {
+          flex-direction: column;
+          gap: 12px;
+        }
+        .top-tracks-header {
+          flex-direction: column;
+          gap: 12px;
+        }
+        .top-tracks-filter-wrap {
+          width: 100%;
+        }
+        .hub-scope-control,
+        .hub-filter-shell {
+          width: 100%;
+          min-width: 0;
+        }
+        .hub-filter-shell {
+          height: 40px;
+        }
+        .hub-scope-caption {
+          margin: 0 0 5px;
+          text-align: left;
+        }
+        #top-discovery-tracks .analytics-table {
+          overflow: visible;
+        }
+        #top-discovery-tracks .analytics-table > div {
+          min-width: 0 !important;
+        }
+        #top-discovery-tracks .analytics-table > div > div:first-child {
+          display: none;
+        }
+        .mobile-track-toolbar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          margin: 14px 0 8px;
+          padding-bottom: 8px;
+          border-bottom: 1px solid var(--secondaryBorder, #e5e5e5);
+        }
+        .mobile-track-toolbar-label {
+          color: var(--secondaryContent, #666);
+          font-size: 11px;
+          font-weight: 600;
+        }
+        .mobile-sort-group {
+          display: flex;
+          gap: 6px;
+        }
+        .mobile-sort-control {
+          display: inline-flex;
+          height: 32px;
+          align-items: center;
+          gap: 4px;
+          border: 1px solid var(--secondaryBorder, #e5e5e5) !important;
+          border-radius: 999px;
+          padding: 0 10px;
+          color: var(--secondaryContent, #666) !important;
+          font-size: 11px;
+          font-weight: 600;
+        }
+        .mobile-sort-control.is-active {
+          border-color: var(--primaryDarkContent, #071331) !important;
+          background: var(--primaryDarkContent, #071331) !important;
+          color: #fff !important;
+        }
+        .mobile-sort-control .sort-arrow {
+          width: 12px;
+          height: 12px;
+        }
+        .mobile-sort-control[data-direction="ascending"] .sort-arrow {
+          transform: rotate(180deg);
+        }
+        #track-list {
+          display: grid;
+          gap: 0;
+        }
+        .analytics-track-row {
+          display: grid;
+          width: 100%;
+          height: auto;
+          min-height: 72px;
+          grid-template-columns: minmax(0, 1fr) 72px !important;
+          align-items: center;
+          gap: 4px;
+          border-bottom: 1px solid var(--secondaryBorder, #e5e5e5);
+          border-radius: 0;
+          padding: 10px 0;
+        }
+        .analytics-track-row > div:nth-child(1),
+        .analytics-track-row > div:nth-child(3),
+        .analytics-track-row > div:nth-child(4),
+        .analytics-track-row > div:nth-child(5),
+        .analytics-track-row > div:nth-child(7) {
+          display: none !important;
+        }
+        .analytics-track-row > div:nth-child(2) {
+          min-width: 0;
+          padding-left: 0;
+          padding-right: 4px;
+        }
+        .analytics-track-row .display-cell {
+          min-width: 0;
+          flex-direction: column;
+          align-items: flex-end;
+          justify-content: center;
+          overflow: visible;
+          padding: 0;
+          font-size: 12px;
+          line-height: 1.2;
+        }
+        .analytics-track-row .display-cell::before {
+          margin-bottom: 5px;
+          color: var(--secondaryContent, #666);
+          font-size: 9px;
+          font-weight: 500;
+          letter-spacing: 0.01em;
+        }
+        .analytics-track-row .display-cell::before {
+          content: "Displays";
+        }
+        #toggle-tracks {
+          margin-top: 28px;
+        }
+      }
+      @media (max-width: 380px) {
+        main[style*="grid-area: view"] {
+          padding-left: 12px !important;
+          padding-right: 12px !important;
+        }
+        main > div {
+          padding-top: 22px !important;
+        }
+        .analytics-grid > section {
+          padding: 12px !important;
+        }
+        .content-cards {
+          grid-auto-columns: min(264px, calc(100vw - 44px));
+        }
+        .metric-row {
+          gap: 8px !important;
+        }
+        .metric-cta {
+          height: 68px !important;
+          min-height: 68px !important;
+          padding-right: 12px !important;
+          padding-left: 12px !important;
+        }
+        .metric-cta p:first-child {
+          margin-bottom: 5px !important;
+          font-size: 11px !important;
+        }
+        .chart-wrap {
+          height: 112px;
+        }
+        .mobile-track-toolbar {
+          flex-wrap: wrap;
+          align-items: flex-start;
+        }
+        .mobile-track-toolbar-label {
+          width: 100%;
+        }
+        .mobile-sort-group {
+          width: 100%;
+        }
+        .mobile-sort-control {
+          width: 100%;
+          justify-content: center;
+        }
+        .analytics-track-row {
+          grid-template-columns: minmax(0, 1fr) 64px !important;
         }
       }
     </style>
@@ -9402,7 +9756,7 @@
   <body>
     <div id="__next">
       <div
-        class="grid h-dvh bg-primarySurface"
+        class="app-shell grid h-dvh bg-primarySurface"
         style="
           grid-template: &quot;nav header&quot; &quot;nav subHeader&quot; &quot;nav view&quot; 1fr &quot;player player&quot; / 96px minmax(
               0px,
@@ -9410,7 +9764,35 @@
             );
         "
       >
-        <nav class="hidden flex-col md:flex" style="grid-area: nav">
+        <nav
+          id="primary-navigation"
+          class="hidden flex-col md:flex"
+          style="grid-area: nav"
+          aria-label="Primary navigation"
+        >
+          <div class="mobile-nav-header">
+            <span class="mobile-nav-title">Menu</span>
+            <button
+              id="mobile-nav-close"
+              type="button"
+              class="mobile-nav-close"
+              aria-label="Close navigation menu"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                class="h-5 w-5 stroke-current"
+                fill="none"
+                stroke-width="1.5"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18 18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
+          </div>
           <div class="shrink-0">
             <div class="h-14 my-4 w-full cursor-pointer px-4">
               <div class="">
@@ -9547,6 +9929,7 @@
                   class="relative mb-4 flex h-auto flex-col items-center text-sm font-semibold text-primaryDarkContent no-underline"
                   draggable="false"
                   href="https://app.bridge.audio/analytics"
+                  aria-current="page"
                   ><div
                     class="item-center relative box-content flex h-6 w-6 justify-center rounded-lg p-2 bg-analyticsBg"
                   >
@@ -9673,8 +10056,13 @@
               class="z-20 flex h-14 w-full justify-end bg-secondarySurface px-6 md:mr-3 md:mt-3 md:h-auto md:rounded-3xl md:rounded-b-none"
             >
               <div class="flex shrink items-center md:hidden">
-                <div
+                <button
+                  id="mobile-nav-open"
+                  type="button"
                   class="flex h-10 w-10 cursor-pointer items-center justify-center p-2 md:hidden"
+                  aria-label="Open navigation menu"
+                  aria-controls="primary-navigation"
+                  aria-expanded="false"
                 >
                   <svg
                     class="h-5 w-5 stroke-neutralPrimaryIcon"
@@ -9687,7 +10075,7 @@
                       d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
                     ></path>
                   </svg>
-                </div>
+                </button>
               </div>
               <div id="header-buttons" class="mr-2 min-h-15 w-full">
                 <div class="flex h-full w-full items-center justify-between">
@@ -9822,23 +10210,20 @@
                 </p>
               </div>
               <div class="analytics-header-filters">
-                <div class="hub-filter-shell">
-                  <label for="hub-filter">Discovery Hub</label>
-                  <select
-                    id="hub-filter"
-                    aria-label="Filter Discovery Hubs analytics"
+                <div class="date-filter-shell">
+                  <label for="period-filter" class="sr-only"
+                    >Analytics period</label
                   >
-                    <option value="all">All Hubs</option>
-                    <option value="sync">Bridge Sync</option>
-                    <option value="library">Bridge Library</option>
-                    <option value="score">Bridge Score</option>
+                  <select
+                    id="period-filter"
+                    aria-label="Select analytics period"
+                  >
+                    <option value="all" selected>All Time</option>
+                    <option value="week">Last Week</option>
+                    <option value="month">Last Month</option>
+                    <option value="year">Last Year</option>
                   </select>
                 </div>
-                <button
-                  class="flex h-12 items-center gap-2 rounded border border-secondaryBorder bg-neutralSofterBg px-4 text-sm font-semibold text-primaryDarkContent"
-                >
-                  Last 30 days <span aria-hidden="true">⌄</span>
-                </button>
               </div>
             </div>
             <div class="analytics-grid mb-10">
@@ -9859,7 +10244,7 @@
                   >
                     <p class="mb-2 text-sm text-secondaryContent">Openings</p>
                     <div class="flex justify-between">
-                      <p class="font-bold text-primaryDarkContent">1,248</p>
+                      <p id="workspace-openings-total" class="font-bold text-primaryDarkContent">1,248</p>
                     </div></button
                   ><button
                     type="button"
@@ -9868,7 +10253,7 @@
                   >
                     <p class="mb-2 text-sm text-secondaryContent">Streams</p>
                     <div class="flex justify-between">
-                      <p class="font-bold text-primaryDarkContent">873</p>
+                      <p id="workspace-streams-total" class="font-bold text-primaryDarkContent">873</p>
                     </div></button
                   ><button
                     type="button"
@@ -9877,7 +10262,7 @@
                   >
                     <p class="mb-2 text-sm text-secondaryContent">Downloads</p>
                     <div class="flex justify-between">
-                      <p class="font-bold text-primaryDarkContent">126</p>
+                      <p id="workspace-downloads-total" class="font-bold text-primaryDarkContent">126</p>
                     </div>
                   </button>
                 </div>
@@ -9927,9 +10312,9 @@
                     ></line>
                     <g fill="#666" font-size="10">
                       <text x="35" y="131" text-anchor="end">0</text>
-                      <text x="42" y="145">14 Jul</text>
-                      <text x="270" y="145">28 Jul</text>
-                      <text x="520" y="145">11 Aug</text>
+                      <text class="period-axis-start" x="42" y="145">May 2022</text>
+                      <text class="period-axis-middle" x="270" y="145">Jan 2025</text>
+                      <text class="period-axis-end" x="520" y="145">Today</text>
                     </g>
                   </svg>
                 </div>
@@ -9937,20 +10322,36 @@
               <section
                 class="rounded-xl border border-secondaryBorder bg-secondarySurface p-4"
               >
-                <div class="mb-4">
-                  <h2 class="font-bold text-primaryDarkContent">
-                    Discovery hubs
-                  </h2>
-                  <p class="mt-1 text-sm text-secondaryContent">
-                    Visibility across Bridge Sync, Score and Library.
-                  </p>
+                <div class="discovery-card-header mb-4">
+                  <div>
+                    <div class="discovery-title-line">
+                      <h2 class="font-bold text-primaryDarkContent">
+                        Discovery Hubs
+                      </h2>
+                    </div>
+                    <p class="mt-1 text-sm text-secondaryContent">
+                      Visibility across Bridge Sync, Score and Library.
+                    </p>
+                  </div>
+                  <div class="hub-scope-control">
+                    <p class="hub-scope-caption">Chart &amp; top tracks</p>
+                    <div class="hub-filter-shell">
+                      <label for="hub-filter">Hub:</label>
+                      <select
+                        id="hub-filter"
+                        aria-label="Filter the Discovery Hubs chart and top tracks"
+                      >
+                        <option value="all">All Hubs</option>
+                        <option value="sync">Bridge Sync</option>
+                        <option value="library">Bridge Library</option>
+                        <option value="score">Bridge Score</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
                 <div class="metric-row mb-5 flex w-full gap-4">
-                  <button
-                    type="button"
-                    class="metric-cta hub-metric h-24 min-w-0 grow cursor-pointer rounded-lg border border-secondaryBorder px-4 py-6 text-left bg-secondarySurface shadow"
-                    aria-pressed="true"
-                    data-hub-metric="display"
+                  <div
+                    class="metric-cta h-24 min-w-0 grow rounded-lg border border-secondaryBorder px-4 py-6 text-left bg-secondarySurface shadow"
                   >
                     <p class="mb-2 text-sm text-secondaryContent">Displays</p>
                     <div class="flex justify-between">
@@ -9961,50 +10362,15 @@
                         4,892
                       </p>
                     </div>
-                  </button>
-                  <button
-                    type="button"
-                    class="metric-cta hub-metric h-24 min-w-0 grow cursor-pointer rounded-lg border border-secondaryBorder px-4 py-6 text-left bg-neutralSoftBg"
-                    aria-pressed="false"
-                    data-hub-metric="activity"
-                  >
-                    <p class="mb-2 text-sm text-secondaryContent">
-                      <span class="activity-help-wrap">
-                        Activity
-                        <span
-                          class="activity-help"
-                          role="button"
-                          tabindex="0"
-                          aria-label="What Activity means"
-                          aria-describedby="activity-tooltip-card"
-                          >i</span
-                        >
-                        <span
-                          id="activity-tooltip-card"
-                          class="activity-tooltip"
-                          role="tooltip"
-                        >
-                          Activity is the total number of actions taken on a
-                          track: streams, downloads, adds to a workspace or
-                          project, and track info views.
-                        </span>
-                      </span>
-                    </p>
-                    <div class="flex justify-between">
-                      <p
-                        id="hub-activity-total"
-                        class="font-bold text-primaryDarkContent"
-                      >
-                        1,376
-                      </p>
-                    </div>
-                  </button>
+                  </div>
                 </div>
                 <div class="chart-wrap">
                   <svg
+                    id="hub-chart"
                     viewBox="0 0 560 150"
                     preserveAspectRatio="none"
                     role="img"
+                    aria-label="Displays on All Hubs over all time"
                   >
                     <defs>
                       <linearGradient id="hubsArea" x1="0" y1="0" x2="0" y2="1">
@@ -10042,9 +10408,9 @@
                     ></line>
                     <g fill="#666" font-size="10">
                       <text x="35" y="131" text-anchor="end">0</text>
-                      <text x="42" y="145">14 Jul</text>
-                      <text x="270" y="145">28 Jul</text>
-                      <text x="520" y="145">11 Aug</text>
+                      <text class="period-axis-start" x="42" y="145">May 2022</text>
+                      <text class="period-axis-middle" x="270" y="145">Jan 2025</text>
+                      <text class="period-axis-end" x="520" y="145">Today</text>
                     </g>
                   </svg>
                 </div>
@@ -10060,7 +10426,13 @@
                   workspace.
                 </p>
               </div>
-              <div class="content-cards">
+              <div
+                id="active-links-carousel"
+                class="content-cards"
+                role="region"
+                aria-label="Most active links"
+                tabindex="0"
+              >
                 <div
                   class="activity-card cursor-pointer rounded-xl border border-primaryBorder bg-neutralSoftBg px-2 py-3"
                 >
@@ -10468,6 +10840,25 @@
                 </div>
               </div>
               <button
+                id="active-links-next"
+                type="button"
+                class="mobile-carousel-cue"
+                aria-label="Show the next active link"
+              >
+                Swipe
+                <svg
+                  viewBox="0 0 20 20"
+                  class="fill-current"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M7.21 14.77a.75.75 0 0 1 .02-1.06L10.94 10 7.23 6.29a.75.75 0 1 1 1.06-1.06l4.24 4.24a.75.75 0 0 1 0 1.06l-4.24 4.24a.75.75 0 0 1-1.08 0Z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </button>
+              <button
                 class="show-button section-show"
                 data-target=".extra-card"
               >
@@ -10475,20 +10866,61 @@
               </button>
             </section>
             <section id="top-discovery-tracks">
-              <div class="mb-4">
-                <h2 class="text-base font-bold text-primaryDarkContent">
-                  Top tracks on Discovery Hubs
-                </h2>
-                <p
-                  id="hub-list-description"
-                  class="mt-1 text-sm text-secondaryContent"
+              <div class="top-tracks-header mb-4">
+                <div>
+                  <h2 class="text-base font-bold text-primaryDarkContent">
+                    Top tracks on Discovery Hubs
+                  </h2>
+                  <p
+                    id="hub-list-description"
+                    class="mt-1 text-sm text-secondaryContent"
+                  >
+                    Your Library tracks ranked by visibility across Bridge Sync,
+                    Bridge Score and Bridge Library.
+                  </p>
+                </div>
+                <div class="top-tracks-filter-wrap">
+                  <div class="hub-filter-shell">
+                    <label for="top-tracks-hub-filter">Hub:</label>
+                    <select
+                      id="top-tracks-hub-filter"
+                      aria-label="Filter top tracks by Discovery Hub"
+                    >
+                      <option value="all">All Hubs</option>
+                      <option value="sync">Bridge Sync</option>
+                      <option value="library">Bridge Library</option>
+                      <option value="score">Bridge Score</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="mobile-track-toolbar"
+                aria-label="Track list controls"
+              >
+                <span class="mobile-track-toolbar-label" id="mobile-track-count"
+                  >45 tracks</span
                 >
-                  Your Library tracks ranked by visibility across Bridge Sync,
-                  Bridge Score and Bridge Library.
-                </p>
+                <div class="mobile-sort-group" aria-label="Sort tracks by">
+                  <button
+                    id="mobile-sort-display"
+                    type="button"
+                    class="mobile-sort-control"
+                    aria-pressed="true"
+                  >
+                    Displays
+                    <svg
+                      viewBox="0 0 20 20"
+                      class="sort-arrow fill-current"
+                      aria-hidden="true"
+                    >
+                      <path d="m10 15-5-5h3V4h4v6h3l-5 5Z"></path>
+                    </svg>
+                  </button>
+                </div>
               </div>
               <div class="analytics-table box-border w-full overflow-x-auto">
-                <div style="min-width: 1060px">
+                <div style="min-width: 940px">
                   <div
                     class="h-10 border-b border-secondaryBorder text-primaryDarkContent sticky z-10 bg-secondarySurface top-0"
                   >
@@ -10497,11 +10929,7 @@
                       style="
                         grid-template-columns:
                           24px minmax(170px, 2fr) minmax(150px, 2fr)
-                          86px minmax(150px, 1fr) minmax(96px, 1fr) minmax(
-                            96px,
-                            1fr
-                          )
-                          52px;
+                          86px minmax(150px, 1fr) minmax(96px, 1fr) 52px;
                       "
                     >
                       <div
@@ -10557,41 +10985,6 @@
                         title="Sort by number of displays"
                       >
                         Displays
-                        <svg
-                          viewBox="0 0 20 20"
-                          class="sort-arrow h-4 w-4 fill-current"
-                          aria-hidden="true"
-                        >
-                          <path d="m10 15-5-5h3V4h4v6h3l-5 5Z"></path>
-                        </svg>
-                      </button>
-                      <button
-                        id="sort-activity"
-                        type="button"
-                        class="sort-control flex items-center gap-1 pl-2 text-left text-base font-semibold"
-                        aria-sort="none"
-                        title="Sort by activity"
-                      >
-                        <span class="activity-help-wrap">
-                          Activity
-                          <span
-                            class="activity-help"
-                            role="button"
-                            tabindex="0"
-                            aria-label="What Activity means"
-                            aria-describedby="activity-tooltip-table"
-                            >i</span
-                          >
-                          <span
-                            id="activity-tooltip-table"
-                            class="activity-tooltip"
-                            role="tooltip"
-                          >
-                            Activity is the total number of actions taken on a
-                            track: streams, downloads, adds to a workspace or
-                            project, and track info views.
-                          </span>
-                        </span>
                         <svg
                           viewBox="0 0 20 20"
                           class="sort-arrow h-4 w-4 fill-current"
@@ -16296,16 +16689,40 @@
       (() => {
         const list = document.getElementById("track-list");
         const hubFilter = document.getElementById("hub-filter");
+        const topTracksHubFilter = document.getElementById(
+          "top-tracks-hub-filter",
+        );
+        const periodFilter = document.getElementById("period-filter");
         const sortDisplay = document.getElementById("sort-display");
-        const sortActivity = document.getElementById("sort-activity");
+        const mobileSortDisplay = document.getElementById(
+          "mobile-sort-display",
+        );
         const toggleButton = document.getElementById("toggle-tracks");
         const selectAll = document.getElementById("select-all-tracks");
         const trackCount = document.getElementById("track-count");
+        const mobileTrackCount = document.getElementById("mobile-track-count");
         const listDescription = document.getElementById("hub-list-description");
         const displayTotal = document.getElementById("hub-display-total");
-        const activityTotal = document.getElementById("hub-activity-total");
+        const workspaceTotals = [
+          document.getElementById("workspace-openings-total"),
+          document.getElementById("workspace-streams-total"),
+          document.getElementById("workspace-downloads-total"),
+        ];
+        const activeLinkValues = Array.from(
+          document.querySelectorAll(".activity-card b"),
+        );
         const chartArea = document.getElementById("hub-chart-area");
         const chartLine = document.getElementById("hub-chart-line");
+        const hubChart = document.getElementById("hub-chart");
+        const primaryNavigation = document.getElementById(
+          "primary-navigation",
+        );
+        const mobileNavOpen = document.getElementById("mobile-nav-open");
+        const mobileNavClose = document.getElementById("mobile-nav-close");
+        const activeLinksCarousel = document.getElementById(
+          "active-links-carousel",
+        );
+        const activeLinksNext = document.getElementById("active-links-next");
         const numberFormat = new Intl.NumberFormat("en-US");
 
         const hubNames = {
@@ -16314,23 +16731,35 @@
           library: "Bridge Library",
           score: "Bridge Score",
         };
+        const periods = {
+          all: {
+            label: "All Time",
+            factor: 1,
+            axis: ["May 2022", "Jan 2025", "Today"],
+          },
+          week: {
+            label: "Last Week",
+            factor: 0.035,
+            axis: ["21 Aug", "24 Aug", "Today"],
+          },
+          month: {
+            label: "Last Month",
+            factor: 0.13,
+            axis: ["28 Jul", "12 Aug", "Today"],
+          },
+          year: {
+            label: "Last Year",
+            factor: 0.62,
+            axis: ["Aug 2025", "Feb 2026", "Today"],
+          },
+        };
         const chartSeries = {
-          display: {
-            all: "M42 128 C92 112 126 98 166 86 S240 73 290 62 S365 49 418 45 S500 45 552 45",
-            sync: "M42 128 C92 119 126 104 166 94 S240 76 290 70 S365 57 418 52 S500 48 552 40",
-            library:
-              "M42 128 C92 121 126 112 166 101 S240 92 290 78 S365 72 418 61 S500 56 552 53",
-            score:
-              "M42 128 C92 124 126 115 166 110 S240 96 290 92 S365 80 418 76 S500 67 552 64",
-          },
-          activity: {
-            all: "M42 128 C92 123 126 110 166 104 S240 89 290 84 S365 69 418 63 S500 54 552 50",
-            sync: "M42 128 C92 125 126 116 166 108 S240 98 290 90 S365 76 418 72 S500 63 552 58",
-            library:
-              "M42 128 C92 126 126 120 166 115 S240 105 290 99 S365 89 418 82 S500 75 552 70",
-            score:
-              "M42 128 C92 127 126 123 166 119 S240 111 290 106 S365 99 418 93 S500 86 552 82",
-          },
+          all: "M42 128 C92 112 126 98 166 86 S240 73 290 62 S365 49 418 45 S500 45 552 45",
+          sync: "M42 128 C92 119 126 104 166 94 S240 76 290 70 S365 57 418 52 S500 48 552 40",
+          library:
+            "M42 128 C92 121 126 112 166 101 S240 92 290 78 S365 72 418 61 S500 56 552 53",
+          score:
+            "M42 128 C92 124 126 115 166 110 S240 96 290 92 S365 80 418 76 S500 67 552 64",
         };
         const hubPatterns = [
           ["sync", "library", "score"],
@@ -16344,20 +16773,27 @@
 
         let expanded = false;
         let currentHub = "all";
-        let currentMetric = "display";
+        let currentPeriod = "all";
         let sortKey = "display";
         let sortDirection = "descending";
+
+        workspaceTotals.forEach((value) => {
+          value.dataset.allTime = value.textContent.replace(/[^0-9]/g, "");
+        });
+        activeLinkValues.forEach((value) => {
+          value.dataset.allTime = value.textContent.replace(/[^0-9]/g, "");
+        });
 
         const rows = () =>
           Array.from(list.querySelectorAll(".analytics-track-row"));
 
-        const distribute = (total, hubs, index, activity = false) => {
+        const distribute = (total, hubs, index) => {
           const baseWeights = { sync: 0.5, library: 0.31, score: 0.19 };
           const weights = hubs.map((hub, hubIndex) =>
             Math.max(
               0.08,
               baseWeights[hub] +
-                (((index + hubIndex + (activity ? 2 : 0)) % 3) - 1) * 0.035,
+                (((index + hubIndex) % 3) - 1) * 0.035,
             ),
           );
           const weightTotal = weights.reduce((sum, value) => sum + value, 0);
@@ -16378,20 +16814,14 @@
 
         rows().forEach((row, index) => {
           const allDisplay = Number(row.dataset.display);
-          const allActivity = Math.max(
-            1,
-            Math.round(allDisplay * (0.16 + (index % 5) * 0.018)),
-          );
           const hubs = hubPatterns[index % hubPatterns.length];
           const displays = distribute(allDisplay, hubs, index);
-          const activities = distribute(allActivity, hubs, index, true);
           row.hubMetrics = {
-            all: { display: allDisplay, activity: allActivity },
+            all: { display: allDisplay },
           };
           hubs.forEach((hub) => {
             row.hubMetrics[hub] = {
               display: displays[hub],
-              activity: activities[hub],
             };
           });
 
@@ -16399,13 +16829,6 @@
             .querySelector('[data-testid="list-hub"]')
             ?.closest('[data-testid="list-cell"]');
           hubCell?.remove();
-
-          const displayCell = row.querySelector(".display-cell");
-          const activityCell = document.createElement("div");
-          activityCell.className =
-            "activity-cell text-primaryDarkContent flex items-center truncate px-2 font-semibold tabular-nums";
-          activityCell.dataset.testid = "list-cell";
-          displayCell.after(activityCell);
         });
 
         const matchingRows = () =>
@@ -16427,43 +16850,69 @@
         };
 
         const updateChart = () => {
-          const totals = rows().reduce(
-            (sum, row) => {
-              const metrics = row.hubMetrics[currentHub];
-              if (metrics) {
-                sum.display += metrics.display;
-                sum.activity += metrics.activity;
-              }
-              return sum;
-            },
-            { display: 0, activity: 0 },
-          );
-          displayTotal.textContent = numberFormat.format(totals.display);
-          activityTotal.textContent = numberFormat.format(totals.activity);
-          const path = chartSeries[currentMetric][currentHub];
+          const factor = periods[currentPeriod].factor;
+          const displayCount = rows().reduce((sum, row) => {
+            const metrics = row.hubMetrics[currentHub];
+            return metrics
+              ? sum + Math.max(1, Math.round(metrics.display * factor))
+              : sum;
+          }, 0);
+          displayTotal.textContent = numberFormat.format(displayCount);
+          const path = chartSeries[currentHub];
           chartLine.setAttribute("d", path);
           chartArea.setAttribute("d", `${path} L552 128H42Z`);
+          hubChart.setAttribute(
+            "aria-label",
+            `Displays on ${hubNames[currentHub]} for ${periods[currentPeriod].label}`,
+          );
         };
 
         const updateRowValues = () => {
+          const factor = periods[currentPeriod].factor;
           rows().forEach((row) => {
             const metrics = row.hubMetrics[currentHub];
             const matches = currentHub === "all" || Boolean(metrics);
             row.dataset.matchesHub = String(matches);
             if (!matches) return;
-            row.dataset.display = metrics.display;
-            row.dataset.activity = metrics.activity;
+            row.dataset.display = Math.max(1, Math.round(metrics.display * factor));
             row.querySelector(".display-cell").textContent =
-              numberFormat.format(metrics.display);
-            row.querySelector(".activity-cell").textContent =
-              numberFormat.format(metrics.activity);
+              numberFormat.format(row.dataset.display);
           });
         };
 
+        const updatePeriodContent = () => {
+          const period = periods[currentPeriod];
+          workspaceTotals.forEach((value) => {
+            value.textContent = numberFormat.format(
+              Math.max(1, Math.round(Number(value.dataset.allTime) * period.factor)),
+            );
+          });
+          activeLinkValues.forEach((value) => {
+            value.textContent = numberFormat.format(
+              Math.max(1, Math.round(Number(value.dataset.allTime) * period.factor)),
+            );
+          });
+          document.querySelectorAll(".period-axis-start").forEach((label) => {
+            label.textContent = period.axis[0];
+          });
+          document.querySelectorAll(".period-axis-middle").forEach((label) => {
+            label.textContent = period.axis[1];
+          });
+          document.querySelectorAll(".period-axis-end").forEach((label) => {
+            label.textContent = period.axis[2];
+          });
+          applyHubFilter();
+        };
+
         const updateSortIndicators = () => {
-          [sortDisplay, sortActivity].forEach((button) => {
+          [sortDisplay, mobileSortDisplay].forEach((button) => {
             const active = button.dataset.sortKey === sortKey;
-            button.setAttribute("aria-sort", active ? sortDirection : "none");
+            if (button.classList.contains("mobile-sort-control")) {
+              button.setAttribute("aria-pressed", String(active));
+              button.classList.toggle("is-active", active);
+            } else {
+              button.setAttribute("aria-sort", active ? sortDirection : "none");
+            }
             button.dataset.direction = active ? sortDirection : "descending";
           });
         };
@@ -16478,6 +16927,7 @@
           });
           const count = matchingRows().length;
           trackCount.textContent = `Track (${count})`;
+          mobileTrackCount.textContent = `${count} ${count === 1 ? "track" : "tracks"}`;
           toggleButton.hidden = count <= 10;
         };
 
@@ -16519,8 +16969,8 @@
         };
 
         sortDisplay.dataset.sortKey = "display";
-        sortActivity.dataset.sortKey = "activity";
-        [sortDisplay, sortActivity].forEach((button) => {
+        mobileSortDisplay.dataset.sortKey = "display";
+        [sortDisplay, mobileSortDisplay].forEach((button) => {
           button.addEventListener("click", () => {
             const nextKey = button.dataset.sortKey;
             sortDirection =
@@ -16536,46 +16986,123 @@
 
         hubFilter.addEventListener("change", () => {
           currentHub = hubFilter.value;
+          topTracksHubFilter.value = currentHub;
           applyHubFilter();
         });
 
-        document.querySelectorAll(".hub-metric").forEach((button) => {
-          button.addEventListener("click", () => {
-            currentMetric = button.dataset.hubMetric;
-            setPressedMetric(button);
-            updateChart();
-          });
+        topTracksHubFilter.addEventListener("change", () => {
+          currentHub = topTracksHubFilter.value;
+          hubFilter.value = currentHub;
+          applyHubFilter();
+        });
+
+        periodFilter.addEventListener("change", () => {
+          currentPeriod = periodFilter.value;
+          updatePeriodContent();
         });
 
         document
-          .querySelectorAll(".metric-cta:not(.hub-metric)")
+          .querySelectorAll(".metric-row button.metric-cta")
           .forEach((button) =>
             button.addEventListener("click", () => setPressedMetric(button)),
           );
 
-        document.querySelectorAll(".activity-help").forEach((help) => {
-          const toggleTooltip = (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            const wrap = help.closest(".activity-help-wrap");
-            const opening = !wrap.classList.contains("is-open");
-            document
-              .querySelectorAll(".activity-help-wrap.is-open")
-              .forEach((item) => item.classList.remove("is-open"));
-            wrap.classList.toggle("is-open", opening);
-          };
-          help.addEventListener("click", toggleTooltip);
-          help.addEventListener("keydown", (event) => {
-            if (event.key === "Enter" || event.key === " ")
-              toggleTooltip(event);
-          });
+        const setMobileNavigation = (open, restoreFocus = true) => {
+          primaryNavigation.classList.toggle("mobile-nav-open", open);
+          document.body.classList.toggle("mobile-menu-open", open);
+          mobileNavOpen.setAttribute("aria-expanded", String(open));
+          if (window.innerWidth < 768) {
+            primaryNavigation.setAttribute("aria-hidden", String(!open));
+          } else {
+            primaryNavigation.removeAttribute("aria-hidden");
+          }
+          if (open) {
+            primaryNavigation.scrollTop = 0;
+            mobileNavClose.focus();
+          } else if (restoreFocus && window.innerWidth < 768) {
+            mobileNavOpen.focus();
+          }
+        };
+
+        mobileNavOpen.addEventListener("click", () =>
+          setMobileNavigation(true),
+        );
+        mobileNavClose.addEventListener("click", () =>
+          setMobileNavigation(false),
+        );
+        primaryNavigation.querySelectorAll("a").forEach((link) =>
+          link.addEventListener("click", () =>
+            setMobileNavigation(false, false),
+          ),
+        );
+        document.addEventListener("keydown", (event) => {
+          const navigationOpen =
+            primaryNavigation.classList.contains("mobile-nav-open");
+          if (event.key === "Escape" && navigationOpen) {
+            setMobileNavigation(false);
+            return;
+          }
+          if (event.key === "Tab" && navigationOpen) {
+            const focusable = Array.from(
+              primaryNavigation.querySelectorAll(
+                'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+              ),
+            ).filter((element) => element.getClientRects().length > 0);
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+              event.preventDefault();
+              last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+              event.preventDefault();
+              first.focus();
+            }
+          }
         });
 
-        document.addEventListener("click", () =>
-          document
-            .querySelectorAll(".activity-help-wrap.is-open")
-            .forEach((item) => item.classList.remove("is-open")),
+        const updateCarouselCue = () => {
+          const unavailable =
+            window.innerWidth > 640 ||
+            activeLinksCarousel.scrollWidth <= activeLinksCarousel.clientWidth + 4;
+          const atEnd =
+            activeLinksCarousel.scrollLeft + activeLinksCarousel.clientWidth >=
+            activeLinksCarousel.scrollWidth - 4;
+          activeLinksNext.hidden = unavailable || atEnd;
+        };
+
+        const scrollActiveLinks = (direction) => {
+          activeLinksCarousel.scrollBy({
+            left: direction * Math.max(240, activeLinksCarousel.clientWidth * 0.84),
+            behavior: "smooth",
+          });
+        };
+
+        activeLinksNext.addEventListener("click", () => scrollActiveLinks(1));
+        activeLinksCarousel.addEventListener(
+          "scroll",
+          () => window.requestAnimationFrame(updateCarouselCue),
+          { passive: true },
         );
+        activeLinksCarousel.addEventListener("keydown", (event) => {
+          if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+            event.preventDefault();
+            scrollActiveLinks(event.key === "ArrowRight" ? 1 : -1);
+          }
+        });
+
+        window.addEventListener("resize", () => {
+          if (
+            window.innerWidth >= 768 &&
+            primaryNavigation.classList.contains("mobile-nav-open")
+          ) {
+            setMobileNavigation(false, false);
+          }
+          updateCarouselCue();
+        });
+
+        if (window.innerWidth < 768) {
+          primaryNavigation.setAttribute("aria-hidden", "true");
+        }
 
         toggleButton.addEventListener("click", () => {
           expanded = !expanded;
@@ -16593,15 +17120,17 @@
         document.querySelectorAll(".show-button").forEach((button) => {
           button.addEventListener("click", () => {
             const cards = document.querySelectorAll(button.dataset.target);
-            const grid = button.previousElementSibling;
+            const grid = button.parentElement.querySelector(".content-cards");
             const opening = !grid.classList.contains("is-expanded");
             grid.classList.toggle("is-expanded", opening);
             cards.forEach((card) => card.classList.toggle("hidden", !opening));
             button.textContent = opening ? "Show less" : "Show more";
+            window.requestAnimationFrame(updateCarouselCue);
           });
         });
 
-        applyHubFilter();
+        updatePeriodContent();
+        window.requestAnimationFrame(updateCarouselCue);
       })();
     </script>
   </body>
