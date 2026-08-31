@@ -1,0 +1,76 @@
+name: Update entities artwork and description hover
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/entities-artwork-hover.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-entities:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply requested entities adjustments
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('entities/index.html')
+          s = p.read_text()
+
+          replacements = [
+              ('width:156px;height:156px;flex:0 0 156px;', 'width:176px;height:176px;flex:0 0 176px;'),
+              ('margin-top:-70px;', 'margin-top:-78px;'),
+              ('width:156px;height:156px;object-fit:cover;', 'width:176px;height:176px;object-fit:cover;'),
+              ('.bridge-artwork-project svg{width:62px;height:62px;', '.bridge-artwork-project svg{width:68px;height:68px;'),
+              ('.bridge-page-state:not(.bridge-no-artwork) .bridge-header-actions{left:174px;}', '.bridge-page-state:not(.bridge-no-artwork) .bridge-header-actions{left:194px;}'),
+              ('  .bridge-artwork-slot{width:112px!important;height:112px!important;flex-basis:112px!important;margin-top:8px!important;margin-bottom:10px!important;}', '  .bridge-artwork-slot{width:120px!important;height:120px!important;flex-basis:120px!important;margin-top:8px!important;margin-bottom:10px!important;}'),
+              ('  .bridge-artwork{width:112px!important;height:112px!important;}', '  .bridge-artwork{width:120px!important;height:120px!important;}'),
+              ('  .bridge-has-cover .bridge-artwork-slot{margin-top:-46px!important;}', '  .bridge-has-cover .bridge-artwork-slot{margin-top:-50px!important;}'),
+              ('  .bridge-page-state:not(.bridge-no-artwork) .bridge-header-actions{left:122px!important;top:6px!important;}', '  .bridge-page-state:not(.bridge-no-artwork) .bridge-header-actions{left:130px!important;top:6px!important;}'),
+              ('  .bridge-artwork-slot,.bridge-artwork{width:104px!important;height:104px!important;}', '  .bridge-artwork-slot,.bridge-artwork{width:112px!important;height:112px!important;}'),
+              ('  .bridge-artwork-slot{flex-basis:104px!important;}', '  .bridge-artwork-slot{flex-basis:112px!important;}'),
+              ('  .bridge-has-cover .bridge-artwork-slot{margin-top:-42px!important;}', '  .bridge-has-cover .bridge-artwork-slot{margin-top:-46px!important;}'),
+              ('  .bridge-page-state:not(.bridge-no-artwork) .bridge-header-actions{left:114px!important;}', '  .bridge-page-state:not(.bridge-no-artwork) .bridge-header-actions{left:122px!important;}'),
+          ]
+
+          for old, new in replacements:
+              count = s.count(old)
+              if count != 1:
+                  raise SystemExit(f'Expected exactly one occurrence of {old!r}, found {count}')
+              s = s.replace(old, new, 1)
+
+          old = '''[data-description-editor] ._placeholder_1e2ox_1106{display:none!important;}\n\n@media(max-width:767px){'''
+          new = '''[data-description-editor] ._placeholder_1e2ox_1106{display:none!important;}\n.bridge-description-empty button{\n  color:#8b8993!important;\n  font-weight:500!important;\n}\n.bridge-description-empty button:hover,\n.bridge-description-empty button:focus-visible{\n  color:#56545d!important;\n}\n@media (hover:hover) and (pointer:fine){\n  .bridge-description-empty{\n    opacity:0;\n    pointer-events:none;\n    transition:opacity .14s ease;\n  }\n  .bridge-identity-zone:hover .bridge-description-empty,\n  .bridge-identity-zone:focus-within .bridge-description-empty{\n    opacity:1;\n    pointer-events:auto;\n  }\n}\n\n@media(max-width:767px){'''
+          if s.count(old) != 1:
+              raise SystemExit(f'Description hover anchor mismatch: {s.count(old)}')
+          s = s.replace(old, new, 1)
+
+          old = '''  .bridge-header-actions button{\n    color:#96949d!important;\n    background:transparent!important;\n  }'''
+          new = '''  .bridge-header-actions button{\n    color:#96949d!important;\n    background:transparent!important;\n  }\n  .bridge-description-empty{\n    opacity:1!important;\n    pointer-events:auto!important;\n  }\n  .bridge-description-empty button{\n    color:#96949d!important;\n    background:transparent!important;\n  }'''
+          if s.count(old) != 1:
+              raise SystemExit(f'Mobile description anchor mismatch: {s.count(old)}')
+          s = s.replace(old, new, 1)
+
+          p.write_text(s)
+          PY
+
+          test "$(git hash-object entities/index.html)" = "6668afbcf8fc03d3caa61d126eb0bf5557457564"
+
+      - name: Commit updated page
+        shell: bash
+        run: |
+          rm -f .github/workflows/entities-artwork-hover.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add entities/index.html .github/workflows/entities-artwork-hover.yml
+          git commit -m 'Polish entities artwork and add description'
+          git push
