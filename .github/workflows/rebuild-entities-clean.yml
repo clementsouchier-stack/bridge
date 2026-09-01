@@ -1,0 +1,167 @@
+name: Rebuild entities cleanly
+
+on:
+  push:
+    paths:
+      - '.github/workflows/rebuild-entities-clean.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Consolidate entities code
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('entities/index.html')
+          html = path.read_text(encoding='utf-8')
+
+          # Remove all previous prototype style layers. The large Bridge source stylesheet
+          # is preserved, but its old appended prototype tail is stripped.
+          style_re = re.compile(r'(?is)<style(?P<attrs>[^>]*)>(?P<body>.*?)</style>')
+          rebuilt = []
+          last = 0
+          for m in style_re.finditer(html):
+              rebuilt.append(html[last:m.start()])
+              attrs, body = m.group('attrs'), m.group('body')
+              marker = 'html,body{height:100%;}'
+              if marker in body and '.bridge-page-state' in body:
+                  body = body[:body.find(marker)].rstrip() + '\n'
+                  rebuilt.append(f'<style{attrs}>{body}</style>')
+              elif any(token in body for token in (
+                  '.bridge-artwork-slot',
+                  '.bridge-header-actions',
+                  '.bridge-description-empty',
+                  'Bridge Entities — consolidated component styles'
+              )):
+                  # Old standalone prototype override block: intentionally removed.
+                  pass
+              else:
+                  rebuilt.append(m.group(0))
+              last = m.end()
+          rebuilt.append(html[last:])
+          html = ''.join(rebuilt)
+
+          # The component markup itself carries a semantic desktop fallback size.
+          def normalize_artwork_img(match):
+              tag = match.group(0)
+              tag = re.sub(r'\s(?:width|height)="[^"]*"', '', tag, flags=re.I)
+              return tag[:-1] + ' width="220" height="220">'
+          html = re.sub(r'<img\b(?=[^>]*\bclass="[^"]*\bbridge-artwork\b[^"]*")[^>]*>', normalize_artwork_img, html, flags=re.I)
+
+          css = r'''
+          /* Bridge Entities — consolidated component styles.
+             One source of truth for entity picture sizing; no trailing size overrides. */
+          :root{
+            --bridge-entity-picture-size:220px;
+            --bridge-entity-picture-overlap:96px;
+            --bridge-entity-picture-radius:20px;
+            --bridge-entity-picture-mobile-size:140px;
+            --bridge-entity-picture-mobile-overlap:58px;
+          }
+          html,body{height:100%;}
+          body{overflow:hidden;}
+          .bridge-page-state{display:none;height:100%;}
+          .bridge-page-state.is-active{display:flex;flex-direction:column;min-height:100%;}
+          .bridge-page-inner{padding-bottom:96px;}
+          .bridge-identity-zone{position:relative;}
+          .bridge-artwork-slot{position:relative;z-index:5;inline-size:var(--bridge-entity-picture-size);block-size:var(--bridge-entity-picture-size);flex:0 0 var(--bridge-entity-picture-size);margin-top:8px;margin-bottom:12px;overflow:visible;}
+          .bridge-has-cover .bridge-artwork-slot{margin-top:calc(-1 * var(--bridge-entity-picture-overlap));}
+          .bridge-artwork{display:block;inline-size:100%;block-size:100%;max-inline-size:none;max-block-size:none;object-fit:cover;background:var(--color-secondarySurface,#fff);box-sizing:border-box;box-shadow:0 1px 3px rgba(0,0,0,.12);}
+          .bridge-artwork-circle{border-radius:9999px;}
+          .bridge-artwork-square{border-radius:var(--bridge-entity-picture-radius);}
+          .bridge-artwork-project{display:flex;align-items:center;justify-content:center;inline-size:100%;block-size:100%;background:#8065f2;color:#fff;border-radius:var(--bridge-entity-picture-radius);box-shadow:0 1px 3px rgba(0,0,0,.12);}
+          .bridge-artwork-project svg{width:80px;height:80px;fill:currentColor;}
+          .bridge-artwork-overlay{position:absolute;inset:0;z-index:4;display:none;align-items:center;justify-content:center;background:rgba(30,29,32,.60);}
+          .bridge-artwork-slot:hover .bridge-artwork-overlay{display:flex;}
+          .bridge-artwork-circle~.bridge-artwork-overlay{border-radius:9999px;}
+          .bridge-artwork-square~.bridge-artwork-overlay,.bridge-artwork-project~.bridge-artwork-overlay{border-radius:var(--bridge-entity-picture-radius);}
+          .bridge-artwork-slot .bridge-artwork-overlay input{cursor:pointer;}
+          .bridge-artwork-slot[hidden]{display:none!important;}
+          .bridge-header-actions{position:absolute;z-index:14;top:10px;left:0;display:flex;gap:4px;opacity:0;pointer-events:none;transition:opacity .14s ease;}
+          .bridge-identity-zone:hover>.bridge-header-actions,.bridge-identity-zone:focus-within>.bridge-header-actions{opacity:1;pointer-events:auto;}
+          .bridge-page-state:not(.bridge-no-artwork) .bridge-header-actions{left:calc(var(--bridge-entity-picture-size) + 18px);}
+          .bridge-header-actions [data-header-add-cover][hidden],.bridge-header-actions [data-header-add-picture][hidden]{display:none!important;}
+          .bridge-header-actions button,.bridge-description-empty button{color:#8b8993!important;font-weight:500!important;}
+          .bridge-header-actions button:hover,.bridge-header-actions button:focus-visible,.bridge-description-empty button:hover,.bridge-description-empty button:focus-visible{color:#56545d!important;}
+          .bridge-add-media-icon{flex:0 0 auto;opacity:.88;}
+          .bridge-add-cover-action .bridge-add-media-icon{width:21px!important;}
+          .bridge-add-picture-action .bridge-add-media-icon{width:19px!important;height:19px!important;}
+          .bridge-no-artwork .bridge-title-block,.bridge-no-artwork.bridge-has-cover .bridge-title-block{padding-top:42px;}
+          .bridge-cover-preview{position:relative;height:34vh;min-height:176px;width:100%;flex-shrink:0;border-radius:1rem;overflow:hidden;}
+          .bridge-cover-preview img{height:100%;width:100%;object-fit:cover;pointer-events:none;}
+          .bridge-add-cover-wrap{padding-top:.75rem;flex-shrink:0;}
+          .bridge-cover-real{position:relative;}
+          .bridge-cover-real[hidden],.bridge-cover-cta[hidden]{display:none!important;}
+          .bridge-cover-controls{position:absolute;right:20px;bottom:18px;z-index:20;display:flex;gap:8px;opacity:0;pointer-events:none;transition:opacity .14s ease;}
+          .bridge-cover-real:hover>.bridge-cover-controls,.bridge-cover-real:focus-within>.bridge-cover-controls,.bridge-cover-real.is-menu-open>.bridge-cover-controls,.bridge-cover-real.is-repositioning>.bridge-cover-controls{opacity:1;pointer-events:auto;}
+          .bridge-cover-control-button{background:#fff!important;border:0!important;box-shadow:0 1px 2px rgba(0,0,0,.05);font-size:14px!important;height:36px!important;min-height:36px!important;padding:0 12px!important;border-radius:8px!important;}
+          .bridge-cover-control-button [data-testid="button-left-icon"]{display:none!important;}
+          .bridge-cover-popover{position:absolute;right:132px;bottom:-150px;z-index:35;width:280px;padding:10px 12px 12px;background:#fff;border:1px solid #e8e8e8;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.18);}
+          .bridge-cover-popover[hidden]{display:none!important;}
+          .bridge-cover-remove{display:block;width:100%;padding:8px 4px 12px;text-align:right;font-size:14px;color:#27272a;background:transparent;border:0;cursor:pointer;}
+          .bridge-cover-upload{display:flex;width:100%;height:42px;align-items:center;justify-content:center;border:0;border-radius:7px;background:#202022;color:#fff;font-size:16px;font-weight:600;cursor:pointer;}
+          .bridge-cover-help{text-align:center;margin-top:10px;color:#777583;font-size:13px;font-weight:600;}
+          .bridge-cover-more{display:block;margin:7px auto 0;background:transparent;border:0;color:#2367d1;font-size:13px;cursor:pointer;}
+          .bridge-cover-real.is-repositioning{cursor:ns-resize;user-select:none;}
+          .bridge-cover-real.is-repositioning img{pointer-events:none;}
+          .bridge-cover-real.is-repositioning [data-reposition-cover]{background:#202022!important;color:#fff!important;}
+          .bridge-title-block{margin-bottom:8px;}
+          .bridge-description-empty{margin-bottom:16px;}
+          .bridge-description-empty[hidden],.bridge-description-editor[hidden]{display:none!important;}
+          .bridge-description-editor ._placeholder_1e2ox_1106,[data-description-editor] ._placeholder_1e2ox_1106{display:none!important;}
+          .bridge-description-view{position:relative;margin-bottom:1rem;padding:2px 8px 8px;border:1px solid transparent;border-radius:8px;cursor:text;}
+          .bridge-description-view:hover{border-color:#efefef;background:#fafafa;}
+          .bridge-description-view .prose{max-width:none;}
+          @media (hover:hover) and (pointer:fine){.bridge-description-empty{opacity:0;pointer-events:none;transition:opacity .14s ease;}.bridge-identity-zone:hover .bridge-description-empty,.bridge-identity-zone:focus-within .bridge-description-empty{opacity:1;pointer-events:auto;}}
+          .bridge-description-editor ._contentEditable_1e2ox_380,[data-page-state="project"] .mdxeditor ._contentEditable_1e2ox_380{position:relative!important;display:block!important;width:100%!important;min-height:46px!important;height:auto!important;overflow:visible!important;font-family:Manrope,sans-serif!important;font-size:14px!important;font-weight:400!important;font-style:normal!important;line-height:1.5!important;letter-spacing:normal!important;text-indent:0!important;text-shadow:none!important;transform:none!important;white-space:pre-wrap!important;word-break:break-word!important;overflow-wrap:anywhere!important;caret-color:currentColor;}
+          .bridge-description-editor ._contentEditable_1e2ox_380 p,[data-page-state="project"] .mdxeditor ._contentEditable_1e2ox_380 p{position:static!important;display:block!important;min-height:21px;margin:0!important;padding:0!important;font:inherit!important;line-height:1.5!important;letter-spacing:normal!important;text-shadow:none!important;transform:none!important;}
+          .bridge-description-editor ._contentEditable_1e2ox_380 span,[data-page-state="project"] .mdxeditor ._contentEditable_1e2ox_380 span{position:static!important;display:inline!important;font:inherit;line-height:inherit!important;letter-spacing:inherit!important;text-shadow:none!important;transform:none!important;}
+          .bridge-description-editor ._contentEditable_1e2ox_380::before,.bridge-description-editor ._contentEditable_1e2ox_380::after,.bridge-description-editor ._contentEditable_1e2ox_380 p::before,.bridge-description-editor ._contentEditable_1e2ox_380 p::after,[data-page-state="project"] .mdxeditor ._contentEditable_1e2ox_380::before,[data-page-state="project"] .mdxeditor ._contentEditable_1e2ox_380::after,[data-page-state="project"] .mdxeditor ._contentEditable_1e2ox_380 p::before,[data-page-state="project"] .mdxeditor ._contentEditable_1e2ox_380 p::after{content:none!important;display:none!important;}
+          .bridge-prototype-capsule{position:fixed;z-index:80;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:6px 8px 6px 12px;background:#fff;border:1px solid #e5e5e5;border-radius:16px;box-shadow:0 10px 32px rgba(0,0,0,.14);max-width:calc(100vw - 32px);}
+          .bridge-prototype-breadcrumb{min-width:0;display:flex;align-items:center;}
+          .bridge-prototype-breadcrumb>div{min-width:0;}
+          .bridge-prototype-switch{display:flex;align-items:center;gap:2px;padding-left:8px;border-left:1px solid #e6e6e6;}
+          .bridge-prototype-switch button{white-space:nowrap;}
+          .bridge-prototype-switch button.is-selected{background:#f1efff;color:#6750d9;}
+          .bridge-mobile-drawer{display:none;}
+          @media (max-width:767px){
+            #__next>.grid{grid-template:"nav header" minmax(56px,auto) "nav subHeader" "nav view" 1fr "player player" / 0px minmax(0px,1fr)!important;}
+            .bridge-mobile-drawer{display:block!important;position:absolute!important;top:0!important;left:0!important;z-index:100!important;box-sizing:border-box!important;width:100vw!important;height:100dvh!important;padding:24px 24px 24px 0!important;transform:translateX(-100%);opacity:0!important;pointer-events:none;transition:transform .18s ease,opacity .18s ease!important;}
+            .bridge-mobile-drawer.is-open{transform:translateX(0);opacity:1!important;pointer-events:auto;}.bridge-mobile-drawer>div{height:100%!important;}
+            #header-buttons>div>div.flex.gap-2 button{width:40px!important;min-width:40px!important;padding-left:0!important;padding-right:0!important;}#header-buttons>div>div.flex.gap-2 button [data-testid="button-label"]{display:none!important;}#header-buttons>div>div.flex.gap-2 button [data-testid="button-left-icon"] svg{margin-right:0!important;}
+            .bridge-cover-real,.bridge-cover-preview{height:176px!important;min-height:176px!important;max-height:176px!important;border-radius:16px!important;}.bridge-cover-real>img,.bridge-cover-preview>img{border-radius:16px!important;}
+            .bridge-artwork-slot{inline-size:var(--bridge-entity-picture-mobile-size);block-size:var(--bridge-entity-picture-mobile-size);flex-basis:var(--bridge-entity-picture-mobile-size);margin-top:8px;margin-bottom:10px;}
+            .bridge-has-cover .bridge-artwork-slot{margin-top:calc(-1 * var(--bridge-entity-picture-mobile-overlap));}
+            .bridge-artwork-square,.bridge-artwork-project,.bridge-artwork-square~.bridge-artwork-overlay,.bridge-artwork-project~.bridge-artwork-overlay{border-radius:16px;}
+            .bridge-page-state:not(.bridge-no-artwork) .bridge-header-actions{left:calc(var(--bridge-entity-picture-mobile-size) + 10px);top:6px;}.bridge-no-artwork .bridge-title-block,.bridge-no-artwork.bridge-has-cover .bridge-title-block{padding-top:38px;}
+            .bridge-identity-zone>.bridge-header-actions{opacity:1!important;pointer-events:auto!important;}.bridge-header-actions button{color:#96949d!important;background:transparent!important;}.bridge-description-empty{opacity:1!important;pointer-events:auto!important;}.bridge-description-empty button{color:#96949d!important;background:transparent!important;}
+            .bridge-artwork-slot .bridge-artwork-overlay{display:none!important;}.bridge-artwork-slot.is-mobile-artwork-controls-open .bridge-artwork-overlay{display:flex!important;}
+            .bridge-cover-real>.bridge-cover-controls{opacity:0!important;pointer-events:none!important;}.bridge-cover-real.is-mobile-controls-open>.bridge-cover-controls,.bridge-cover-real.is-menu-open>.bridge-cover-controls,.bridge-cover-real.is-repositioning>.bridge-cover-controls{opacity:1!important;pointer-events:auto!important;}
+            .bridge-cover-controls{right:8px!important;bottom:8px!important;gap:4px!important;}.bridge-cover-control-button{height:32px!important;min-height:32px!important;font-size:12px!important;padding:0 9px!important;}.bridge-cover-popover{right:8px!important;bottom:-166px!important;width:min(286px,calc(100vw - 64px))!important;}
+            .mdxeditor,.mdxeditor-root-contenteditable,.bridge-description-view,.bridge-description-editor{max-width:100%!important;min-width:0!important;}.mdxeditor-toolbar{max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;flex-wrap:nowrap!important;scrollbar-width:none;}.mdxeditor-toolbar::-webkit-scrollbar{display:none;}
+            [data-page-state="album"] .bridge-page-inner{min-width:0!important;overflow-x:hidden;}[data-page-state="album"] table{min-width:640px;}[data-page-state="album"] .overflow-x-auto,[data-page-state="album"] [class*="overflow-x-auto"]{max-width:100%;}
+            .bridge-prototype-capsule{bottom:10px!important;width:calc(100vw - 20px)!important;max-width:calc(100vw - 20px)!important;gap:6px!important;padding:5px 6px 5px 8px!important;border-radius:14px!important;justify-content:space-between;}.bridge-prototype-breadcrumb{flex:1 1 auto!important;min-width:0!important;overflow:hidden!important;}.bridge-prototype-breadcrumb>div{max-width:100%!important;overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;}.bridge-prototype-switch{flex:0 0 auto!important;gap:0!important;padding-left:5px!important;}.bridge-prototype-switch button{padding-left:7px!important;padding-right:7px!important;font-size:10px!important;}.bridge-page-inner{padding-bottom:90px!important;}
+          }
+          '''
+
+          html = html.replace('</head>', f'<style id="bridge-entities-ui">{css}</style></head>', 1)
+          path.write_text(html, encoding='utf-8')
+          PY
+
+      - name: Remove temporary workflow and commit
+        shell: bash
+        run: |
+          rm -f .github/workflows/rebuild-entities-clean.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add entities/index.html .github/workflows/rebuild-entities-clean.yml
+          git commit -m 'Rebuild entities page with clean 220px artwork component'
+          git push
