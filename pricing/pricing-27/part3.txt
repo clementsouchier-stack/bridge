@@ -1,0 +1,205 @@
+100%;
+  max-width:520px;
+  margin:8px auto 0;
+  color:var(--muted);
+  text-align:center;
+  font-size:9.5px;
+  line-height:1.35;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.selected-plan.free-theme .selected-plan-header{
+  background:#e7e7e9;
+  color:#252428;
+  border-bottom-color:rgba(37,36,40,.06);
+}
+@media(max-width:620px){
+  .selected-plan-header{
+    min-height:40px;
+    padding:9px 14px;
+  }
+  .selected-plan-header .selected-plan-title{
+    font-size:11.5px;
+  }
+  .selected-plan-intro{
+    padding:15px 16px 8px;
+  }
+  .selected-plan-intro .selected-plan-subtitle{
+    font-size:16px;
+  }
+  .selected-plan-intro .selected-plan-loved{
+    font-size:9px;
+  }
+}
+.selected-plan-header{
+  padding:13px 18px!important;
+}
+.selected-plan-intro{
+  display:block!important;
+  padding:16px 22px 10px!important;
+  background:#fff;
+  text-align:center!important;
+}
+.selected-plan-intro .selected-plan-subtitle,
+.selected-plan-intro .selected-plan-loved{
+  width:100%!important;
+  max-width:none!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:center!important;
+}
+.selected-plan-intro .selected-plan-subtitle{
+  margin-top:0!important;
+  margin-bottom:0!important;
+  font-size:16px;
+  line-height:1.18;
+}
+.selected-plan-intro .selected-plan-loved{
+  margin-top:8px!important;
+  font-size:9px;
+  line-height:1.3;
+  opacity:.76;
+}
+@media(max-width:620px){
+  .selected-plan-header{
+    padding:12px 14px!important;
+  }
+  .selected-plan-intro{
+    padding:14px 16px 8px!important;
+  }
+  .selected-plan-intro .selected-plan-subtitle{
+    font-size:14px;
+  }
+  .selected-plan-intro .selected-plan-loved{
+    font-size:8.5px;
+  }
+}
+.recap-feature-title{
+  font-weight:700;
+}
+.recap-feature-list{
+  color:var(--muted);
+}
+.checkout-size-line{
+  letter-spacing:-.01em;
+}
+.selected-plan-loved{
+  letter-spacing:.07em;
+}
+</style></head><body><main class="page-shell"><header class="pricing-hero"><h1>Where creators, music pros and entertainment connect.</h1><p>Organize, discover, pitch and collaborate on music — powered by ethical AI.</p><div class="billing"><button id="yearlyBtn" class="active" type="button">Yearly <span style="opacity:.7">save ≈35%</span></button><button id="monthlyBtn" type="button">Monthly</button></div></header><section class="pricing-section"><div class="pricing-infos"><div class="pricing-step"><div class="pricing-step-title">Choose your plan</div><div class="pricing-step-description">Select the plan that matches your role. Options appear only when the plan needs configuration.</div></div><div class="plans" id="plans"></div></div><aside class="selected-plan" id="summary"></aside></section><section class="ecosystem-proof" aria-label="Bridge.audio ecosystem proof"><p class="ecosystem-proof-kicker">BRIDGE.AUDIO ECOSYSTEM</p><h3>Bridge the gap within the music industry and beyond.</h3><div class="ecosystem-proof-stats"><div class="ecosystem-stat"><div class="ecosystem-stat-number">50K+</div><div class="ecosystem-stat-title">Creators &amp; artists</div><div class="ecosystem-stat-copy">Artists, composers, voice-over and independent creative teams.</div></div><div class="ecosystem-stat"><div class="ecosystem-stat-number">5K+</div><div class="ecosystem-stat-title">Music professionals</div><div class="ecosystem-stat-copy">Labels, publishers, managers, brokers and rights holders.</div><div class="ecosystem-logo-grid" aria-label="Music professionals using Bridge.audio"><span>Sony Music</span><span>Warner Music</span><span>Wagram</span><span>Budde Music</span><span>Wise Music</span></div></div><div class="ecosystem-stat"><div class="ecosystem-stat-number">600+</div><div class="ecosystem-stat-title">Buyers &amp; creative teams</div><div class="ecosystem-stat-copy">Supervisors, agencies, brands, broadcasters and media teams searching for music.</div><div class="ecosystem-logo-grid" aria-label="Buyer network examples"><span>ASM</span><span>BBDO</span><span>Chanel</span><span>L’Oréal</span><span>TBWA</span></div></div></div></section><section class="full-compare" aria-label="Full plan comparison"><p class="full-compare-kicker">FULL COMPARE</p><h3>Compare plans line by line.</h3><div class="compare-scroll"><table class="compare-table" id="compareTable"></table></div></section></main><script>
+const icons={"cloud": "assets/cloud.svg", "team": "assets/team.svg", "rocket": "assets/rocket.svg", "search": "assets/search.svg", "chart": "assets/chart.svg", "wrench": "assets/wrench.svg", "music": "assets/music.svg", "eye": "assets/eye.svg", "paper": "assets/paper.svg"};
+const plans=[
+{
+ id:'free', badge:'FREE PLAN', color:'#e7e7e9', rgb:'231,231,233', text:'#252428',
+ title:'Start your catalog', loved:'FOR EVERYONE', cta:'Start free',
+ free:true,
+ size:{key:'Free',yearly:0,storage:'2 GB',tracks:'25 tracks',members:'3',slots:'0 slots'},
+ common:[
+  ['cloud','Storage & media',['2 GB storage - 25 tracks','All media formats']],
+  ['search','Search',['Standard search','Genre auto-tagging']],
+  ['paper','Organize & share',['Projects','Links & email sharing','Inbox']],
+  ['team','Team',['3 members included']]
+ ]
+},
+{
+ id:'talent', badge:'TALENT PRO', color:'#FFC833', rgb:'255,200,51', text:'#252428',
+ title:'Get discovered', loved:'FOR ARTISTS, BEATMAKERS & VOICE OVER', cta:'Choose Talent Pro',
+ sizes:[
+  {key:'M',yearly:5,storage:'100 GB',tracks:'100 tracks',members:'5',slots:'10 slots'},
+  {key:'L',yearly:9,storage:'250 GB',tracks:'500 tracks',members:'7',slots:'50 slots'},
+  {key:'XL',yearly:19,storage:'500 GB',tracks:'Unlimited',members:'10',slots:'100 slots'}
+ ],
+ common:[
+  ['cloud','Storage & media',['Storage by size','All media formats']],
+  ['search','Search & tagging',['Standard + Prompt search','Advanced auto-tagging']],
+  ['paper','Organize & share',['Projects','Advanced sharing','Inbox','Analytics']],
+  ['eye','Discovery',['Publish on Bridge Talent','Browse Bridge Talent']]
+ ]
+},
+{
+ id:'music', badge:'MUSIC PRO', color:'#2F43DE', rgb:'47,67,222', text:'#fff',
+ title:'Manage & promote your catalog', loved:'FOR LABELS, PUBLISHERS, MANAGERS & COMPOSERS', cta:'Choose Music Pro',
+ sizes:[
+  {key:'M',yearly:29,storage:'1 TB',tracks:'Unlimited',members:'5',slots:'250 slots'},
+  {key:'L',yearly:39,storage:'2 TB',tracks:'Unlimited',members:'7',slots:'500 slots'},
+  {key:'XL',yearly:49,storage:'3 TB',tracks:'Unlimited',members:'10',slots:'1,000 slots'}
+ ],
+ common:[
+  ['cloud','Storage & media',['Storage by size','All media formats']],
+  ['search','Search & tagging',['Standard + Prompt search','Advanced auto-tagging']],
+  ['paper','Organize & share',['Projects','Advanced sharing','Inbox','Analytics']],
+  ['eye','Discovery',['Publish on Bridge Talent, Sync, Library & Score','Browse Bridge Talent']]
+ ]
+},
+{
+ id:'supervisor', badge:'SUPERVISOR / MEDIA PRO', color:'#FF3364', rgb:'255,51,100', text:'#fff',
+ title:'Find the right track, fast', loved:'FOR SUPERVISORS, AGENCIES, BRANDS & PRODUCERS', cta:'Choose Supervisor / Media Pro',
+ sizes:[
+  {key:'M',yearly:29,storage:'2 TB',tracks:'Unlimited',members:'5',slots:null},
+  {key:'L',yearly:39,storage:'3 TB',tracks:'Unlimited',members:'5',slots:null},
+  {key:'XL',yearly:49,storage:'5 TB',tracks:'Unlimited',members:'5',slots:null}
+ ],
+ common:[
+  ['cloud','Storage & media',['Storage by size','All media formats']],
+  ['search','Search & tagging',['Standard + Prompt search','Advanced auto-tagging']],
+  ['paper','Organize & share',['Projects','Advanced sharing','Inbox','Analytics']],
+  ['eye','Discovery',['Browse Bridge Talent, Sync, Library & Score','No publishing needed']]
+ ]
+},
+{
+ id:'enterprise', badge:'ENTERPRISE', color:'#252428', rgb:'37,36,40', text:'#fff',
+ title:'Built for your organization', loved:'FOR LARGE ORGANIZATIONS', cta:'Talk to sales',
+ enterprise:true,
+ common:[
+  ['cloud','Storage & media',['Custom storage','All media formats']],
+  ['search','Search & tagging',['Custom search & AI workflows']],
+  ['paper','Organize & share',['Custom workflows','Advanced security & permissions']],
+  ['team','Support & integrations',['Custom ingestion','API, SSO & integrations']]
+ ]
+}
+];
+const compareRows=[
+ ['STORAGE AND TEAM','Cloud Storage',['2 GB','100 / 250 / 500 GB','1 / 2 / 3 TB','2 / 3 / 5 TB','Custom']],
+ ['','Music / Audio Storage',['25 tracks','100 / 500 / Unlimited','Unlimited','Unlimited','Custom']],
+ ['','Host all media',['Yes','Yes','Yes','Yes','Custom']],
+ ['','Members included',['3','5 / 7 / 10','5 / 7 / 10','5 / 5 / 5','Custom']],
+ ['INTERNAL DISCOVERABILITY','Standard search',['Yes','Yes','Yes','Yes','Custom']],
+ ['','Prompt search',['No','Yes','Yes','Yes','Custom']],
+ ['','Auto-tagging Genre',['Yes','Yes','Yes','Yes','Custom']],
+ ['','Auto-tagging Language, Themes, Explicit',['No','Yes','Yes','Yes','Custom']],
+ ['EXTERNAL DISCOVERABILITY','Hub promotion slots',['0','10 / 50 / 100','250 / 500 / 1,000','No need','Custom']],
+ ['','Publish: Bridge Talent',['No','Yes','Yes','No need','Custom']],
+ ['','Publish: Bridge Sync',['No','No','Yes','No need','Custom']],
+ ['','Publish: Bridge Library',['No','No','Pro Library only','No need','Custom']],
+ ['','Publish: Bridge Score',['No','No','Yes','No need','Custom']],
+ ['PREMIUM CATALOG ACCESS','Browse Bridge Talent',['No','Yes','Yes','Yes','Custom']],
+ ['','Browse Bridge Sync',['No','No','No','Yes','Custom']],
+ ['','Browse Bridge Library',['No','No','No','Yes','Custom']],
+ ['','Browse Bridge Score',['No','No','No','Yes','Custom']],
+ ['ORGANIZE AND SHARE','Beautiful Projects to Share',['Yes','Yes','Yes','Yes','Custom']],
+ ['','Sharing Options',['Links / Email','Advanced','Advanced','Advanced','Custom']],
+ ['','Immortal links',['Yes','Yes','Yes','Yes','Custom']],
+ ['','Metadata editor',['Yes','Yes','Yes','Yes','Custom']],
+ ['','Download all formats',['Yes','Yes','Yes','Yes','Custom']],
+ ['','Sub-Projects',['Yes','Yes','Yes','Yes','Custom']],
+ ['','Inbox',['Yes','Yes','Yes','Yes','Custom']],
+ ['','Password on shared',['No','No','Yes','Yes','Custom']],
+ ['','Player',['Bridge branded','Ad-free','Ad-free','Ad-free','Custom']],
+ ['','Replace Audio-File',['No','Yes','Yes','Yes','Custom']],
+ ['','Dark Mode',['Yes','Yes','Yes','Yes','Custom']],
+ ['INGESTION','Upload all formats',['Yes','Yes','Yes','Yes','Custom']],
+ ['','Premium ingestion',['No','No','Yes','Yes','Custom']],
+ ['','DDEX',['No','No','Yes for label','No need','Custom']],
+ ['','FTP',['No','No','Yes','Yes','Custom']],
+ ['','Disco import',['No','No','Yes','Yes','Custom']],
+ ['ACTIVITY / ANALYTICS','Notifications',['Yes','Yes','Yes','Yes','Custom']],
+ ['','Activities',['No','Yes','Yes','Yes','Custom']],
+ ['','Analytics',['No','Yes','Yes','Yes','Custom']],
+ ['SUPPORT','Chatbot / Email',['Yes','Yes','Yes','Yes','Custom']],
+ ['','Premium support',['No','No','Yes','Yes','Custom']]
+];
+let state={plan:0,yearly:true,size:0};
+const yearlyBtn=document.getElementById('yearlyBtn');
+const monthlyBtn=document.getElementById('monthlyBtn');
+function diamond(){return `<svg width="21" height="20" aria-hidden="true" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg"><g ><path d="M5.26953 1.36719L6.35156 3.74805L8.18555 4.58203H15.7246L15.8096 4.58691C16.005 4.61152 16.1821 4.72048 16.293 4.88672L19.0273 8.98828C19.197 9.24307 19.1768 9.58007 18.9775 9.8125L10.7744 19.3828C10.6425 19.5365 10.4486 19.6238 10.2461 19.6211C10.0434 19.6181 9.85124 19.5256 9.72363 19.3682L1.97656 9.79785C1.80124 9.58124 1.77502 9.27883 1.91016 9.03516L3.0498 6.98438L3.19824 6.71484L0.945312 5.69141L0 5.26172L0.945312 4.83203L3.32715 3.74902L4.41016 1.36719L4.83984 0.421875L5.26953 1.36719ZM8.93555 9.35742L7.48242 10.0176L8.93555 10.6787L9.59668 12.1318L10.2568 10.6787L11.7109 10.0176L10.2568 9.35742L9.59668 7.9043L8.93555 9.35742ZM4.11426 4.30176L4.04102 4.46289L3.87988 4.53613L2.28125 5.26172L3.87988 5.98828L4.04102 6.06152L4.11426 6.22266L4.83984 7.82031L5.56641 6.22266L5.63965 6.06152L5.80078 5.98828L7.39844 5.26172L5.80078 4.53613L5.63965 4.46289L5.56641 4.30176L4.83984 2.70312L4.11426 4.30176Z" fill="currentColor"/><path d="M5.26953
