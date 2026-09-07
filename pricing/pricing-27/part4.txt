@@ -1,0 +1,144 @@
+ 1.36719L6.35156 3.74805L8.18555 4.58203H15.7246L15.8096 4.58691C16.005 4.61152 16.1821 4.72048 16.293 4.88672L19.0273 8.98828C19.197 9.24307 19.1768 9.58007 18.9775 9.8125L10.7744 19.3828C10.6425 19.5365 10.4486 19.6238 10.2461 19.6211C10.0434 19.6181 9.85124 19.5256 9.72363 19.3682L1.97656 9.79785C1.80124 9.58124 1.77502 9.27883 1.91016 9.03516L3.0498 6.98438L3.19824 6.71484L0.945312 5.69141L0 5.26172L0.945312 4.83203L3.32715 3.74902L4.41016 1.36719L4.83984 0.421875L5.26953 1.36719ZM8.93555 9.35742L7.48242 10.0176L8.93555 10.6787L9.59668 12.1318L10.2568 10.6787L11.7109 10.0176L10.2568 9.35742L9.59668 7.9043L8.93555 9.35742ZM4.11426 4.30176L4.04102 4.46289L3.87988 4.53613L2.28125 5.26172L3.87988 5.98828L4.04102 6.06152L4.11426 6.22266L4.83984 7.82031L5.56641 6.22266L5.63965 6.06152L5.80078 5.98828L7.39844 5.26172L5.80078 4.53613L5.63965 4.46289L5.56641 4.30176L4.83984 2.70312L4.11426 4.30176Z" fill="url(#paint0_linear_33277_11157)"/></g></svg>
+`}
+function icon(k){return `<span class="summary-icon"><img src="${icons[k]}" alt=""></span>`}
+function optIcon(k){return `<img class="option-icon" src="${icons[k]}" alt="">`}
+function currentPlan(){return plans[state.plan]}
+function currentSize(){const p=currentPlan();return p.sizes?p.sizes[state.size]:p.size||null}
+function monthlyFromYearly(y){return Math.round(y/0.65)}
+function priceOf(s){return state.yearly?s.yearly:monthlyFromYearly(s.yearly)}
+function fmt(n){return `${n}€`}
+function priceText(p){
+ if(p.free)return 'Free';
+ if(p.enterprise)return 'Custom';
+ return fmt(priceOf(p.sizes[0]));
+}
+function selectedPrice(){
+ const p=currentPlan();
+ if(p.free)return 0;
+ if(p.enterprise)return null;
+ return priceOf(currentSize());
+}
+function renderFeatures(p){
+ return p.common.map(([i,t,items])=>`<div class="recap-feature">${icon(i)}<div><p class="recap-feature-title">${t}</p><ul class="recap-feature-list">${items.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>`).join('');
+}
+function checkoutSizeLines(p,s){
+ const storage=s.tracks==='Unlimited'
+   ? `${s.storage} storage - Unlimited tracks`
+   : `${s.storage} storage - ${s.tracks}`;
+ const members=`${s.members} members included`;
+ let hubs='';
+ if(p.id==='talent') hubs=`${s.slots} tracks published on Bridge Talent`;
+ else if(p.id==='music') hubs=`${s.slots} tracks published on Bridge Hubs`;
+ else if(p.id==='supervisor') hubs=`Bridge Talent, Sync, Library & Score included`;
+ return `<div class="checkout-size-lines"><div class="checkout-size-line">${optIcon('cloud')}<span>${storage}</span></div><div class="checkout-size-line">${optIcon('team')}<span>${members}</span></div><div class="checkout-size-line">${optIcon('eye')}<span>${hubs}</span></div></div>`;
+}
+function renderCheckoutStack(p){
+ const val=selectedPrice();
+ const price=p.enterprise?'Custom':p.free?'Free':fmt(val);
+ const suffix=p.sizes?'/mo':'';
+ const yearlyLine=p.sizes
+   ? (state.yearly?`${fmt(val*12)}/year billed yearly`:`${fmt(val*12)}/year billed monthly`)
+   : (p.enterprise?'Talk to sales':'');
+ const sizes=p.sizes ? `
+   <div class="checkout-size-tabs" role="tablist" aria-label="${p.badge} sizes">
+     ${p.sizes.map((x,i)=>`<button type="button" class="checkout-size-tab" role="tab" aria-selected="${i===state.size}" tabindex="${i===state.size?'0':'-1'}" data-size="${i}">${x.key}</button>`).join('')}
+   </div>
+   ${checkoutSizeLines(p,p.sizes[state.size])}` : '';
+ return `<div class="checkout-stack">
+   ${sizes}
+   <div class="checkout-bottom"><div class="checkout-price"><div class="checkout-price-main"><span class="checkout-price-value" aria-live="polite">${price}</span>
+         ${suffix?`<span class="checkout-price-suffix">${suffix}</span>`:''}
+       </div>
+       ${yearlyLine?`<div class="checkout-price-yearly">${yearlyLine}</div>`:''}
+     </div><div class="checkout-cta-wrap"><button class="pricing-plan-sign-up checkout-cta ${p.enterprise?'secondary':''}" id="mainCta">${p.cta}</button><div class="checkout-reassurance">${p.free?'No card required':p.sizes?'Cancel anytime':''}</div></div></div></div>`;
+}
+function renderPlans(){
+ const root=document.getElementById('plans');
+ root.setAttribute('role','radiogroup');
+ root.setAttribute('aria-label','Choose your Bridge plan');
+ root.innerHTML=plans.map((p,i)=>`<button type="button" class="pricing-plan ${i===state.plan?'selected':''}" role="radio" data-plan-id="${p.id}" aria-checked="${i===state.plan}" tabindex="${i===state.plan?'0':'-1'}" data-i="${i}" style="--plan-color:${p.color};--plan-text:${p.text}"><div class="pricing-plan-main"><div class="pricing-plan-name">${p.sizes?diamond():''}${p.badge}</div><div class="pricing-plan-title">${p.title}</div><div class="pricing-plan-lovedby">${p.loved}</div></div><div class="right"><div class="pricing-plan-notice">${p.enterprise?'Tailored plan':p.free?'':'Starting at'}</div><div class="pricing-plan-price-main"><span class="pricing-plan-price-value">${priceText(p)}</span>${p.sizes?'<span class="pricing-plan-price-suffix">/mo</span>':''}</div>
+   ${p.sizes?`<div class="pricing-plan-price-yearly">${state.yearly?'billed yearly':'billed monthly'}</div>`:''}
+  </div></button>`).join('');
+ [...root.querySelectorAll('.pricing-plan')].forEach((el,i)=>{
+  const select=()=>{
+   state.plan=i; state.size=0; render(); positionCheckout();
+  };
+  el.addEventListener('click',select);
+  el.addEventListener('keydown',e=>{
+   if(e.key==='Enter'||e.key===' '){e.preventDefault();select();return;}
+   if(e.key==='ArrowDown'||e.key==='ArrowRight'){e.preventDefault();focusPlan((i+1)%plans.length);}
+   if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();focusPlan((i-1+plans.length)%plans.length);}
+  });
+ });
+}
+function focusPlan(i){
+ const items=[...document.querySelectorAll('.pricing-plan')];
+ items.forEach((x,j)=>x.tabIndex=j===i?0:-1);
+ items[i].focus();
+}
+function bindSizeKeys(){
+ const tabs=[...document.querySelectorAll('.checkout-size-tab')];
+ tabs.forEach((tab,i)=>{
+  const select=()=>{state.size=i;renderSummary();renderPlans();};
+  tab.addEventListener('click',select);
+  tab.addEventListener('keydown',e=>{
+   let next=null;
+   if(e.key==='ArrowRight'||e.key==='ArrowDown') next=(i+1)%tabs.length;
+   if(e.key==='ArrowLeft'||e.key==='ArrowUp') next=(i-1+tabs.length)%tabs.length;
+   if(e.key==='Home') next=0;
+   if(e.key==='End') next=tabs.length-1;
+   if(next!==null){
+    e.preventDefault();
+    state.size=next;
+    renderSummary();
+    renderPlans();
+    requestAnimationFrame(()=>document.querySelectorAll('.checkout-size-tab')[next]?.focus());
+   }
+  });
+ });
+}
+function renderSummary(){
+ const p=currentPlan();
+ const summary=document.getElementById('summary');
+ summary.style.setProperty('--active',p.color);
+ summary.style.setProperty('--active-rgb',p.rgb);
+ summary.style.setProperty('--active-text',p.text);
+ summary.classList.toggle('free-theme',p.id==='free');
+ summary.innerHTML=`
+   <div class="selected-plan-header"><div class="selected-plan-title">${p.sizes?diamond():''}${p.badge}</div></div><div class="selected-plan-intro"><div class="selected-plan-subtitle">${p.title}</div><div class="selected-plan-loved">${p.loved}</div></div><div class="selected-plan-body"><div class="selected-plan-details">${renderFeatures(p)}</div></div>
+   ${renderCheckoutStack(p)}
+ `;
+ bindSizeKeys();
+ document.getElementById('mainCta').onclick=()=>alert('Demo action');
+}
+function renderCompare(){
+ const t=document.getElementById('compareTable');
+ t.innerHTML=`<thead><tr><th class="compare-feature">Feature family</th><th>Free</th><th>Talent Pro</th><th>Music Pro</th><th>Supervisor / Media Pro</th><th>Enterprise</th></tr></thead><tbody>${compareRows.map(([family,feature,vals])=>{
+   const familyRow=family?`<tr class="compare-family"><td colspan="6">${family}</td></tr>`:'';
+   return `${familyRow}<tr><td class="compare-feature">${feature}</td>${vals.map(v=>`<td class="${v==='No'||v==='No need'?'compare-muted':'compare-check'}">${v}</td>`).join('')}</tr>`;
+ }).join('')}</tbody>`;
+}
+function positionCheckout(){
+ const summary=document.getElementById('summary');
+ if(!summary)return;
+ const mobile=window.matchMedia('(max-width:900px)').matches;
+ requestAnimationFrame(()=>{
+  if(mobile){
+   const y=summary.getBoundingClientRect().top+window.scrollY-12;
+   window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+  }else{
+   const rect=summary.getBoundingClientRect();
+   if(rect.top<24 || rect.bottom>window.innerHeight-24){
+    const y=summary.getBoundingClientRect().top+window.scrollY-24;
+    window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+   }
+   const body=summary.querySelector('.selected-plan-body');
+   if(body) body.scrollTop=0;
+  }
+ });
+}
+function render(){renderPlans();renderSummary();renderCompare()}
+yearlyBtn.onclick=()=>{state.yearly=true;yearlyBtn.classList.add('active');monthlyBtn.classList.remove('active');render()};
+monthlyBtn.onclick=()=>{state.yearly=false;monthlyBtn.classList.add('active');yearlyBtn.classList.remove('active');render()};
+render();
+</script></body></html>
