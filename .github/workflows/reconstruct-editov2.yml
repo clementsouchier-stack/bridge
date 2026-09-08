@@ -1,0 +1,40 @@
+name: Reconstruct Edito V2
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.editov2-upload/READY'
+
+permissions:
+  contents: write
+
+jobs:
+  reconstruct:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reconstruct exact HTML
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .editov2-upload/part-* > /tmp/editov2.xz.b64
+          base64 -d /tmp/editov2.xz.b64 > /tmp/editov2.html.xz
+          xz -dc /tmp/editov2.html.xz > /tmp/index.html
+          echo '70e660c8cebfd6ecf6ebeda426220ad3732eed8e78237f02e7bc3b22f9d091c1  /tmp/index.html' | sha256sum -c -
+          mkdir -p editov2
+          mv /tmp/index.html editov2/index.html
+          rm -rf .editov2-upload
+
+      - name: Commit exact page
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Publish exact Edito V2 [skip ci]'
+          git push
