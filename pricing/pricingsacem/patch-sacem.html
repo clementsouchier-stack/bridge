@@ -14,10 +14,10 @@
  plans.push({
   id:'sacem',badge:'SACEM MEMBER BENEFIT',color:'#D9004C',rgb:'217,0,76',text:'#fff',
   title:'Sacem Cloud by Bridge.audio',loved:'EXCLUSIVE TO SACEM MEMBERS',cta:'Choose Sacem Cloud',
-  partner:true,fixedMonthly:1.99,
-  size:{key:'SACEM',monthly:1.99,storage:'50 GB',tracks:'100 tracks',members:'3',slots:'0'},
+  partner:true, yearlyMonthly:1.99, monthlyPrice:2.50,
+  size:{key:'SACEM',yearly:1.99,monthly:2.50,storage:'50 GB',tracks:'50 tracks',members:'3',slots:'0'},
   common:[
-   ['cloud','Storage & media',['50 GB storage - 100 tracks','All media formats']],
+   ['cloud','Storage & media',['50 GB storage - 50 tracks','All media formats']],
    ['search','Search & tagging',['Standard search','Genre auto-tagging']],
    ['paper','Organize & share',['Projects','Links & email sharing','Inbox']],
    ['team','Team',['3 members included']],
@@ -25,21 +25,21 @@
   ]
  });
  state.partnerExpanded=false;
- const basePriceText=priceText;
- priceText=function(p){if(p.partner)return `${p.fixedMonthly.toFixed(2).replace('.',',')}€`;return basePriceText(p)};
- const baseSelectedPrice=selectedPrice;
- selectedPrice=function(){const p=currentPlan();if(p.partner)return p.fixedMonthly;return baseSelectedPrice()};
  function renderSacemSummary(p){const s=p.size;return `<div class="sacem-fixed-summary"><div class="checkout-size-line">${optIcon('cloud')}<span>${s.storage} storage - ${s.tracks}</span></div><div class="checkout-size-line">${optIcon('team')}<span>${s.members} members included</span></div><div class="checkout-size-line">${optIcon('eye')}<span>No Bridge Hubs included</span></div></div>`}
+ const baseSelectedPrice=selectedPrice;
+ selectedPrice=function(){const p=currentPlan();if(p.partner)return state.yearly?p.yearlyMonthly:p.monthlyPrice;return baseSelectedPrice()};
  const baseRenderCheckoutStack=renderCheckoutStack;
  renderCheckoutStack=function(p){
   if(!p.partner)return baseRenderCheckoutStack(p);
-  const price=`${p.fixedMonthly.toFixed(2).replace('.',',')}€`;
-  return `<div class="checkout-stack">${renderSacemSummary(p)}<div class="checkout-bottom"><div class="checkout-price"><div class="checkout-price-main"><span class="checkout-price-value" aria-live="polite">${price}</span><span class="checkout-price-suffix">/mo</span></div><div class="checkout-price-yearly">Monthly only</div></div><div class="checkout-cta-wrap"><button class="pricing-plan-sign-up checkout-cta" id="mainCta">${p.cta}</button><div class="checkout-reassurance">Reserved for verified SACEM members</div></div></div></div>`;
+  const val=selectedPrice();
+  const price=`${val.toFixed(2).replace('.',',')}€`;
+  const yearlyLine=state.yearly?`${(p.yearlyMonthly*12).toFixed(2).replace('.',',')}€/year billed yearly`:`${(p.monthlyPrice*12).toFixed(2).replace('.',',')}€/year billed monthly`;
+  return `<div class="checkout-stack">${renderSacemSummary(p)}<div class="checkout-bottom"><div class="checkout-price"><div class="checkout-price-main"><span class="checkout-price-value" aria-live="polite">${price}</span><span class="checkout-price-suffix">/mo</span></div><div class="checkout-price-yearly">${yearlyLine}</div></div><div class="checkout-cta-wrap"><button class="pricing-plan-sign-up checkout-cta" id="mainCta">${p.cta}</button><div class="checkout-reassurance">Reserved for verified SACEM members</div></div></div></div>`;
  };
  renderPlans=function(){
   const root=document.getElementById('plans');root.setAttribute('role','radiogroup');root.setAttribute('aria-label','Choose your Bridge plan');
   root.innerHTML=plans.map((p,i)=>{
-   if(p.partner){const expanded=state.partnerExpanded;return `<div class="partner-plan-divider" aria-hidden="true"><span>For SACEM members</span></div><button type="button" class="pricing-plan sacem-plan ${expanded?'is-expanded ':''}${i===state.plan?'selected':''}" role="radio" data-plan-id="${p.id}" aria-checked="${i===state.plan}" aria-expanded="${expanded}" tabindex="${i===state.plan?'0':'-1'}" data-i="${i}" style="--plan-color:${p.color};--plan-text:${p.text}"><div class="sacem-collapsed-main"><img class="sacem-mini-logo" src="${sacemLogo}" alt="SACEM Bridge.audio"><div class="sacem-collapsed-copy"><div class="sacem-collapsed-title">Sacem Cloud by Bridge.audio</div><div class="sacem-collapsed-subtitle">Exclusive member offer</div></div></div><div class="sacem-collapsed-right"><div class="sacem-collapsed-price">1,99€ /mo</div><span class="sacem-chevron" aria-hidden="true">⌄</span></div><div class="sacem-expanded-content"><div class="sacem-expanded-left"><div class="sacem-expanded-brand"><img class="sacem-mini-logo" src="${sacemLogo}" alt="SACEM Bridge.audio"><div><div class="sacem-expanded-kicker">SACEM member benefit</div><div class="sacem-expanded-title">Sacem Cloud by Bridge.audio</div></div></div><div class="sacem-expanded-note">50 GB · 100 tracks · 3 members · No Hubs</div></div><div class="sacem-expanded-price"><div class="pricing-plan-notice">Member price</div><div class="pricing-plan-price-main"><span class="pricing-plan-price-value">1,99€</span><span class="pricing-plan-price-suffix">/mo</span></div><div class="pricing-plan-price-yearly">monthly only</div></div></div></button>`}
+   if(p.partner){const expanded=state.partnerExpanded;const currentPrice=(state.yearly?p.yearlyMonthly:p.monthlyPrice).toFixed(2).replace('.',',');return `<div class="partner-plan-divider" aria-hidden="true"><span>For SACEM members</span></div><button type="button" class="pricing-plan sacem-plan ${expanded?'is-expanded ':''}${i===state.plan?'selected':''}" role="radio" data-plan-id="${p.id}" aria-checked="${i===state.plan}" aria-expanded="${expanded}" tabindex="${i===state.plan?'0':'-1'}" data-i="${i}" style="--plan-color:${p.color};--plan-text:${p.text}"><div class="sacem-collapsed-main"><img class="sacem-mini-logo" src="${sacemLogo}" alt="SACEM Bridge.audio"><div class="sacem-collapsed-copy"><div class="sacem-collapsed-title">Sacem Cloud by Bridge.audio</div><div class="sacem-collapsed-subtitle">Exclusive member offer</div></div></div><div class="sacem-collapsed-right"><div class="sacem-collapsed-price">${currentPrice}€ /mo</div><span class="sacem-chevron" aria-hidden="true">⌄</span></div><div class="sacem-expanded-content"><div class="sacem-expanded-left"><div class="sacem-expanded-brand"><img class="sacem-mini-logo" src="${sacemLogo}" alt="SACEM Bridge.audio"><div><div class="sacem-expanded-kicker">SACEM member benefit</div><div class="sacem-expanded-title">Sacem Cloud by Bridge.audio</div></div></div><div class="sacem-expanded-note">50 GB · 50 tracks · 3 members · No Hubs</div></div><div class="sacem-expanded-price"><div class="pricing-plan-notice">Member price</div><div class="pricing-plan-price-main"><span class="pricing-plan-price-value">${currentPrice}€</span><span class="pricing-plan-price-suffix">/mo</span></div><div class="pricing-plan-price-yearly">${state.yearly?'billed yearly':'billed monthly'}</div></div></div></button>`}
    return `<button type="button" class="pricing-plan ${i===state.plan?'selected':''}" role="radio" data-plan-id="${p.id}" aria-checked="${i===state.plan}" tabindex="${i===state.plan?'0':'-1'}" data-i="${i}" style="--plan-color:${p.color};--plan-text:${p.text}"><div class="pricing-plan-main"><div class="pricing-plan-name">${p.sizes?diamond():''}${p.badge}</div><div class="pricing-plan-title">${p.title}</div><div class="pricing-plan-lovedby">${p.loved}</div></div><div class="right"><div class="pricing-plan-notice">${p.enterprise?'Tailored plan':p.free?'':'Starting at'}</div><div class="pricing-plan-price-main"><span class="pricing-plan-price-value">${priceText(p)}</span>${p.sizes?'<span class="pricing-plan-price-suffix">/mo</span>':''}</div>${p.sizes?`<div class="pricing-plan-price-yearly">${state.yearly?'billed yearly':'billed monthly'}</div>`:''}</div></button>`
   }).join('');
   [...root.querySelectorAll('.pricing-plan')].forEach(el=>{const i=Number(el.dataset.i);const select=()=>{const p=plans[i];if(p.partner){state.partnerExpanded=!state.partnerExpanded;if(state.partnerExpanded){state.plan=i;state.size=0}render();if(state.partnerExpanded)positionCheckout();return}state.partnerExpanded=false;state.plan=i;state.size=0;render();positionCheckout()};el.addEventListener('click',select);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select();return}if(e.key==='ArrowDown'||e.key==='ArrowRight'){e.preventDefault();focusPlan((i+1)%plans.length)}if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();focusPlan((i-1+plans.length)%plans.length)}})});
