@@ -1,0 +1,65 @@
+<script>
+(()=>{
+  const sacem=plans.find(p=>p.id==='sacem');
+  if(!sacem)return;
+
+  sacem.yearlyMonthly=4.99;
+  sacem.monthlyPrice=6.74;
+  sacem.fixedMonthly=4.99;
+  sacem.size={key:'SACEM',yearly:4.99,monthly:6.74,storage:'50 GB',tracks:'50 tracks',members:'3',slots:'0'};
+  sacem.common=sacem.common.map(row=>{
+    if(row[0]==='cloud') return ['cloud','Storage & media',['50 GB storage - 50 tracks','All media formats']];
+    return row;
+  });
+
+  const sacemPrice=()=>state.yearly?sacem.yearlyMonthly:sacem.monthlyPrice;
+  const formatSacemPrice=n=>`${n.toFixed(2).replace('.',',')}€`;
+
+  const previousPriceText=priceText;
+  priceText=function(p){
+    if(p&&p.id==='sacem') return formatSacemPrice(sacemPrice());
+    return previousPriceText(p);
+  };
+
+  const previousSelectedPrice=selectedPrice;
+  selectedPrice=function(){
+    const p=currentPlan();
+    if(p&&p.id==='sacem') return sacemPrice();
+    return previousSelectedPrice();
+  };
+
+  const previousRenderPlans=renderPlans;
+  renderPlans=function(){
+    sacem.fixedMonthly=sacemPrice();
+    previousRenderPlans();
+    const card=document.querySelector('[data-plan-id="sacem"]');
+    if(!card)return;
+    const price=formatSacemPrice(sacemPrice());
+    const collapsed=card.querySelector('.sacem-collapsed-price');
+    if(collapsed) collapsed.textContent=`${price} /mo`;
+    const note=card.querySelector('.sacem-expanded-note');
+    if(note) note.textContent='50 GB · 50 tracks · 3 members · No Hubs';
+    const value=card.querySelector('.sacem-expanded-price .pricing-plan-price-value');
+    if(value) value.textContent=price;
+    const billing=card.querySelector('.sacem-expanded-price .pricing-plan-price-yearly');
+    if(billing) billing.textContent=state.yearly?'billed yearly':'billed monthly';
+  };
+
+  const previousRenderSummary=renderSummary;
+  renderSummary=function(){
+    sacem.fixedMonthly=sacemPrice();
+    previousRenderSummary();
+    if(currentPlan().id!=='sacem')return;
+    const price=sacemPrice();
+    const value=document.querySelector('#summary .checkout-price-value');
+    if(value)value.textContent=formatSacemPrice(price);
+    const billing=document.querySelector('#summary .checkout-price-yearly');
+    if(billing){
+      const annual=price*12;
+      billing.textContent=`${annual.toFixed(2).replace('.',',')}€/year ${state.yearly?'billed yearly':'billed monthly'}`;
+    }
+  };
+
+  render();
+})();
+</script>
