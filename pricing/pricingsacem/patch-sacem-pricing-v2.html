@@ -3,10 +3,10 @@
   const sacem=plans.find(p=>p.id==='sacem');
   if(!sacem)return;
 
-  sacem.yearlyMonthly=4.99;
-  sacem.monthlyPrice=6.74;
-  sacem.fixedMonthly=4.99;
-  sacem.size={key:'SACEM',yearly:4.99,monthly:6.74,storage:'50 GB',tracks:'50 tracks',members:'3',slots:'0'};
+  sacem.yearlyMonthly=1.99;
+  sacem.monthlyPrice=2.50;
+  sacem.fixedMonthly=1.99;
+  sacem.size={key:'SACEM',yearly:1.99,monthly:2.50,storage:'50 GB',tracks:'50 tracks',members:'3',slots:'0'};
   sacem.common=sacem.common.map(row=>{
     if(row[0]==='cloud') return ['cloud','Storage & media',['50 GB storage - 50 tracks','All media formats']];
     return row;
