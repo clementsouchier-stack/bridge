@@ -672,7 +672,7 @@ pattern = re.compile(
     r'\n\s*<script>\s*\(\(\) => \{.*?</script>\s*<script id="analytics-v2-overview-layout">.*?</script>',
     re.S,
 )
-text, count = pattern.subn('\n' + clean_script, text, count=1)
+text, count = pattern.subn(lambda _: '\n' + clean_script, text, count=1)
 if count != 1:
     raise SystemExit(f'Expected to replace analytics scripts once, replaced {count}')
 
