@@ -13,12 +13,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate staged source chunks
-        run: |
-          wc -c .github/tmp_share_ref/raw*.txt
-          sha256sum .github/tmp_share_ref/raw*.txt
       - name: Install parser
         run: python -m pip install beautifulsoup4
+      - name: Use verified source chunks
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('.github/analytics-v2-exact-project-patch.py')
+          s = p.read_text()
+          old = "b64 = ''.join(Path(f'.github/tmp_share_ref/raw0{i}.txt').read_text().strip() for i in range(3))"
+          new = "b64 = Path('.github/tmp_share_ref/raw00.txt').read_text().strip() + ''.join(Path(f'.github/tmp_share_ref/r1_{i}.txt').read_text().strip() for i in range(5)) + Path('.github/tmp_share_ref/raw02.txt').read_text().strip()"
+          if old not in s:
+              raise SystemExit('chunk loader marker missing')
+          p.write_text(s.replace(old, new, 1))
+          PY
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          parts = [Path('.github/tmp_share_ref/raw00.txt')] + [Path(f'.github/tmp_share_ref/r1_{i}.txt') for i in range(5)] + [Path('.github/tmp_share_ref/raw02.txt')]
+          data = ''.join(p.read_text().strip() for p in parts).encode()
+          print(len(data), hashlib.sha256(data).hexdigest())
+          expected = 'ddca0590b2cd66ce33414db2340fba6c04800fe56202670bcd29dad9698cf294'
+          if hashlib.sha256(data).hexdigest() != expected:
+              raise SystemExit('Exact reference checksum mismatch')
+          PY
       - name: Apply exact source DOM
         run: python .github/analytics-v2-exact-project-patch.py
       - name: Commit exact project view
