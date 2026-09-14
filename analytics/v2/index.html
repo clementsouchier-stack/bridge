@@ -15,7 +15,8 @@
     const response = await fetch('./base.html?v=20260914-v7', { cache: 'no-store' });
     if (!response.ok) throw new Error(`Failed to load Analytics baseline (${response.status})`);
     let html = await response.text();
-    html = html.replace('</body>', '<script src="./enhancements.js?v=20260914-v7"><\\/script></body>');
+    const enhancement = '<script src="./enhancements.js?v=20260914-v7"></' + 'script>';
+    html = html.replace('</body>', enhancement + '</body>');
     document.open();
     document.write(html);
     document.close();
