@@ -15,26 +15,31 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install parser
         run: python -m pip install beautifulsoup4
-      - name: Use verified source chunks
+      - name: Prepare verified exact source
         run: |
           python - <<'PY'
           from pathlib import Path
           p = Path('.github/analytics-v2-exact-project-patch.py')
           s = p.read_text()
-          old = "b64 = ''.join(Path(f'.github/tmp_share_ref/raw0{i}.txt').read_text().strip() for i in range(3))"
-          new = "b64 = Path('.github/tmp_share_ref/raw00.txt').read_text().strip() + ''.join(Path(f'.github/tmp_share_ref/r1_{i}.txt').read_text().strip() for i in range(5)) + Path('.github/tmp_share_ref/raw02.txt').read_text().strip()"
-          if old not in s:
-              raise SystemExit('chunk loader marker missing')
-          p.write_text(s.replace(old, new, 1))
+          old_loader = "b64 = ''.join(Path(f'.github/tmp_share_ref/raw0{i}.txt').read_text().strip() for i in range(3))"
+          new_loader = "b64 = Path('.github/tmp_share_ref/raw00.txt').read_text().strip() + ''.join(Path(f'.github/tmp_share_ref/r1_{i}.txt').read_text().strip() for i in range(5)) + Path('.github/tmp_share_ref/raw02.txt').read_text().strip()"
+          if old_loader in s:
+              s = s.replace(old_loader, new_loader, 1)
+          old_root = "root = soup.select_one('#__next')\nchildren = [c for c in root.children if getattr(c, 'name', None)]"
+          new_root = "root = soup.select_one('#__next')\nif root is None:\n    top_level = [c for c in soup.contents if getattr(c, 'name', None)]\n    root = soup.new_tag('div', id='__next')\n    for node in top_level:\n        root.append(node.extract())\nchildren = [c for c in root.children if getattr(c, 'name', None)]"
+          if old_root not in s:
+              raise SystemExit('root marker missing')
+          p.write_text(s.replace(old_root, new_root, 1))
           PY
           python - <<'PY'
           from pathlib import Path
           import hashlib
           parts = [Path('.github/tmp_share_ref/raw00.txt')] + [Path(f'.github/tmp_share_ref/r1_{i}.txt') for i in range(5)] + [Path('.github/tmp_share_ref/raw02.txt')]
           data = ''.join(p.read_text().strip() for p in parts).encode()
-          print(len(data), hashlib.sha256(data).hexdigest())
           expected = 'ddca0590b2cd66ce33414db2340fba6c04800fe56202670bcd29dad9698cf294'
-          if hashlib.sha256(data).hexdigest() != expected:
+          digest = hashlib.sha256(data).hexdigest()
+          print(len(data), digest)
+          if digest != expected:
               raise SystemExit('Exact reference checksum mismatch')
           PY
       - name: Apply exact source DOM
