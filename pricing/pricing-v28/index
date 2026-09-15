@@ -1,0 +1,1384 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Bridge Pricing</title>
+  <style>
+
+    :root{
+      --bg:#f5f5f7;
+      --surface:#fff;
+      --surface-soft:#f7f7f9;
+      --text:#18181c;
+      --muted:#6d6b75;
+      --muted-2:#96939b;
+      --border:rgba(24,24,28,.10);
+      --rule:rgba(24,24,28,.08);
+      --focus:#2f43de;
+      --radius-card:24px;
+      --body:14px;
+      font-family:Satoshi,Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    html,body{margin:0;padding:0}
+    body{
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+    button{font:inherit}
+    button:focus-visible{
+      outline:2px solid var(--focus);
+      outline-offset:2px;
+    }
+    .sr-only{
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
+
+    .page{min-height:100vh;padding:32px 24px 72px}
+
+    /* Hero */
+    .hero{
+      max-width:1180px;
+      margin:0 auto 34px;
+      text-align:center;
+    }
+    .hero h1{
+      max-width:980px;
+      margin:0 auto;
+      font-size:clamp(42px,6vw,82px);
+      line-height:.98;
+      letter-spacing:-.045em;
+      font-weight:700;
+    }
+    .hero p{
+      max-width:640px;
+      margin:18px auto 0;
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.45;
+    }
+    .billing{
+      display:inline-flex;
+      gap:6px;
+      margin-top:22px;
+      padding:5px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background:#fff;
+    }
+    .billing button{
+      border:0;
+      background:transparent;
+      color:var(--muted);
+      padding:9px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:650;
+      cursor:pointer;
+      transition:background .14s ease,color .14s ease;
+    }
+    .billing button[aria-pressed="true"]{
+      background:#202024;
+      color:#fff;
+    }
+
+    /* Pricing cards */
+    .pricing{max-width:1180px;margin:0 auto 18px}
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:18px;
+      align-items:stretch;
+    }
+    .card{
+      --accent:#202024;
+      --accent-text:#fff;
+      min-width:0;
+      overflow:hidden;
+      display:grid;
+      grid-template-rows:50px 112px 63px auto 86px;
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--radius-card);
+      box-shadow:0 1px 0 rgba(24,24,28,.02),0 8px 28px rgba(24,24,28,.035);
+    }
+    .card-header{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      padding:0 14px;
+      background:var(--accent);
+      color:var(--accent-text);
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .diamond{
+      width:18px;
+      height:17px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      flex:0 0 auto;
+    }
+    .diamond svg{width:100%;height:100%;display:block}
+
+    .card-intro{
+      padding:28px 22px 12px;
+      display:grid;
+      align-content:start;
+      justify-items:center;
+      gap:12px;
+      text-align:center;
+    }
+    .card-title{
+      margin:0;
+      font-size:21px;
+      line-height:1.12;
+      letter-spacing:-.035em;
+      font-weight:700;
+      white-space:nowrap;
+    }
+    .card-persona{
+      margin:0;
+      color:var(--muted);
+      font-size:9px;
+      line-height:1;
+      letter-spacing:.055em;
+      font-weight:700;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+
+    .card-size{
+      padding:0 22px 6px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      transform:translateY(-10px);
+      margin-bottom:-10px;
+    }
+    .free .card-size{visibility:hidden}
+    .size-tabs{
+      width:88%;
+      max-width:220px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:3px;
+      padding:3px;
+      background:#f4f4f6;
+      border:1px solid rgba(24,24,28,.09);
+      border-radius:14px;
+    }
+    .size-tab{
+      height:36px;
+      border:0;
+      background:transparent;
+      color:#74717a;
+      border-radius:11px;
+      font-size:13px;
+      font-weight:800;
+      cursor:pointer;
+      transition:background .14s ease,color .14s ease,box-shadow .14s ease;
+    }
+    .size-tab[aria-pressed="true"]{
+      background:var(--accent);
+      color:var(--accent-text);
+      box-shadow:0 4px 12px rgba(24,24,28,.08);
+    }
+
+    .card-content{
+      min-width:0;
+      padding:10px 22px 16px;
+      display:grid;
+      grid-template-rows:24px 132px 24px 72px 64px;
+      row-gap:18px;
+      align-content:start;
+    }
+    .section-label{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-width:0;
+      color:var(--muted-2);
+      font-size:10.5px;
+      font-weight:750;
+      letter-spacing:.075em;
+      text-transform:uppercase;
+      white-space:nowrap;
+      text-align:left;
+    }
+    .section-label::after{
+      content:"";
+      height:1px;
+      flex:1;
+      min-width:12px;
+      margin-left:4px;
+      background:var(--rule);
+    }
+    .section-core{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+    }
+    .section-core img{
+      width:14px;
+      height:14px;
+      object-fit:contain;
+      opacity:.65;
+      flex:0 0 auto;
+    }
+    .section-label.discovery{
+      margin-top:10px;
+      cursor:help;
+    }
+
+    .workspace-slot{
+      min-width:0;
+      padding-bottom:6px;
+      display:grid;
+      grid-auto-rows:minmax(20px,auto);
+      row-gap:8px;
+      align-content:start;
+      text-align:left;
+    }
+    .workspace-slot .feature-line{
+      max-width:100%;
+      white-space:normal;
+      overflow-wrap:normal;
+      word-break:normal;
+    }
+    .workspace-slot .feature-line:last-child{
+      font-size:12px;
+      line-height:1.45;
+      letter-spacing:0;
+    }
+
+    .publish-slot,
+    .search-slot{
+      display:grid;
+      grid-template-rows:18px auto;
+      row-gap:8px;
+      align-content:start;
+      text-align:left;
+    }
+    .publish-slot{padding-top:3px}
+    .search-slot{
+      margin-top:-5px;
+      padding-bottom:10px;
+    }
+    .search-slot.is-empty{visibility:hidden}
+
+    .micro-label{
+      color:#24242a;
+      font-size:11px;
+      line-height:18px;
+      font-weight:750;
+      letter-spacing:.045em;
+      text-transform:uppercase;
+    }
+    .feature-line,
+    .feature-copy{
+      color:#64616b;
+      font-size:var(--body);
+      line-height:1.4;
+    }
+    .feature-line strong,
+    .feature-copy strong{
+      color:var(--text);
+      font-size:inherit;
+      font-weight:800;
+    }
+    .feature-copy{
+      display:grid;
+      gap:5px;
+      align-content:start;
+    }
+    .search-slot .feature-copy{
+      font-size:12px;
+      line-height:1.45;
+      letter-spacing:0;
+    }
+
+    .card-footer{
+      padding:3px 22px 7px;
+      border-top:1px solid var(--rule);
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 118px;
+      gap:16px;
+      align-items:center;
+    }
+    .price-wrap{
+      min-width:0;
+      min-height:50px;
+      display:grid;
+      align-content:center;
+      text-align:left;
+    }
+    .price-main{
+      min-height:31px;
+      display:flex;
+      align-items:flex-end;
+      gap:4px;
+      line-height:1;
+    }
+    .price-value{
+      font-size:32px;
+      line-height:.92;
+      letter-spacing:-.05em;
+      font-weight:800;
+    }
+    .price-suffix{
+      color:var(--muted);
+      font-size:10px;
+      font-weight:700;
+      transform:translateY(-1px);
+    }
+    .price-year{
+      min-height:12px;
+      margin-top:8px;
+      color:var(--muted);
+      font-size:10px;
+      line-height:1.2;
+      white-space:nowrap;
+    }
+    .cta{
+      width:118px;
+      height:48px;
+      justify-self:end;
+      align-self:center;
+      border:0;
+      border-radius:15px;
+      background:var(--accent);
+      color:var(--accent-text);
+      font-size:13px;
+      font-weight:800;
+      white-space:nowrap;
+      cursor:pointer;
+      transition:transform .14s ease,opacity .14s ease,box-shadow .14s ease;
+    }
+    .free .cta{background:#202024;color:#fff}
+    .cta:hover{
+      transform:translateY(-1px);
+      opacity:.96;
+      box-shadow:0 5px 14px rgba(23,23,27,.08);
+    }
+
+    /* Enterprise */
+    .enterprise{
+      max-width:1180px;
+      margin:18px auto 48px;
+      overflow:hidden;
+      background:#151515;
+      color:#fff;
+      border-radius:28px;
+      box-shadow:0 14px 34px rgba(17,17,19,.10);
+    }
+    .enterprise-main{padding:30px 28px}
+    .enterprise-head{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(260px,.9fr);
+      gap:12px 24px;
+      align-items:end;
+      grid-template-areas:"badge badge" "title intro";
+    }
+    .enterprise-badge{
+      grid-area:badge;
+      justify-self:start;
+      padding:8px 11px;
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:999px;
+      font-size:10px;
+      letter-spacing:.08em;
+      font-weight:800;
+      text-transform:uppercase;
+    }
+    .enterprise-title{
+      grid-area:title;
+      margin:0;
+      font-size:30px;
+      line-height:1;
+      letter-spacing:-.04em;
+      font-weight:700;
+    }
+    .enterprise-intro{
+      grid-area:intro;
+      color:rgba(255,255,255,.66);
+      font-size:13px;
+      line-height:1.45;
+    }
+    .enterprise-grid{
+      margin-top:26px;
+      padding-top:22px;
+      border-top:1px solid rgba(255,255,255,.12);
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:24px;
+    }
+    .enterprise-group h4{
+      margin:0 0 10px;
+      color:#fff;
+      font-size:12px;
+      letter-spacing:.08em;
+      font-weight:800;
+      text-transform:uppercase;
+    }
+    .enterprise-group ul{
+      list-style:none;
+      margin:0;
+      padding:0;
+      display:grid;
+      gap:8px;
+    }
+    .enterprise-group li{
+      position:relative;
+      padding-left:14px;
+      color:rgba(255,255,255,.74);
+      font-size:12px;
+      line-height:1.35;
+    }
+    .enterprise-group li::before{
+      content:"";
+      position:absolute;
+      left:0;
+      top:.55em;
+      width:4px;
+      height:4px;
+      border-radius:50%;
+      background:rgba(255,255,255,.65);
+    }
+    .enterprise-footer{
+      padding:18px 28px;
+      border-top:1px solid rgba(255,255,255,.12);
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+      gap:18px;
+    }
+    .enterprise-note{
+      color:rgba(255,255,255,.58);
+      font-size:11px;
+      line-height:1.3;
+    }
+    .enterprise-cta{
+      min-height:46px;
+      padding:0 20px;
+      border:0;
+      border-radius:14px;
+      background:#fff;
+      color:#151515;
+      font-weight:800;
+      cursor:pointer;
+      transition:transform .14s ease,opacity .14s ease;
+    }
+    .enterprise-cta:hover{transform:translateY(-1px);opacity:.94}
+
+    /* Ecosystem proof */
+    .ecosystem-proof{
+      max-width:1180px;
+      margin:0 auto 48px;
+      padding:28px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:28px;
+    }
+    .ecosystem-proof-kicker{
+      margin:0 0 6px;
+      text-align:center;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+    .ecosystem-proof h3{
+      max-width:720px;
+      margin:0 auto 22px;
+      text-align:center;
+      font-size:clamp(25px,3vw,38px);
+      line-height:1.05;
+      letter-spacing:-.04em;
+      font-weight:700;
+    }
+    .ecosystem-proof-stats{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+    }
+    .ecosystem-stat{
+      padding:18px;
+      border:1px solid var(--border);
+      border-radius:20px;
+      background:#fff;
+    }
+    .ecosystem-stat-number{
+      font-size:34px;
+      line-height:1;
+      letter-spacing:-.05em;
+      font-weight:700;
+    }
+    .ecosystem-stat-title{
+      margin-top:8px;
+      font-size:14px;
+      font-weight:700;
+    }
+    .ecosystem-stat-copy{
+      margin-top:5px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.4;
+    }
+    .ecosystem-logo-grid{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:8px;
+      align-items:center;
+    }
+    .ecosystem-logo-grid img{
+      width:100%;
+      height:38px;
+      display:block;
+      object-fit:contain;
+      border-radius:8px;
+      background:#fff;
+    }
+
+    /* Compare */
+    .compare{
+      max-width:1180px;
+      margin:0 auto;
+      padding:28px 30px 30px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:28px;
+    }
+    .compare-kicker{
+      margin:0 0 8px;
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+    .compare h3{
+      margin:0 0 22px;
+      text-align:center;
+      font-size:clamp(26px,3vw,40px);
+      line-height:1.05;
+      letter-spacing:-.04em;
+      font-weight:700;
+    }
+    .compare-scroll{
+      overflow-x:auto;
+      border:1px solid rgba(23,23,27,.08);
+      border-radius:18px;
+    }
+    .compare-actions{
+      margin-top:16px;
+      display:flex;
+      justify-content:center;
+    }
+    .compare-toggle{
+      min-height:42px;
+      padding:0 16px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:#fff;
+      color:var(--text);
+      font-size:12px;
+      font-weight:750;
+      cursor:pointer;
+      transition:background .14s ease,border-color .14s ease,transform .14s ease;
+    }
+    .compare-toggle:hover{
+      background:#f7f7f9;
+      border-color:rgba(23,23,27,.14);
+      transform:translateY(-1px);
+    }
+    table{
+      width:100%;
+      min-width:940px;
+      border-collapse:separate;
+      border-spacing:0;
+      font-size:12.5px;
+    }
+    th,td{
+      padding:12px;
+      border-right:1px solid rgba(17,17,19,.06);
+      border-bottom:1px solid rgba(17,17,19,.08);
+      vertical-align:middle;
+      text-align:center;
+      line-height:1.35;
+    }
+    th:first-child,td:first-child{
+      width:180px;
+      min-width:180px;
+      text-align:left;
+    }
+    th:last-child,td:last-child{border-right:0}
+    tbody tr:last-child th,
+    tbody tr:last-child td{border-bottom:0}
+    thead th{
+      height:56px;
+      background:#fff;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.075em;
+      text-transform:uppercase;
+    }
+    .family th{
+      padding:10px 12px;
+      background:#f5f5f7;
+      color:var(--muted);
+      font-size:10.5px;
+      font-weight:800;
+      letter-spacing:.13em;
+      text-transform:uppercase;
+      text-align:left;
+    }
+    .plan-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:5px;
+      min-height:30px;
+      padding:7px 10px;
+      border-radius:999px;
+      line-height:1;
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+      white-space:nowrap;
+      vertical-align:middle;
+    }
+    .plan-pill.free{background:#e7e7e9;color:#252428}
+    .plan-pill.talent{background:#ffc833;color:#252428}
+    .plan-pill.music{background:#2f43de;color:#fff}
+    .plan-pill.supervisor{background:#ff3364;color:#fff}
+    .plan-pill.enterprise{background:#252428;color:#fff}
+    .check{
+      display:inline-grid;
+      place-items:center;
+      width:16px;
+      height:16px;
+      border-radius:999px;
+      background:#2f43de;
+      color:#fff;
+      font-size:10px;
+      font-weight:900;
+    }
+    .no{color:#aaa7b0;font-size:15px}
+
+    /* Value changes */
+    .value-changing{
+      transition:opacity .11s ease,transform .11s ease;
+      will-change:opacity,transform;
+    }
+    .value-changing.is-leaving{opacity:0;transform:translateY(-4px)}
+    .value-changing.is-entering{opacity:0;transform:translateY(4px)}
+    .value-changing.is-visible{opacity:1;transform:translateY(0)}
+
+    /* Tablet */
+    @media(max-width:1180px){
+      .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+
+    /* Mobile */
+    @media(max-width:760px){
+      html,body{overflow-x:hidden}
+      .page{padding:14px 12px 48px}
+
+      .hero{
+        margin-bottom:24px;
+        padding:0 4px;
+      }
+      .hero h1{
+        font-size:clamp(38px,11vw,54px);
+        line-height:.98;
+      }
+      .hero p{
+        margin-top:14px;
+        font-size:15px;
+      }
+      .billing{margin-top:18px}
+
+      .pricing{width:100%;margin-bottom:16px}
+      .cards{
+        width:100%;
+        max-width:430px;
+        margin:0 auto;
+        grid-template-columns:1fr;
+        gap:16px;
+      }
+      .card{
+        width:100%;
+        border-radius:22px;
+        grid-template-rows:48px auto auto auto auto;
+      }
+      .card-header{
+        min-height:50px;
+        padding:0 14px;
+        font-size:clamp(12px,3.2vw,14px);
+        letter-spacing:.035em;
+      }
+      .card-intro{
+        padding:24px 18px 10px;
+        gap:10px;
+      }
+      .card-title{
+        font-size:clamp(25px,6.8vw,29px);
+        line-height:1.06;
+      }
+      .card-persona{
+        font-size:clamp(8px,2.2vw,9.5px);
+        line-height:1.2;
+        letter-spacing:.04em;
+      }
+
+      .card-size{
+        min-height:0;
+        padding:0 18px 6px;
+      }
+      .free .card-size{display:none}
+      .size-tabs{
+        width:86%;
+        max-width:260px;
+      }
+      .size-tab{height:38px}
+
+      .card-content{
+        padding:12px 20px 16px;
+        grid-template-rows:auto auto auto auto auto;
+        row-gap:0;
+      }
+      .section-label{
+        min-height:24px;
+        margin:0;
+        font-size:clamp(10.5px,2.8vw,11.5px);
+      }
+      .section-label.discovery{margin-top:12px}
+      .workspace-slot{
+        min-height:0;
+        padding-top:18px;
+        padding-bottom:30px;
+        row-gap:8px;
+      }
+      .workspace-slot .feature-line:last-child{
+        font-size:clamp(13px,3.5vw,14px);
+        line-height:1.45;
+      }
+      .publish-slot{
+        min-height:0;
+        padding-top:23px;
+      }
+      .search-slot{
+        min-height:0;
+        margin-top:-5px;
+        padding-top:4px;
+        padding-bottom:16px;
+      }
+      .search-slot.is-empty{display:none}
+      .feature-line,
+      .feature-copy{
+        font-size:clamp(15.5px,4.15vw,17px);
+        line-height:1.4;
+      }
+      .search-slot .feature-copy{
+        font-size:clamp(13px,3.5vw,14px);
+        line-height:1.45;
+      }
+      .micro-label{
+        font-size:clamp(11px,2.9vw,12px);
+        line-height:1.2;
+      }
+
+      .card-footer{
+        min-height:74px;
+        padding:3px 20px 5px;
+        grid-template-columns:minmax(0,1fr) 124px;
+        gap:16px;
+      }
+      .price-value{font-size:clamp(35px,9vw,39px)}
+      .price-year{
+        font-size:10.5px;
+        white-space:nowrap;
+      }
+      .cta{
+        width:124px;
+        height:50px;
+        font-size:clamp(13px,3.4vw,14px);
+      }
+
+      .enterprise{
+        margin:16px auto 40px;
+        border-radius:22px;
+      }
+      .enterprise-main{padding:24px 20px}
+      .enterprise-head{
+        grid-template-columns:1fr;
+        grid-template-areas:"badge" "title" "intro";
+      }
+      .enterprise-title{font-size:27px}
+      .enterprise-grid{
+        grid-template-columns:1fr;
+        gap:20px;
+      }
+      .enterprise-footer{
+        padding:16px 20px 20px;
+        flex-direction:column;
+        align-items:stretch;
+      }
+      .enterprise-cta{width:100%}
+
+      .ecosystem-proof{
+        margin-bottom:40px;
+        padding:22px 18px;
+        border-radius:22px;
+      }
+      .ecosystem-proof-kicker,
+      .ecosystem-proof h3{text-align:left}
+      .ecosystem-proof-stats{grid-template-columns:1fr}
+      .ecosystem-logo-grid img{height:42px}
+
+      .compare{
+        width:100%;
+        padding:20px 0;
+        border-radius:22px;
+        overflow:hidden;
+      }
+      .compare-kicker,
+      .compare h3{
+        padding-left:18px;
+        padding-right:18px;
+        text-align:left;
+      }
+      .compare h3{margin-bottom:18px}
+      .compare-scroll{
+        width:100%;
+        max-width:100%;
+        overflow-x:auto;
+        overflow-y:hidden;
+        border:0;
+        border-radius:0;
+        -webkit-overflow-scrolling:touch;
+        scrollbar-width:none;
+        overscroll-behavior-x:contain;
+      }
+      .compare-scroll::-webkit-scrollbar{display:none}
+      .compare-scroll table{
+        width:max-content;
+        min-width:860px;
+        border-top:1px solid var(--border);
+        border-bottom:1px solid var(--border);
+      }
+      .compare-scroll th,
+      .compare-scroll td{
+        min-width:120px;
+        padding:11px 9px;
+        background:#fff;
+        font-size:12px;
+      }
+      .compare-scroll th:first-child,
+      .compare-scroll td:first-child{
+        width:145px;
+        min-width:145px;
+      }
+      .compare-scroll thead th{height:54px}
+      .family th{
+        padding:9px 10px;
+        background:#f5f5f7;
+        font-size:10px;
+      }
+      .plan-pill{
+        min-height:28px;
+        padding:6px 8px;
+        font-size:9px;
+      }
+      .compare-actions{
+        margin-top:16px;
+        padding:0 18px;
+      }
+      .compare-toggle{width:100%}
+    }
+
+    @media(max-width:380px){
+      .page{padding-left:10px;padding-right:10px}
+      .card-intro{padding-left:16px;padding-right:16px}
+      .card-title{font-size:24px}
+      .card-persona{font-size:7.6px}
+      .card-content{padding-left:18px;padding-right:18px}
+      .card-footer{
+        padding-left:18px;
+        padding-right:18px;
+        grid-template-columns:minmax(0,1fr) 112px;
+        gap:12px;
+      }
+      .cta{width:112px}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto}
+      .value-changing,
+      .billing button,
+      .size-tab,
+      .cta,
+      .enterprise-cta,
+      .compare-toggle{
+        transition:none !important;
+        transform:none !important;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <h1>Where creators, music pros and entertainment connect.</h1>
+      <p>Organize, discover, pitch and collaborate on music - powered by ethical AI.</p>
+      <div class="billing" role="group" aria-label="Billing period">
+        <button id="yearlyBtn" type="button" aria-pressed="true">Yearly <span style="opacity:.72">save ≈35%</span></button>
+        <button id="monthlyBtn" type="button" aria-pressed="false">Monthly</button>
+      </div>
+    </header>
+
+    <section class="pricing">
+      <div class="cards" id="cards"></div>
+    </section>
+
+    <section id="enterpriseMount"></section>
+
+    <section aria-label="Bridge.audio ecosystem proof" class="ecosystem-proof"><p class="ecosystem-proof-kicker">BRIDGE.AUDIO ECOSYSTEM</p><h3>Bridge the gap within the music industry and beyond.</h3><div class="ecosystem-proof-stats"><div class="ecosystem-stat"><div class="ecosystem-stat-number">50K+</div><div class="ecosystem-stat-title">Creators &amp; artists</div><div class="ecosystem-stat-copy">Artists, composers, voice-over and independent creative teams.</div><div aria-label="Artists using Bridge.audio" class="ecosystem-logo-grid"><img src="https://www.bridge.audio/images/pricing/creators/1.png" alt="" title="" aria-label="">
+<img src="https://www.bridge.audio/images/pricing/creators/2.png" alt="" title="" aria-label="">
+<img src="https://www.bridge.audio/images/pricing/creators/3.png" alt="" title="" aria-label="">
+<img src="https://www.bridge.audio/images/pricing/creators/4.png" alt="" title="" aria-label="">
+<img src="https://www.bridge.audio/images/pricing/creators/5.png" alt="" title="" aria-label=""></div></div><div class="ecosystem-stat"><div class="ecosystem-stat-number">5K+</div><div class="ecosystem-stat-title">Music professionals</div><div class="ecosystem-stat-copy">Labels, publishers, managers, brokers and rights holders.</div><div aria-label="Music professionals using Bridge.audio" class="ecosystem-logo-grid"><img src="https://www.bridge.audio/images/pricing/professionals/1.jpg" alt="" title="" aria-label="">
+<img src="https://www.bridge.audio/images/pricing/professionals/2.jpg" alt="" title="" aria-label="">
+<img src="https://www.bridge.audio/images/pricing/professionals/3.jpg" alt="" title="" aria-label="">
+<img src="https://www.bridge.audio/images/pricing/professionals/4.jpg" alt="" title="" aria-label="">
+<img src="https://www.bridge.audio/images/pricing/professionals/5.jpg" alt="" title="" aria-label=""></div></div><div class="ecosystem-stat"><div class="ecosystem-stat-number">600+</div><div class="ecosystem-stat-title">Buyers &amp; creative teams</div><div class="ecosystem-stat-copy">Supervisors, agencies, brands, broadcasters and media teams searching for music.</div><div aria-label="Buyer network examples" class="ecosystem-logo-grid"><img src="https://www.bridge.audio/images/pricing/buyers/1.jpg" alt="" title="" aria-label="">
+<img src="https://www.bridge.audio/images/pricing/buyers/2.jpg" alt="" title="" aria-label="">
+<img src="https://www.bridge.audio/images/pricing/buyers/3.jpg" alt="" title="" aria-label="">
+<img src="https://www.bridge.audio/images/pricing/buyers/4.jpg" alt="" title="" aria-label="">
+<img src="https://www.bridge.audio/images/pricing/buyers/5.jpg" alt="" title="" aria-label=""></div></div></div></section>
+
+    <section class="compare">
+      <p class="compare-kicker">COMPARE</p>
+      <h3>Compare plans at a glance.</h3>
+      <div class="compare-scroll">
+        <table id="compareTable"><caption class="sr-only">Bridge.audio plan comparison</caption></table>
+      </div>
+      <div class="compare-actions">
+        <button class="compare-toggle" id="compareToggle" type="button" aria-expanded="false">Compare all features</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const iconBase = "https://raw.githubusercontent.com/clementsouchier-stack/bridge/main/pricing/pricing-27/assets/";
+    const icons = {
+      cloud: iconBase + "cloud.svg",
+      eye: iconBase + "eye.svg"
+    };
+
+    const plans = [
+      {
+        id:"free",
+        badge:"FREE",
+        title:"Start with Bridge",
+        persona:"FOR GETTING STARTED",
+        color:"#e8e8eb",
+        text:"#252428",
+        free:true,
+        sizes:[{key:"FREE",yearly:0,storage:"2 GB",tracks:"25 tracks",members:"3"}]
+      },
+      {
+        id:"talent",
+        badge:"TALENT PRO",
+        title:"Get discovered",
+        persona:"FOR ARTISTS, BEATMAKERS, VOICE OVER...",
+        color:"#ffc83d",
+        text:"#252428",
+        sizes:[
+          {key:"M",yearly:5,storage:"100 GB",tracks:"100 tracks",members:"5",published:"10"},
+          {key:"L",yearly:9,storage:"250 GB",tracks:"500 tracks",members:"7",published:"50"},
+          {key:"XL",yearly:19,storage:"500 GB",tracks:"Unlimited",members:"10",published:"100"}
+        ]
+      },
+      {
+        id:"music",
+        badge:"MUSIC PRO",
+        title:"Boost your catalog",
+        persona:"FOR LABELS, PUBLISHERS, MANAGER...",
+        color:"#2f43de",
+        text:"#fff",
+        sizes:[
+          {key:"M",yearly:29,storage:"1 TB",tracks:"Unlimited",members:"5",published:"250"},
+          {key:"L",yearly:39,storage:"2 TB",tracks:"Unlimited",members:"7",published:"500"},
+          {key:"XL",yearly:49,storage:"3 TB",tracks:"Unlimited",members:"10",published:"1,000"}
+        ]
+      },
+      {
+        id:"supervisor",
+        badge:"SUPERVISOR / MEDIA PRO",
+        title:"Find the right track, fast",
+        persona:"FOR SUPERVISORS, AGENCIES, BRANDS...",
+        color:"#ff3364",
+        text:"#fff",
+        sizes:[
+          {key:"M",yearly:29,storage:"2 TB",tracks:"Unlimited",members:"5"},
+          {key:"L",yearly:39,storage:"3 TB",tracks:"Unlimited",members:"7"},
+          {key:"XL",yearly:49,storage:"5 TB",tracks:"Unlimited",members:"10"}
+        ]
+      }
+    ];
+
+    const state={
+      yearly:true,
+      fullCompare:false,
+      size:{free:0,talent:0,music:0,supervisor:0}
+    };
+
+    const yearlyBtn=document.getElementById("yearlyBtn");
+    const monthlyBtn=document.getElementById("monthlyBtn");
+    const compareToggle=document.getElementById("compareToggle");
+
+    function diamond(){
+      return `<span class="diamond" aria-hidden="true"><svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.26953 1.36719L6.35156 3.74805L8.18555 4.58203H15.7246L15.8096 4.58691C16.005 4.61152 16.1821 4.72048 16.293 4.88672L19.0273 8.98828C19.197 9.24307 19.1768 9.58007 18.9775 9.8125L10.7744 19.3828C10.6425 19.5365 10.4486 19.6238 10.2461 19.6211C10.0434 19.6181 9.85124 19.5256 9.72363 19.3682L1.97656 9.79785C1.80124 9.58124 1.77502 9.27883 1.91016 9.03516L3.0498 6.98438L3.19824 6.71484L0.945312 5.69141L0 5.26172L0.945312 4.83203L3.32715 3.74902L4.41016 1.36719L4.83984 0.421875L5.26953 1.36719ZM8.93555 9.35742L7.48242 10.0176L8.93555 10.6787L9.59668 12.1318L10.2568 10.6787L11.7109 10.0176L10.2568 9.35742L9.59668 7.9043L8.93555 9.35742ZM4.11426 4.30176L4.04102 4.46289L3.87988 4.53613L2.28125 5.26172L3.87988 5.98828L4.04102 6.06152L4.11426 6.22266L4.83984 7.82031L5.56641 6.22266L5.63965 6.06152L5.80078 5.98828L7.39844 5.26172L5.80078 4.53613L5.63965 4.46289L5.56641 4.30176L4.83984 2.70312L4.11426 4.30176Z" fill="currentColor"/></svg></span>`;
+    }
+
+    function monthlyFromYearly(y){return Math.round(y/0.65)}
+    function activePrice(size){return state.yearly?size.yearly:monthlyFromYearly(size.yearly)}
+
+    function yearlySubline(plan,size){
+      if(plan.free) return "No card required";
+      if(state.yearly) return `${size.yearly*12}€/year`;
+      return "Monthly billing";
+    }
+
+    function workspaceLines(plan,size){
+      const first=size.tracks==="Unlimited"
+        ? `<strong>${size.storage}</strong> · <strong>Unlimited tracks</strong>`
+        : `<strong>${size.storage}</strong> · <strong>${size.tracks}</strong>`;
+
+      if(plan.id==="free"){
+        return [
+          first,
+          `<strong>${size.members} members included</strong>`,
+          `Unlimited Projects · Sharing · Inbox · Standard Auto Tagging`
+        ];
+      }
+
+      if(plan.id==="talent"){
+        return [
+          first,
+          `<strong>${size.members} members included</strong>`,
+          `Everything in Free +`,
+          `Advanced Sharing · Advanced Auto Tagging · Full Analytics`
+        ];
+      }
+
+      return [
+        first,
+        `<strong>${size.members} members included</strong>`,
+        `Everything in Talent Pro +`,
+        `Premium Ingestion`
+      ];
+    }
+
+    function discoveryLines(plan,size){
+      if(plan.id==="free"){
+        return {
+          publish:`–`,
+          search:null
+        };
+      }
+      if(plan.id==="talent"){
+        return {
+          publish:`<strong>${size.published} tracks</strong> on Bridge Talent`,
+          search:null
+        };
+      }
+      if(plan.id==="music"){
+        return {
+          publish:`<strong>${size.published} tracks</strong> across all Hubs`,
+          search:`Bridge Talents`
+        };
+      }
+      return {
+        publish:`Not needed`,
+        search:`Bridge Sync · Bridge Score · Bridge Library · Bridge Talents`
+      };
+    }
+
+    function cardHTML(plan){
+      const idx=state.size[plan.id];
+      const size=plan.sizes[idx];
+      const workspace=workspaceLines(plan,size);
+      const discovery=discoveryLines(plan,size);
+      const price=activePrice(size);
+      const hubsTooltip="Discovery Hubs: Bridge Talent · Bridge Sync · Bridge Library · Bridge Score. Publish and discover across Bridge's professional network.";
+
+      return `
+        <article class="card ${plan.free?"free":""}" style="--accent:${plan.color};--accent-text:${plan.text}">
+          <div class="card-header">
+            ${plan.free?"":diamond()}
+            <span>${plan.badge}</span>
+          </div>
+
+          <div class="card-intro">
+            <h3 class="card-title">${plan.title}</h3>
+            <p class="card-persona">${plan.persona}</p>
+          </div>
+
+          <div class="card-size">
+            ${plan.free?"":`
+              <div class="size-tabs" role="group" aria-label="${plan.badge} sizes">
+                ${plan.sizes.map((s,i)=>`
+                  <button class="size-tab" type="button" data-plan="${plan.id}" data-size="${i}" aria-pressed="${i===idx}">${s.key}</button>
+                `).join("")}
+              </div>
+            `}
+          </div>
+
+          <div class="card-content">
+            <div class="section-label">
+              <span class="section-core"><img src="${icons.cloud}" alt=""><span>Workspace</span></span>
+            </div>
+
+            <div class="workspace-slot">
+              ${workspace.map((line,i)=>`<div class="feature-line ${i<2?'value-changing':''}">${line}</div>`).join("")}
+            </div>
+
+            <div class="section-label discovery" title="${hubsTooltip}" aria-label="${hubsTooltip}">
+              <span class="section-core"><img src="${icons.eye}" alt=""><span>Discovery Hubs</span></span>
+            </div>
+
+            <div class="publish-slot">
+              <div class="micro-label">Publish</div>
+              <div class="feature-copy"><div class="value-changing">${discovery.publish}</div></div>
+            </div>
+
+            <div class="search-slot ${discovery.search ? "" : "is-empty"}">
+              ${discovery.search ? `
+                <div class="micro-label">Search</div>
+                <div class="feature-copy"><div>${discovery.search}</div></div>
+              ` : ""}
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <div class="price-wrap">
+              <div class="price-main">
+                <span class="price-value value-changing">${plan.free?"Free":`${price}€`}</span>
+                ${plan.free?"":`<span class="price-suffix">/mo</span>`}
+              </div>
+              <div class="price-year">${yearlySubline(plan,size)}</div>
+            </div>
+            <button class="cta value-changing" type="button">${plan.free?"Start Free":`Choose ${size.key}`}</button>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderCards(){
+      document.getElementById("cards").innerHTML=plans.map(cardHTML).join("");
+      document.querySelectorAll(".size-tab").forEach(btn=>{
+        btn.addEventListener("click",()=>{
+          const planId=btn.dataset.plan;
+          const nextSize=Number(btn.dataset.size);
+          if(state.size[planId]===nextSize) return;
+
+          const card=btn.closest(".card");
+          const changing=card ? [...card.querySelectorAll(".value-changing")] : [];
+
+          if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+            state.size[planId]=nextSize;
+            renderCards();
+            return;
+          }
+
+          changing.forEach(el=>{
+            el.classList.remove("is-visible","is-entering");
+            el.classList.add("is-leaving");
+          });
+
+          window.setTimeout(()=>{
+            state.size[planId]=nextSize;
+            renderCards();
+
+            const cards=[...document.querySelectorAll(".card")];
+            const freshCard=cards.find(c=>c.querySelector(`.size-tab[data-plan="${planId}"]`));
+            if(!freshCard) return;
+
+            const freshChanging=[...freshCard.querySelectorAll(".value-changing")];
+            freshChanging.forEach(el=>{
+              el.classList.add("is-entering");
+            });
+
+            requestAnimationFrame(()=>{
+              requestAnimationFrame(()=>{
+                freshChanging.forEach(el=>{
+                  el.classList.remove("is-entering");
+                  el.classList.add("is-visible");
+                });
+              });
+            });
+          },110);
+        });
+      });
+    }
+
+    function renderEnterprise(){
+      document.getElementById("enterpriseMount").innerHTML=`
+        <article class="enterprise">
+          <div class="enterprise-main">
+            <div class="enterprise-head">
+              <div class="enterprise-badge">ENTERPRISE</div>
+              <h3 class="enterprise-title">Built for your organization</h3>
+              <div class="enterprise-intro">For large teams, complex catalogs and advanced workflows.</div>
+            </div>
+
+            <div class="enterprise-grid">
+              <div class="enterprise-group">
+                <h4>Workspace</h4>
+                <ul>
+                  <li>Custom storage and media limits</li>
+                  <li>Custom team size and permissions</li>
+                  <li>Unlimited projects and advanced workflows</li>
+                  <li>Custom analytics and reporting</li>
+                </ul>
+              </div>
+              <div class="enterprise-group">
+                <h4>Discovery Hubs</h4>
+                <ul>
+                  <li>Custom publishing across Discovery Hubs</li>
+                  <li>Advanced discovery workflows</li>
+                  <li>Custom access rules and visibility</li>
+                  <li>Bridge Talent, Sync, Library and Score</li>
+                </ul>
+              </div>
+              <div class="enterprise-group">
+                <h4>Service</h4>
+                <ul>
+                  <li>Dedicated onboarding and migration</li>
+                  <li>Premium support and SLA</li>
+                  <li>API, SSO and integrations</li>
+                  <li>Tailored commercial terms</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="enterprise-footer">
+            <div class="enterprise-note">Tailored pricing, onboarding and support</div>
+            <button class="enterprise-cta" type="button">Talk to sales</button>
+          </div>
+        </article>
+      `;
+    }
+
+    const lightRows=[
+      ["WORKSPACE","Storage",["2 GB","100 / 250 / 500 GB","1 / 2 / 3 TB","2 / 3 / 5 TB","Custom"]],
+      ["","Tracks",["25","100 / 500 / Unlimited","Unlimited","Unlimited","Unlimited / Custom"]],
+      ["","Members included",["3","5 / 7 / 10","5 / 7 / 10","5 / 7 / 10","Custom"]],
+      ["","Auto Tagging",["Standard","Advanced","Advanced","Advanced","Custom"]],
+      ["DISCOVERY HUBS","Publish",["–","10 / 50 / 100 tracks on Bridge Talent","250 / 500 / 1,000 tracks across all Hubs","Not needed","Custom"]],
+      ["","Search",["–","–","Bridge Talents","Bridge Sync · Bridge Score · Bridge Library · Bridge Talents","Custom"]]
+    ];
+
+    const fullRows=[
+      ["WORKSPACE","Storage",["2 GB","100 / 250 / 500 GB","1 / 2 / 3 TB","2 / 3 / 5 TB","Custom"]],
+      ["","Tracks",["25","100 / 500 / Unlimited","Unlimited","Unlimited","Unlimited / Custom"]],
+      ["","Members included",["3","5 / 7 / 10","5 / 7 / 10","5 / 7 / 10","Custom"]],
+      ["","Projects",["Unlimited","Unlimited","Unlimited","Unlimited","Custom"]],
+      ["","Sharing",["Standard","Advanced","Advanced","Advanced","Custom"]],
+      ["","Inbox",["Yes","Yes","Yes","Yes","Custom"]],
+      ["","Auto Tagging",["Standard","Advanced","Advanced","Advanced","Custom"]],
+      ["","Analytics",["No","Full","Full","Full","Custom"]],
+      ["DISCOVERY HUBS","Publish",["–","10 / 50 / 100 tracks on Bridge Talent","250 / 500 / 1,000 tracks across all Hubs","Not needed","Custom"]],
+      ["","Search",["–","–","Bridge Talents","Bridge Sync · Bridge Score · Bridge Library · Bridge Talents","Custom"]],
+      ["SUPPORT","Premium Ingestion",["No","No","Yes","Yes","Custom"]],
+      ["","Premium support",["No","No","No","No","Custom"]],
+      ["ENTERPRISE","SSO / API / Integrations",["No","No","No","No","Custom"]]
+    ];
+
+    function planPill(type,label,showDiamond=false){
+      return `<span class="plan-pill ${type}">${showDiamond?diamond():""}${label}</span>`;
+    }
+    function cellValue(value){
+      if(value==="Yes") return `<span class="check">✓</span>`;
+      if(value==="No") return `<span class="no">–</span>`;
+      return value;
+    }
+
+    function renderCompare(){
+      const rows=state.fullCompare?fullRows:lightRows;
+      document.getElementById("compareTable").innerHTML=`
+        <caption class="sr-only">Bridge.audio plan comparison</caption>
+        <thead>
+          <tr>
+            <th scope="col">Feature</th>
+            <th scope="col">${planPill("free","Free")}</th>
+            <th scope="col">${planPill("talent","Talent Pro",true)}</th>
+            <th scope="col">${planPill("music","Music Pro",true)}</th>
+            <th scope="col">${planPill("supervisor","Supervisor / Media Pro",true)}</th>
+            <th scope="col">${planPill("enterprise","Enterprise")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(([family,feature,values])=>`
+            ${family?`<tr class="family"><th scope="colgroup" colspan="6">${family}</th></tr>`:""}
+            <tr>
+              <th scope="row">${feature}</th>
+              ${values.map(v=>`<td>${cellValue(v)}</td>`).join("")}
+            </tr>
+          `).join("")}
+        </tbody>
+      `;
+      compareToggle.textContent=state.fullCompare?"Show key features":"Compare all features";
+      compareToggle.setAttribute("aria-expanded", String(state.fullCompare));
+    }
+
+    function setBilling(yearly){
+      state.yearly=yearly;
+      yearlyBtn.setAttribute("aria-pressed", String(yearly));
+      monthlyBtn.setAttribute("aria-pressed", String(!yearly));
+      renderCards();
+    }
+
+    yearlyBtn.addEventListener("click",()=>setBilling(true));
+    monthlyBtn.addEventListener("click",()=>setBilling(false));
+
+    compareToggle.addEventListener("click",()=>{
+      state.fullCompare=!state.fullCompare;
+      renderCompare();
+    });
+
+    renderCards();
+    document.querySelectorAll(".value-changing").forEach(el=>el.classList.add("is-visible"));
+    renderEnterprise();
+    renderCompare();
+  </script>
+</body>
+</html>
