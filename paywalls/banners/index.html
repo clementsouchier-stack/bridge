@@ -807,8 +807,7 @@
           <option value="legacy">Legacy plan</option>
           <option value="payment_failed">Payment failed</option>
           <option value="card_expired">Card expired</option>
-          <option value="cancelled">Subscription cancelled</option>
-          <option value="paused">Workspace paused</option>
+          <option value="free_trial">Free trial ending</option>
         </select>
       </div>
 
@@ -901,45 +900,37 @@
         severity: 'warning',
         title: 'Your subscription needs your attention',
         pill: 'Payment issue',
-        description: "Payment failed. Update billing before July 11, 2026.",
-        countdown: '5 days left',
+        description: "Payment failed. Update your billing details within 15 days to keep your plan active.",
+        countdown: '15 days left',
         cta: 'Update billing',
         href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
         showProInfo: false,
-        dismissMode: 'none'
+        dismissMode: 'none',
+        triggerWindow: 'From payment failure through the 15-day grace period'
       },
       card_expired: {
         severity: 'warning',
         title: 'Your subscription needs your attention',
         pill: 'Payment method expired',
-        description: 'Payment method expired. Update it before July 9, 2026.',
-        countdown: '3 days left',
+        description: 'Your payment method has expired. Update it before your next renewal.',
+        countdown: 'Renews in 15 days',
         cta: 'Update payment method',
         href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
         showProInfo: false,
-        dismissMode: 'none'
+        dismissMode: 'none',
+        triggerWindow: 'From 15 days before renewal through 15 days after renewal, when an expired card is detected'
       },
-      cancelled: {
+      free_trial: {
         severity: 'warning',
-        title: 'Your subscription needs your attention',
-        pill: 'Subscription cancelled',
-        description: 'Subscription cancelled. Reactivate before July 13, 2026.',
-        countdown: '7 days left',
-        cta: 'Reactivate subscription',
-        href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
-        showProInfo: true,
-        dismissMode: 'collapse'
-      },
-      paused: {
-        severity: 'critical',
-        title: 'Workspace paused',
-        pill: 'Workspace safely locked',
-        description: 'Workspace locked. Files and links are safe. Choose a plan to unlock everything.',
-        countdown: 'Action required now',
+        title: 'Your free trial is ending soon',
+        pill: 'Free trial',
+        description: 'Your free trial ends in 15 days. Choose a plan to keep your workspace features active.',
+        countdown: '15 days left',
         cta: 'Choose a plan',
         href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
         showProInfo: true,
-        dismissMode: 'none'
+        dismissMode: 'collapse',
+        triggerWindow: 'From 15 days before the free trial end date'
       }
     };
 
