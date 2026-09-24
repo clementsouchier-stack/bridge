@@ -819,10 +819,28 @@
       <div class="demo-controls" aria-label="Prototype controls">
         <span>Prototype states:</span>
         <select id="stateSelector">
-          <option value="legacy">Legacy plan</option>
-          <option value="payment_failed">Payment failed</option>
-          <option value="card_expired">Card expired</option>
-          <option value="free_trial">Free trial ending</option>
+          <optgroup label="Legacy plan">
+            <option value="legacy_14">J-14 · Migration starts</option>
+            <option value="legacy_7">J-7 · Reminder</option>
+            <option value="legacy_3">J-3 · Urgent reminder</option>
+          </optgroup>
+          <optgroup label="Free trial">
+            <option value="free_trial_15">J-15 · Trial ending soon</option>
+            <option value="free_trial_7">J-7 · One week left</option>
+            <option value="free_trial_3">J-3 · Final reminder</option>
+            <option value="free_trial_1">J-1 · Ends tomorrow</option>
+          </optgroup>
+          <optgroup label="Expired card">
+            <option value="card_expired_15">J-15 · Before renewal</option>
+            <option value="card_expired_7">J-7 · Before renewal</option>
+            <option value="card_expired_1">J-1 · Renewal tomorrow</option>
+          </optgroup>
+          <optgroup label="Payment failed · 15-day grace period">
+            <option value="payment_failed_15">J0 · Payment failed</option>
+            <option value="payment_failed_7">J+8 · 7 days left</option>
+            <option value="payment_failed_3">J+12 · 3 days left</option>
+            <option value="payment_failed_1">J+14 · Final day</option>
+          </optgroup>
         </select>
       </div>
 
@@ -901,11 +919,11 @@
     };
 
     const states = {
-      legacy: {
+      legacy_14: {
         severity: 'warning',
-        title: 'Your subscription needs your attention',
-        pill: 'Action required',
-        description: 'Current plan unavailable. Choose a new plan before July 20, 2026.',
+        title: 'Your current plan is being retired',
+        pill: 'Plan update',
+        description: 'Choose a new plan before July 20, 2026 to keep your current workspace features.',
         countdown: '14 days left',
         cta: 'Choose a new plan',
         href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
@@ -913,42 +931,152 @@
         secondaryLabel: 'Compare plans',
         dismissMode: 'collapse'
       },
-      payment_failed: {
+      legacy_7: {
         severity: 'warning',
-        title: 'Your subscription needs your attention',
-        pill: 'Payment issue',
-        description: "Payment failed. Update your billing details within 15 days to keep your plan active.",
-        countdown: '15 days left',
-        cta: 'Update billing',
+        title: 'Choose your new plan',
+        pill: 'Action required',
+        description: 'Your current plan ends in 7 days. Choose a new plan to keep your workspace features.',
+        countdown: '7 days left',
+        cta: 'Choose a new plan',
+        href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
+        showProInfo: true,
+        secondaryLabel: 'Compare plans',
+        dismissMode: 'collapse'
+      },
+      legacy_3: {
+        severity: 'critical',
+        title: 'Your current plan ends in 3 days',
+        pill: 'Action required',
+        description: 'Choose a new plan now to avoid changes to your workspace access.',
+        countdown: '3 days left',
+        cta: 'Choose a new plan',
         href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
         showProInfo: false,
-        dismissMode: 'collapse',
-        triggerWindow: 'From payment failure through the 15-day grace period'
+        dismissMode: 'none'
       },
-      card_expired: {
-        severity: 'warning',
-        title: 'Your subscription needs your attention',
-        pill: 'Payment method expired',
-        description: 'Your payment method has expired. Update it before your next renewal.',
-        countdown: 'Renews in 15 days',
-        cta: 'Update payment method',
-        href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
-        showProInfo: false,
-        dismissMode: 'collapse',
-        triggerWindow: 'From 15 days before renewal through 15 days after renewal, when an expired card is detected'
-      },
-      free_trial: {
+      free_trial_15: {
         severity: 'informational',
         title: 'Your free trial is ending soon',
         pill: 'Free trial',
-        description: 'Your free trial ends in 15 days. Choose a plan to keep your workspace features active.',
+        description: 'You have 15 days left to explore Bridge. Choose a plan whenever you are ready to continue.',
         countdown: '15 days left',
         cta: 'Choose a plan',
         href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
         showProInfo: true,
         secondaryLabel: 'Compare plans',
-        dismissMode: 'collapse',
-        triggerWindow: 'From 15 days before the free trial end date'
+        dismissMode: 'collapse'
+      },
+      free_trial_7: {
+        severity: 'informational',
+        title: 'One week left in your free trial',
+        pill: 'Free trial',
+        description: 'Choose a plan to keep your workspace features active after your trial ends.',
+        countdown: '7 days left',
+        cta: 'Choose a plan',
+        href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
+        showProInfo: true,
+        secondaryLabel: 'Compare plans',
+        dismissMode: 'none'
+      },
+      free_trial_3: {
+        severity: 'warning',
+        title: 'Your free trial ends in 3 days',
+        pill: 'Trial ending',
+        description: 'Choose a plan to keep your workspace features active when your trial ends.',
+        countdown: '3 days left',
+        cta: 'Choose a plan',
+        href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
+        showProInfo: true,
+        secondaryLabel: 'Compare plans',
+        dismissMode: 'none'
+      },
+      free_trial_1: {
+        severity: 'warning',
+        title: 'Your free trial ends tomorrow',
+        pill: 'Trial ending',
+        description: 'Choose a plan today to keep your workspace features active without interruption.',
+        countdown: '1 day left',
+        cta: 'Choose a plan',
+        href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
+        showProInfo: false,
+        dismissMode: 'none'
+      },
+      card_expired_15: {
+        severity: 'warning',
+        title: 'Your payment method has expired',
+        pill: 'Payment method',
+        description: 'Update your payment method before your next renewal to avoid a failed payment.',
+        countdown: 'Renews in 15 days',
+        cta: 'Update payment method',
+        href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
+        showProInfo: false,
+        dismissMode: 'collapse'
+      },
+      card_expired_7: {
+        severity: 'warning',
+        title: 'Update your payment method',
+        pill: 'Payment method',
+        description: 'Your card is expired and your subscription renews in 7 days.',
+        countdown: 'Renews in 7 days',
+        cta: 'Update payment method',
+        href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
+        showProInfo: false,
+        dismissMode: 'none'
+      },
+      card_expired_1: {
+        severity: 'critical',
+        title: 'Your subscription renews tomorrow',
+        pill: 'Card expired',
+        description: 'Update your expired payment method today to avoid a failed renewal.',
+        countdown: 'Renews tomorrow',
+        cta: 'Update payment method',
+        href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
+        showProInfo: false,
+        dismissMode: 'none'
+      },
+      payment_failed_15: {
+        severity: 'warning',
+        title: 'We could not process your payment',
+        pill: 'Payment failed',
+        description: 'Update your billing details within 15 days to keep your plan active.',
+        countdown: '15 days left',
+        cta: 'Update billing',
+        href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
+        showProInfo: false,
+        dismissMode: 'none'
+      },
+      payment_failed_7: {
+        severity: 'warning',
+        title: 'Your payment still needs attention',
+        pill: 'Payment failed',
+        description: 'Update your billing details within 7 days to keep your plan active.',
+        countdown: '7 days left',
+        cta: 'Update billing',
+        href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
+        showProInfo: false,
+        dismissMode: 'none'
+      },
+      payment_failed_3: {
+        severity: 'critical',
+        title: 'Update your billing within 3 days',
+        pill: 'Payment failed',
+        description: 'Your grace period is almost over. Update your billing details to keep your plan active.',
+        countdown: '3 days left',
+        cta: 'Update billing',
+        href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
+        showProInfo: false,
+        dismissMode: 'none'
+      },
+      payment_failed_1: {
+        severity: 'critical',
+        title: 'Update your billing today',
+        pill: 'Final day',
+        description: 'Your grace period ends today. Update your billing details to keep your plan active.',
+        countdown: 'Today',
+        cta: 'Update billing',
+        href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
+        showProInfo: false,
+        dismissMode: 'none'
       }
     };
 
@@ -985,7 +1113,7 @@
     }
 
     selector.addEventListener('change', (event) => applyState(event.target.value));
-    applyState('legacy');
+    applyState('legacy_14');
 
     dismissBanner.addEventListener('click', (event) => {
       event.stopPropagation();
