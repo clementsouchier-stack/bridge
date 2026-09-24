@@ -10,6 +10,7 @@
       --blue: #3444D4;
       --yellow: #FFC94A;
       --yellow-soft: #FFF8E5;
+      --blue-soft: #F1F3FF;
       --red: #FF5E57;
       --red-soft: #FFF0EF;
       --green: #59D994;
@@ -215,6 +216,20 @@
       bottom: 0;
       width: 4px;
       background: var(--yellow);
+    }
+
+    .subscription-banner[data-severity="informational"]::before { background: var(--blue); }
+
+    .subscription-banner[data-severity="informational"] .state-icon {
+      background: var(--blue-soft);
+      color: var(--blue);
+      border-color: rgba(52, 68, 212, 0.18);
+    }
+
+    .subscription-banner[data-severity="informational"] .state-pill {
+      border-color: rgba(52, 68, 212, 0.16);
+      background: var(--blue-soft);
+      color: var(--blue);
     }
 
     .subscription-banner[data-severity="critical"] {
@@ -880,6 +895,7 @@
   <script>
     const icons = {
       warning: '<svg viewBox="0 0 24 24" fill="none"><path d="M12 8v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 17h.01" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+      informational: '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 8h.01" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>',
       critical: '<svg viewBox="0 0 24 24" fill="none"><path d="M12 10v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 18h.01" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M7 10V8a5 5 0 0 1 10 0v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="4" y="10" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/></svg>',
       time: '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
     };
@@ -894,6 +910,7 @@
         cta: 'Choose a new plan',
         href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
         showProInfo: true,
+        secondaryLabel: 'Compare plans',
         dismissMode: 'collapse'
       },
       payment_failed: {
@@ -905,7 +922,7 @@
         cta: 'Update billing',
         href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
         showProInfo: false,
-        dismissMode: 'none',
+        dismissMode: 'collapse',
         triggerWindow: 'From payment failure through the 15-day grace period'
       },
       card_expired: {
@@ -917,11 +934,11 @@
         cta: 'Update payment method',
         href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
         showProInfo: false,
-        dismissMode: 'none',
+        dismissMode: 'collapse',
         triggerWindow: 'From 15 days before renewal through 15 days after renewal, when an expired card is detected'
       },
       free_trial: {
-        severity: 'warning',
+        severity: 'informational',
         title: 'Your free trial is ending soon',
         pill: 'Free trial',
         description: 'Your free trial ends in 15 days. Choose a plan to keep your workspace features active.',
@@ -929,6 +946,7 @@
         cta: 'Choose a plan',
         href: 'https://clementsouchier-stack.github.io/pricing-checkout/',
         showProInfo: true,
+        secondaryLabel: 'Compare plans',
         dismissMode: 'collapse',
         triggerWindow: 'From 15 days before the free trial end date'
       }
@@ -959,6 +977,7 @@
       countdown.innerHTML = icons.time + '<span>' + state.countdown + '</span>';
       benefitsList.style.display = 'none';
       learnMoreButton.style.display = state.showProInfo ? 'inline-flex' : 'none';
+      learnMoreButton.textContent = state.secondaryLabel || "What's in Pro?";
       primaryCTA.textContent = state.cta;
       primaryCTA.href = state.href;
       dismissBanner.style.display = state.dismissMode === 'collapse' ? 'grid' : 'none';
