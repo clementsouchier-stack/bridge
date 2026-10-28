@@ -295,6 +295,21 @@
  .bridge-alt-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
  .bridge-alt-card{padding:10px}
  .bridge-alt-text{padding-top:12px}
+
+ /* Mobile Library is one continuous white canvas, not a card on a grey shell. */
+ html,body,#__next,#__next>.grid{background:#fff!important;background-color:#fff!important}
+ #__next>.grid>[style*="grid-area: header"],
+ #__next>.grid>[style*="grid-area: header"]>header,
+ #__next>.grid>[style*="grid-area: header"]>header>div,
+ #header-buttons,#header-buttons>div,
+ #__next>.grid>[style*="grid-area: view"],
+ #bridge-original-tracks,#bridge-alternate-view{
+   background:#fff!important;background-color:#fff!important;
+   border-radius:0!important;box-shadow:none!important;
+ }
+ #__next>.grid>[style*="grid-area: view"]{margin:0!important;border:0!important;outline:0!important}
+ #__next>.grid>[style*="grid-area: header"]>header{border-radius:0!important;box-shadow:none!important}
+ #bridge-original-tracks .sticky, #bridge-alternate-view .sticky{background-color:#fff!important}
 }
 @media(min-width:520px) and (max-width:767px){.bridge-alt-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:360px){#__next>.grid>[style*="grid-area: header"]>header{padding-left:10px!important;padding-right:10px!important}#__next>.grid>[style*="grid-area: header"]>header>div{gap:5px}#header-buttons .bridge-filter-row{gap:5px}.bridge-alt-card{padding:7px}}
