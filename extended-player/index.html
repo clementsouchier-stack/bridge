@@ -1249,7 +1249,7 @@ function moveSeekPreview(clientX){
  seekLoupeBars.forEach((bar,i)=>{
    const sample=detailedPeaks[Math.max(0,Math.min(detailedPeaks.length-1,center+Math.round((i-(seekLoupeBars.length-1)/2)*.48)))];
    bar.style.setProperty('--bar',(4+sample*.65)+'px');
-   bar.style.background=i<50?'#2674e9':'#aeb2ba';
+   bar.style.background=i<seekLoupeBars.length/2?'#2674e9':'#535862';
  });
 }
 wave.addEventListener('pointerdown',event=>{
