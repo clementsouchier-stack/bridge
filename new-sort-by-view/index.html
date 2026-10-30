@@ -253,17 +253,18 @@
 @media(max-width:767px){
  #__next>.grid{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto minmax(0,1fr) auto!important;grid-template-areas:"header" "view" "player"!important;min-height:0;overflow:hidden}
  #__next>.grid>nav{display:none!important}
- /* A stable top inset, with the burger and the search vertically centered. */
+ /* Mobile header: first row burger + search, second row full-width filters + view. */
  #__next>.grid>[style*="grid-area: header"]>header{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;position:relative;z-index:45;padding:12px 14px 10px!important;margin:0!important}
- #__next>.grid>[style*="grid-area: header"]>header>div{display:flex!important;flex-wrap:nowrap!important;align-items:flex-start!important;gap:8px;width:100%!important;min-width:0!important;height:auto!important;padding:0!important;margin:0!important;overflow:visible!important}
- #__next>.grid>[style*="grid-area: header"]>header>div>div:first-child{display:flex!important;flex:0 0 40px!important;width:40px!important;height:44px!important;align-items:center!important;justify-content:center!important;margin:0!important;padding:0!important}
+ #__next>.grid>[style*="grid-area: header"]>header>div{display:grid!important;grid-template-columns:40px minmax(0,1fr);grid-template-rows:44px auto;align-items:center!important;column-gap:8px;row-gap:8px;width:100%!important;min-width:0!important;height:auto!important;padding:0!important;margin:0!important;overflow:visible!important}
+ #__next>.grid>[style*="grid-area: header"]>header>div>div:first-child{grid-column:1;grid-row:1;display:flex!important;width:40px!important;height:44px!important;align-items:center!important;justify-content:center!important;margin:0!important;padding:0!important}
  #__next>.grid>[style*="grid-area: header"]>header>div>div:first-child>div{width:40px!important;height:40px!important}
  #__next>.grid>[style*="grid-area: header"]>header>div>div:nth-child(n+3){display:none!important}
- #header-buttons{display:block!important;flex:1 1 0%!important;min-width:0!important;width:0!important;max-width:none!important;margin:0!important;height:auto!important;overflow:visible!important}
- #header-buttons>div{display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;gap:8px!important;width:100%!important;min-width:0!important;height:auto!important;min-height:0!important;padding:0!important;margin:0!important;overflow:visible!important}
- #header-buttons>div>div:first-child{display:flex!important;align-items:center!important;min-width:0!important;width:100%!important;min-height:44px!important;height:44px!important;margin:0!important;padding:0!important}
+ /* Flatten only structural wrappers, so the toolbar can span both grid columns. */
+ #header-buttons,#header-buttons>div{display:contents!important}
+ #header-buttons>div>div:first-child{grid-column:2;grid-row:1;display:flex!important;align-items:center!important;min-width:0!important;width:100%!important;min-height:44px!important;height:44px!important;margin:0!important;padding:0!important}
  #header-buttons>div>div:first-child>div{min-width:0!important}
- #header-buttons .bridge-filter-row{width:100%!important;max-width:100%!important;gap:7px;padding:0 0 2px!important;margin:0!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important}
+ #header-buttons .bridge-library-toolbar{grid-column:1 / -1;grid-row:2;display:flex!important;min-width:0!important;width:100%!important;padding:0!important;margin:0!important;gap:8px!important}
+ #header-buttons .bridge-library-toolbar>.bridge-filter-row{flex:1 1 0!important;width:auto!important;min-width:0!important;max-width:none!important;gap:7px!important;padding:0!important;margin:0!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important}
  #header-buttons .bridge-filter-row>div{display:block!important;visibility:visible!important;flex:0 0 auto!important}
  #bridge-mobile-add{display:flex}
  #bridge-original-tracks{padding-left:12px!important;padding-right:12px!important;min-width:0}
@@ -330,8 +331,6 @@
 .bridge-sort-option:focus-visible{outline:2px solid var(--accentContent,#126bff);outline-offset:2px}
 .bridge-sort-direction{min-width:12px;text-align:right}
 @media(max-width:767px){
- #header-buttons .bridge-library-toolbar{gap:8px}
- #header-buttons .bridge-library-toolbar>.bridge-filter-row{width:auto!important;min-width:0;overflow-x:auto!important;overflow-y:hidden!important}
  .bridge-view-segment{display:none}
  #bridge-mobile-cycle{display:inline-flex;min-width:36px;width:36px;padding:5px}
  .bridge-library-actions{gap:6px}
