@@ -230,6 +230,15 @@
 .bridge-alt-name{font-weight:700;font-size:14px;line-height:20px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .bridge-alt-sub{font-size:12px;color:#767676;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 </style><style>/* BRIDGE prototype layout: single authoritative responsive stylesheet. */
+
+/* Shared content axis and breathing room between controls and results. */
+@media (min-width:768px){
+ #__next>.grid>[style*="grid-area: header"]>header>div{padding-bottom:18px}
+ #bridge-original-tracks{padding-left:32px!important;padding-right:32px!important}
+ #bridge-alternate-view{padding-left:32px;padding-right:32px}
+ .bridge-alt-grid{margin-left:-16px;margin-right:-16px}
+}
+
 #bridge-original-tracks{display:flex;flex-direction:column;min-height:0;overflow:hidden}
 #bridge-original-tracks [data-bridge-track-body]{display:flex;flex-direction:column;flex:1 1 auto;min-height:0}
 #bridge-original-tracks [data-bridge-track-scroll]{height:auto!important;flex:1 1 auto!important;min-height:0!important;overflow:auto!important;overscroll-behavior:contain}
@@ -257,7 +266,7 @@
  #__next>.grid{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto minmax(0,1fr) auto!important;grid-template-areas:"header" "view" "player"!important;min-height:0;overflow:hidden}
  #__next>.grid>nav{display:none!important}
  /* Mobile header: first row burger + search, second row full-width filters + view. */
- #__next>.grid>[style*="grid-area: header"]>header{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;position:relative;z-index:45;padding:12px 14px 10px!important;margin:0!important}
+ #__next>.grid>[style*="grid-area: header"]>header{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;position:relative;z-index:45;padding:12px 14px 22px!important;margin:0!important}
  #__next>.grid>[style*="grid-area: header"]>header>div{display:grid!important;grid-template-columns:40px minmax(0,1fr);grid-template-rows:44px auto;align-items:center!important;column-gap:8px;row-gap:8px;width:100%!important;min-width:0!important;height:auto!important;padding:0!important;margin:0!important;overflow:visible!important}
  #__next>.grid>[style*="grid-area: header"]>header>div>div:first-child{grid-column:1;grid-row:1;display:flex!important;width:40px!important;height:44px!important;align-items:center!important;justify-content:center!important;margin:0!important;padding:0!important}
  #__next>.grid>[style*="grid-area: header"]>header>div>div:first-child>div{width:40px!important;height:40px!important}
@@ -271,15 +280,16 @@
  #header-buttons .bridge-filter-row>div{display:block!important;visibility:visible!important;flex:0 0 auto!important}
  #header-buttons .bridge-filter-row>div>div{height:36px;min-height:36px}
  #bridge-mobile-add{display:flex}
- #bridge-original-tracks{padding-left:12px!important;padding-right:12px!important;min-width:0}
+ #bridge-original-tracks{padding-left:14px!important;padding-right:14px!important;min-width:0}
  #bridge-original-tracks .grid.h-10{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;min-width:0!important;width:100%!important;position:relative;gap:4px}
  #bridge-original-tracks .grid.h-10>:not(:nth-child(2)):not(:last-child){display:none!important}
  #bridge-original-tracks .grid.h-10>:nth-child(2){grid-column:1;min-width:0!important;font-size:14px;padding-left:0!important;white-space:nowrap}
  #bridge-original-tracks .grid.h-10>:last-child{grid-column:2;min-width:0!important;width:auto!important;padding:0!important;justify-self:end}
- #bridge-alternate-view{padding:0 12px 24px}
+ #bridge-alternate-view{padding:0 14px 24px}
  .bridge-alt-title{font-size:14px;gap:8px}
  .bridge-alt-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
  .bridge-alt-card{padding:10px}
+ .bridge-alt-grid{margin-left:-10px;margin-right:-10px}
  .bridge-alt-text{padding-top:12px}
 
  /* Mobile Library is one continuous white canvas, not a card on a grey shell. */
@@ -298,7 +308,7 @@
  #bridge-original-tracks .sticky, #bridge-alternate-view .sticky{background-color:#fff!important}
 }
 @media(min-width:520px) and (max-width:767px){.bridge-alt-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:360px){#__next>.grid>[style*="grid-area: header"]>header{padding-left:10px!important;padding-right:10px!important}#__next>.grid>[style*="grid-area: header"]>header>div{gap:5px}#header-buttons .bridge-filter-row{gap:5px}.bridge-alt-card{padding:7px}}
+@media(max-width:360px){#__next>.grid>[style*="grid-area: header"]>header{padding-left:10px!important;padding-right:10px!important}#bridge-original-tracks{padding-left:10px!important;padding-right:10px!important}#bridge-alternate-view{padding-left:10px;padding-right:10px}#__next>.grid>[style*="grid-area: header"]>header>div{gap:5px}#header-buttons .bridge-filter-row{gap:5px}.bridge-alt-card{padding:7px}}
 @media(prefers-reduced-motion:reduce){.bridge-compact-button,.bridge-alt-card{transition:none}}
 </style><style id="bridge-toolbar-unified-style">
 /* New Sort / View toolbar: original Bridge controls, compact and responsive */
