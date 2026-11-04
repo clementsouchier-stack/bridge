@@ -2298,3 +2298,24 @@ for(const e of existing.filter(x=>!activeOnly||x.active)){
  const bar=document.createElement('div');bar.className='v69-existing-line';
  const label=document.createElement('div');label.className='v69-existing-name';label.innerHTML='<span aria-hidden="true">🔗</span><span title="'+safe(e.name)+'">'+safe(e.name)+'</span>';
  const controls=document.createElement('div');controls.className='v69-existing-actions';
+ const copy=document.createElement('button');copy.type='button';copy.disabled=true;copy.title='No real link exists in this standalone prototype';copy.textContent='Copy link';
+ const edit=document.createElement('button');edit.type='button';edit.textContent='Edit';edit.setAttribute('aria-expanded',String(expanded===e.id));edit.addEventListener('click',()=>{expanded=expanded===e.id?null:e.id;render()});
+ const toggle=document.createElement('input');toggle.type='checkbox';toggle.checked=e.active;toggle.setAttribute('aria-label','Active link '+e.name);toggle.addEventListener('change',()=>{e.active=toggle.checked;render();status('v66-existing-feedback','Status updated locally, not on Bridge.')});
+ controls.append(copy,edit,toggle);bar.append(label,controls);wrap.append(bar);
+ if(expanded===e.id){const panel=document.createElement('div');panel.className='v69-existing-settings';
+ const heading=document.createElement('strong');heading.textContent='Link name';panel.append(heading);
+ const field=document.createElement('input');field.type='text';field.value=e.name;field.setAttribute('aria-label','Link name');field.addEventListener('change',()=>{if(field.value.trim())e.name=field.value.trim();render()});panel.append(field);
+ for(const [key,text] of [['streaming','Streaming'],['mp3','MP3 download'],['hq','HQ download (WAV, FLAC...)'],['info','Track information'],['password','Password protection']]){const row=document.createElement('label');row.textContent=text;const check=document.createElement('input');check.type='checkbox';check.checked=e[key];check.addEventListener('change',()=>{e[key]=check.checked;status('v66-existing-feedback','Settings updated locally, not on Bridge.')});row.append(check);panel.append(row)}
+ const done=document.createElement('button');done.textContent='Done';done.type='button';done.addEventListener('click',()=>{expanded=null;render()});panel.append(done);wrap.append(panel)}
+ root.append(wrap)}
+if(!root.children.length){const empty=document.createElement('p');empty.textContent='No active links to display.';empty.className='v69-status';root.append(empty)}
+}
+$('v66-links-filter').addEventListener('change',e=>{activeOnly=e.target.checked;render()});
+create.addEventListener('click',()=>{const names=name.value.split(',').map(x=>x.trim()).filter(Boolean);if(!names.length)return;for(const n of names)existing.unshift({id:seq++,name:n,active:true,streaming:true,mp3:true,hq:true,info:true,password:false});name.value='';validate();render();status('v66-link-feedback',names.length+' link configuration(s) added locally. No real URL was created.');});
+send.addEventListener('click',()=>status('v66-email-feedback','Preview only: no email was sent.'));
+render();
+const menu=$('v67-workspaces'),loc=$('v67-location'),back=$('v67-workspace-back');
+document.addEventListener('pointerdown',e=>{if(menu&&!menu.hidden&&loc&&!loc.contains(e.target))back.click()},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menu&&!menu.hidden){back.click();$('v67-workspace-picker').focus();e.stopPropagation()}});
+})();
+</script></body></html>
