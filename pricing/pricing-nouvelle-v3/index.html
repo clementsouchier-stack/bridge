@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#FCFCFC">
 <meta name="description" content="Bridge.audio plans for creators, music professionals, and entertainment teams. One connected platform for music.">
-<title>Pricing | Bridge.audio V27</title>
+<title>Pricing | Bridge.audio V38</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -54,9 +54,8 @@ button:focus-visible,a:focus-visible,.compare-scroll:focus-visible{outline:2px s
 
 .cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:stretch;gap:14px}
 .cards--three{grid-template-columns:repeat(3,minmax(0,1fr));max-width:1110px;margin-inline:auto}
-.plan-card{display:grid;grid-template-rows:176px 26px 306px 94px 42px 78px 48px;min-width:0;background:var(--white);border:0;border-radius:var(--radius-card);padding:25px 22px 22px;box-shadow:0 2px 12px rgba(37,36,40,.025);transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}
+.plan-card{display:grid;grid-template-rows:176px 26px 292px 94px 42px 78px 62px;min-width:0;background:var(--white);border:0;border-radius:var(--radius-card);padding:25px 22px 22px;box-shadow:0 2px 12px rgba(37,36,40,.025);transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}
 .plan-card:hover{box-shadow:0 10px 28px rgba(37,36,40,.065);transform:translateY(-1px)}
-.plan-card--focus{box-shadow:0 5px 22px rgba(37,36,40,.04)}
 .card-banner{position:relative;isolation:isolate;min-width:0;overflow:hidden;margin:-25px -22px 0;padding:23px 22px 17px;border-radius:15px 15px 0 0;border-bottom:0;background:#F8F8F9;display:flex;flex-direction:column;gap:0}
 .card-banner::after{display:none}
 .card-banner .family{position:relative;z-index:1;color:var(--text);font-size:15px;font-weight:650;letter-spacing:-.017em;text-transform:none;white-space:normal;align-items:flex-start;line-height:1.35;min-height:21px}
@@ -167,7 +166,7 @@ button:focus-visible,a:focus-visible,.compare-scroll:focus-visible{outline:2px s
 @media(max-width:1200px){
  .wrap{padding-inline:24px}
  .cards,.cards--three{grid-template-columns:repeat(2,minmax(0,1fr));max-width:none;gap:16px}
- .plan-card{grid-template-rows:176px 26px 302px 94px 42px 78px 48px}
+ .plan-card{grid-template-rows:176px 26px 288px 94px 42px 78px 62px}
  .price-main{font-size:40px}
  .benefits{grid-template-rows:repeat(3,minmax(0,1fr))}
 }
@@ -176,7 +175,7 @@ button:focus-visible,a:focus-visible,.compare-scroll:focus-visible{outline:2px s
  .controls{flex-wrap:wrap;align-items:flex-start;gap:12px}
  .role-switch{max-width:100%;overflow-x:auto}
  .billing-switch{margin-left:auto}
- .plan-card{grid-template-rows:176px 26px 302px 94px 42px 78px 48px}
+ .plan-card{grid-template-rows:176px 26px 288px 94px 42px 78px 62px}
 }
 @media(max-width:720px){
  .wrap{padding-inline:16px}
@@ -209,7 +208,6 @@ button:focus-visible,a:focus-visible,.compare-scroll:focus-visible{outline:2px s
  .mobile-why strong{color:var(--indigo)}
  .mobile-selected-card .plan-card{display:flex;flex-direction:column;gap:0;padding:22px 19px 20px;min-height:0}
  .mobile-selected-card .card-banner{margin:-22px -19px 0;padding:22px 19px 19px;min-height:162px}.mobile-selected-card .family{margin-bottom:0}
- .mobile-selected-card .pick-tag{display:inline-flex}
  
  .mobile-selected-card .plan-heading{padding-top:12px}
  .mobile-selected-card .plan-heading h2{font-size:26px}
@@ -352,7 +350,6 @@ body{background:#EEEFF2}
 .card-banner .plan-heading{padding-top:17px}
 .card-banner .plan-heading h2,.card-banner--creator .plan-heading h2,.card-banner--music .plan-heading h2,.card-banner--buyer .plan-heading h2{color:#252428!important;mix-blend-mode:normal!important;font-weight:500}
 .card-banner .plan-heading p,.card-banner--buyer .plan-heading p{color:#706E78!important;mix-blend-mode:normal!important;max-width:31ch}
-.card-banner--buyer .pick-tag{color:#2F43DE;background:#F6F7FE;border-color:#DDE2FF}
 .compare-head{background:transparent;border:0;padding:0;margin-bottom:18px;border-radius:0}
 .compare-frame{border:0;background:#FFFFFF;box-shadow:0 4px 18px rgba(37,36,40,.028)}
 .compare-table thead th,.compare-table thead tr:last-child th,.compare-table thead th:first-child,.compare-table .plan-headers th:first-child,
@@ -397,68 +394,19 @@ body.modal-is-open{overflow:hidden}
 @media(max-width:360px) { .compare-table { --feature-width:136px; --plan-width:132px; } }
 
 /* V36: clearer recommendation and no duplicated persona label row. */
-.plan-card--focus{position:relative;box-shadow:0 7px 26px rgba(47,67,222,.09),0 0 0 1.5px rgba(47,67,222,.28);}
-.plan-card--focus:hover{box-shadow:0 10px 30px rgba(47,67,222,.13),0 0 0 1.5px rgba(47,67,222,.32);}
 .card-banner .family{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
-.card-banner .pick-tag,.card-banner--buyer .pick-tag{
- display:inline-flex;align-items:center;justify-content:center;gap:3px;flex:0 0 auto;
- background:#2F43DE;color:#FFFFFF!important;border:1px solid #2F43DE;
- border-radius:100px;padding:6px 10px;font-size:10px;font-weight:800;letter-spacing:0;
- text-transform:none;box-shadow:0 2px 8px rgba(47,67,222,.16);
-}
 .mobile-tier-name{flex-wrap:wrap;align-content:flex-start;gap:4px;}
-.mobile-tier-name .tiny-pick{display:inline-flex;align-items:center;justify-content:center;background:#2F43DE;color:#FFFFFF;border-radius:100px;padding:3px 7px;font-size:8px;line-height:1.15;font-weight:800;}
-.mobile-selected-card .pick-tag{display:inline-flex!important;}
 @media(max-width:720px){.mobile-tier-option{display:flex;flex-direction:column;justify-content:flex-start;}.mobile-tier-price{margin-top:auto;padding-top:9px}.mobile-tier-option[aria-pressed="true"]{border-color:#2F43DE;box-shadow:inset 0 0 0 1px rgba(47,67,222,.4);}.mobile-selected-card .card-banner .family{justify-content:flex-start;}}
 
 
-/* V37: Popular label sits across the card's top edge, not inside the persona heading. */
-.plan-card--focus,
-.plan-card--focus:hover {
-  position:relative;
-  overflow:visible;
-  box-shadow:0 4px 18px rgba(37,36,40,.045);
-  border:0;
+
+/* V38: quieter plan cards and more breathing room before the decision CTA. */
+@media (min-width:721px){
+  .plan-card .benefit{padding-top:11px}
+  .plan-card .card-cta{align-items:flex-end}
 }
-.plan-card--focus:hover { box-shadow:0 9px 25px rgba(37,36,40,.07); }
-.plan-card--focus .card-banner .family { justify-content:flex-start; }
-.popular-tag {
-  position:absolute;
-  top:0;
-  right:16px;
-  transform:translateY(-50%);
-  z-index:12;
-  display:inline-flex;
-  flex-direction:row;
-  align-items:center;
-  justify-content:center;
-  gap:5px;
-  padding:5px 8px;
-  margin:0;
-  background:#FFC833;
-  color:#252428;
-  border:0;
-  border-radius:4px;
-  box-shadow:0 1px 3px rgba(37,36,40,.08);
-  font-family:inherit;
-  font-size:10px;
-  line-height:1.15;
-  font-weight:750;
-  letter-spacing:0;
-  text-transform:none;
-  white-space:nowrap;
-  pointer-events:none;
-}
-.popular-star {
-  display:block;
-  width:10px;
-  height:10px;
-  flex:0 0 10px;
-  fill:#252428;
-}
-@media(max-width:720px) {
-  .mobile-selected-card .plan-card--focus { overflow:visible; }
-  .mobile-selected-card .popular-tag { right:15px; }
+@media (max-width:720px){
+  .plan-card .card-cta{margin-top:10px}
 }
 </style>
 </head>
@@ -553,12 +501,6 @@ const plans={
   {size:'Supervisor Max',annual:588,monthly:79,storage:'5 TB',members:'10',indexed:'100,000',publish:null}
  ]}
 };
-const recommended={creator:0,music:0,buyer:0};
-const recommendedReason={
- creator:'Creator includes 25 tracks you can publish to Bridge Talents.',
- music:'Music Pro includes 250 tracks you can publish to Discovery Hubs.',
- buyer:'Supervisor includes 2 TB and 20,000 AI-indexed tracks.'
-};
 const state={role:'all',billing:'yearly',selected:{creator:0,music:0,buyer:0}};
 const $=q=>document.querySelector(q);
 // Prototype-only analytics hooks. No data leaves this file; connect to real analytics in production.
@@ -605,8 +547,7 @@ function capacities(role,t){
  if(role==='buyer')d.push(capacity('Hub search','Free'));
  return `<dl class="capacities" style="--capacity-count:${d.length}">${d.join('')}</dl>`;
 }
-function card(role,index,filtered){const g=plans[role],free=role==='free',t=free?null:g.tiers[index];const pick=filtered&&!free&&recommended[role]===index;return `<article class="plan-card ${pick?'plan-card--focus':''}" ${pick?'data-recommended="true"':''} aria-label="${safe(free?g.name:t.size)}">
- ${pick?`<span class="popular-tag" aria-label="Popular plan"><svg class="popular-star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2 15.1 8.3 22 9.3l-5 4.9 1.18 6.9L12 17.8l-6.18 3.3L7 14.2 2 9.3l6.9-1Z"/></svg><span>Popular</span></span>`:''}
+function card(role,index,filtered){const g=plans[role],free=role==='free',t=free?null:g.tiers[index];return `<article class="plan-card" aria-label="${safe(free?g.name:t.size)}">
  <div class="card-banner card-banner--${role}">
   <div class="family"><span class="persona-pill persona-pill--${role}">${safe(filtered&&!free?t.size:g.name)}</span></div>
   <div class="plan-heading"><h2>${safe(g.headline)}</h2><p>${safe(g.audience)}</p></div>
@@ -634,7 +575,6 @@ function renderMobilePlan(){
   </button>`;
  }).join('');
  panel.innerHTML=`<div class="mobile-tier-picker" style="--tier-count:${g.tiers.length}" role="group" aria-label="Choose ${safe(g.name)} plan">${buttons}</div>
- <p class="mobile-why"><strong>${choice===recommended[role]?'Popular choice.':'More capacity.'}</strong> ${safe(choice===recommended[role]?recommendedReason[role]:(role==='creator'?'More music to showcase on Bridge Talents.':role==='music'?'More capacity for your catalog and your team.':'More room for large projects and music libraries.'))}</p>
  <div class="mobile-selected-card">${card(role,choice,true)}</div>
  <button class="mobile-free-alt" id="mobileFree" type="button" aria-label="Explore Free plan">
   <span><strong>Free · €0/month</strong><small>2 GB · 2 members · 50 tracks</small></span><span class="free-link">Explore Free →</span>
