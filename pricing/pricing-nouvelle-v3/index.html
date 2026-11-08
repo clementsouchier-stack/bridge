@@ -50,8 +50,8 @@ button:focus-visible,a:focus-visible,.compare-scroll:focus-visible{outline:2px s
 .switch button[aria-pressed="true"]{color:var(--indigo);background:var(--white);box-shadow:0 1px 4px rgba(37,36,40,.09)}
 .role-switch{max-width:100%;overflow-x:auto;scrollbar-width:none}
 .role-switch::-webkit-scrollbar{display:none}
-.section-line{display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:15px;font-size:11px;color:var(--grey)}.pick-jump{color:var(--indigo);font-weight:700;font-size:11px;background:transparent;text-align:right;padding:4px 0}.pick-jump:hover{text-decoration:underline}.pick-jump[hidden]{display:none}
-.section-line .spark{display:none}.section-line.is-empty{display:none}
+
+
 .cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:stretch;gap:14px}
 .cards--three{grid-template-columns:repeat(3,minmax(0,1fr));max-width:1110px;margin-inline:auto}
 .plan-card{display:grid;grid-template-rows:176px 26px 306px 94px 42px 78px 48px;min-width:0;background:var(--white);border:0;border-radius:var(--radius-card);padding:25px 22px 22px;box-shadow:0 2px 12px rgba(37,36,40,.025);transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}
@@ -194,7 +194,7 @@ button:focus-visible,a:focus-visible,.compare-scroll:focus-visible{outline:2px s
  .billing-switch button{flex:1}
  .savings-hint{font-size:11px;line-height:1.3;max-width:100px;white-space:normal;text-align:right}
  .switch button{padding:11px 13px}
- .section-line{flex-direction:column;align-items:flex-start;gap:4px}
+ 
  .cards.is-filtered{display:none}
  .mobile-plan-ui:not([hidden]){display:block}
  .mobile-tier-picker{display:grid;grid-template-columns:repeat(var(--tier-count,3),minmax(0,1fr));gap:8px;margin-bottom:13px}
@@ -209,8 +209,8 @@ button:focus-visible,a:focus-visible,.compare-scroll:focus-visible{outline:2px s
  .mobile-why strong{color:var(--indigo)}
  .mobile-selected-card .plan-card{display:flex;flex-direction:column;gap:0;padding:22px 19px 20px;min-height:0}
  .mobile-selected-card .card-banner{margin:-22px -19px 0;padding:22px 19px 19px;min-height:162px}.mobile-selected-card .family{margin-bottom:0}
- .mobile-selected-card .pick-tag{display:none}
- .pick-jump{display:none!important}
+ .mobile-selected-card .pick-tag{display:inline-flex}
+ 
  .mobile-selected-card .plan-heading{padding-top:12px}
  .mobile-selected-card .plan-heading h2{font-size:26px}
  .mobile-selected-card .plan-heading p{max-width:unset;font-size:12px;margin-top:7px}
@@ -395,6 +395,22 @@ body.modal-is-open{overflow:hidden}
  .compare-table thead .plan-tier-name { font-size:10px; }
 }
 @media(max-width:360px) { .compare-table { --feature-width:136px; --plan-width:132px; } }
+
+/* V36: clearer recommendation and no duplicated persona label row. */
+.plan-card--focus{position:relative;box-shadow:0 7px 26px rgba(47,67,222,.09),0 0 0 1.5px rgba(47,67,222,.28);}
+.plan-card--focus:hover{box-shadow:0 10px 30px rgba(47,67,222,.13),0 0 0 1.5px rgba(47,67,222,.32);}
+.card-banner .family{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+.card-banner .pick-tag,.card-banner--buyer .pick-tag{
+ display:inline-flex;align-items:center;justify-content:center;gap:3px;flex:0 0 auto;
+ background:#2F43DE;color:#FFFFFF!important;border:1px solid #2F43DE;
+ border-radius:100px;padding:6px 10px;font-size:10px;font-weight:800;letter-spacing:0;
+ text-transform:none;box-shadow:0 2px 8px rgba(47,67,222,.16);
+}
+.mobile-tier-name{flex-wrap:wrap;align-content:flex-start;gap:4px;}
+.mobile-tier-name .tiny-pick{display:inline-flex;align-items:center;justify-content:center;background:#2F43DE;color:#FFFFFF;border-radius:100px;padding:3px 7px;font-size:8px;line-height:1.15;font-weight:800;}
+.mobile-selected-card .pick-tag{display:inline-flex!important;}
+@media(max-width:720px){.mobile-tier-option{display:flex;flex-direction:column;justify-content:flex-start;}.mobile-tier-price{margin-top:auto;padding-top:9px}.mobile-tier-option[aria-pressed="true"]{border-color:#2F43DE;box-shadow:inset 0 0 0 1px rgba(47,67,222,.4);}.mobile-selected-card .card-banner .family{justify-content:flex-start;}}
+
 </style>
 </head>
 <body>
@@ -424,7 +440,6 @@ body.modal-is-open{overflow:hidden}
         <span class="savings-hint" id="savingsHint" hidden></span>
       </div>
     </div>
-    <div class="section-line"><span id="sectionTitle">Choose your plan.</span><button id="pickJump" class="pick-jump" type="button" hidden></button></div>
     <div id="mobilePlanUI" class="mobile-plan-ui" hidden></div>
     <div class="cards" id="cards" role="region" aria-label="Pricing plans" tabindex="0"></div>
   </section>
@@ -543,7 +558,7 @@ function capacities(role,t){
 }
 function card(role,index,filtered){const g=plans[role],free=role==='free',t=free?null:g.tiers[index];const pick=filtered&&!free&&recommended[role]===index;return `<article class="plan-card ${pick?'plan-card--focus':''}" ${pick?'data-recommended="true"':''} aria-label="${safe(free?g.name:t.size)}">
  <div class="card-banner card-banner--${role}">
-  <div class="family"><span class="persona-pill persona-pill--${role}">${safe(filtered&&!free?t.size:g.name)}</span>${pick?`<span class="pick-tag" title="${safe(recommendedReason[role])}">Our pick</span>`:''}</div>
+  <div class="family"><span class="persona-pill persona-pill--${role}">${safe(filtered&&!free?t.size:g.name)}</span>${pick?`<span class="pick-tag" title="${safe(recommendedReason[role])}">★ Recommended</span>`:''}</div>
   <div class="plan-heading"><h2>${safe(g.headline)}</h2><p>${safe(g.audience)}</p></div>
  </div>
  <p class="inherits ${free?'is-free':''}">${free?'Free forever':'Everything in Free, plus'}</p>
@@ -563,7 +578,7 @@ function renderMobilePlan(){
   const amount=state.billing==='yearly'?t.annual/12:t.monthly;
   const displayName=role==='music' && i>0?t.size.replace('Music Pro ',''):t.size;
   return `<button type="button" class="mobile-tier-option" data-mobile-tier="${i}" aria-pressed="${i===choice}" aria-label="${t.size}, ${money(amount)} per month${state.billing==='yearly'?' equivalent on annual billing':''}, ${t.storage}">
-    <span class="mobile-tier-name">${displayName}${i===recommended[role]?'<span class="tiny-pick">Our pick</span>':''}</span>
+    <span class="mobile-tier-name">${displayName}${i===recommended[role]?'<span class="tiny-pick">Recommended</span>':''}</span>
     <div class="mobile-tier-price">${money(amount)}<small class="tier-per">/mo</small></div>
     <span class="mobile-tier-storage">${state.billing==='yearly'?money(t.annual)+' /yr':t.storage}</span>
   </button>`;
@@ -597,10 +612,6 @@ function renderCards(){
  ).join('');
  $('#cards').classList.toggle('is-filtered',state.role!=='all');
  $('#cards').classList.toggle('cards--three',roles.length===3);
- $('#sectionTitle').textContent=state.role==='all'?'':`${plans[state.role].name}`;
- $('#sectionTitle').closest('.section-line').classList.toggle('is-empty',state.role==='all');
- const jump=$('#pickJump');
- if(jump){jump.hidden=state.role==='all';if(state.role!=='all')jump.textContent=recommendedReason[state.role];}
  renderMobilePlan();updateSavings();
  $('#cards').querySelectorAll('[data-size]').forEach(b=>b.addEventListener('click',()=>{
    const [r,i]=b.dataset.size.split(':');state.selected[r]=Number(i);
@@ -663,7 +674,6 @@ function openModal(token){previousFocus=document.activeElement;const [r,i]=token
  overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');document.body.classList.add('modal-is-open');$('#modalClose').focus();track('preview_open',{plan:r,tier:t?.size||'Free'});
 }
 function closeModal(){overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');document.body.classList.remove('modal-is-open');$('#eligibilityInput').checked=false;previousFocus?.focus()}
-$('#pickJump').addEventListener('click',()=>{const card=$('#cards [data-recommended="true"]');if(!card)return;card.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest',inline:'start'});});
 $('#topFree').addEventListener('click',()=>openModal('free'));
 $('#modalClose').addEventListener('click',closeModal);
 $('#modalContinue').addEventListener('click',()=>{if(!$('#eligibility').classList.contains('hidden')&&!$('#eligibilityInput').checked){$('#eligibilityInput').focus();return}closeModal()});
