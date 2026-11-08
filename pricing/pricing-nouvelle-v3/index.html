@@ -411,6 +411,55 @@ body.modal-is-open{overflow:hidden}
 .mobile-selected-card .pick-tag{display:inline-flex!important;}
 @media(max-width:720px){.mobile-tier-option{display:flex;flex-direction:column;justify-content:flex-start;}.mobile-tier-price{margin-top:auto;padding-top:9px}.mobile-tier-option[aria-pressed="true"]{border-color:#2F43DE;box-shadow:inset 0 0 0 1px rgba(47,67,222,.4);}.mobile-selected-card .card-banner .family{justify-content:flex-start;}}
 
+
+/* V37: Popular label sits across the card's top edge, not inside the persona heading. */
+.plan-card--focus,
+.plan-card--focus:hover {
+  position:relative;
+  overflow:visible;
+  box-shadow:0 4px 18px rgba(37,36,40,.045);
+  border:0;
+}
+.plan-card--focus:hover { box-shadow:0 9px 25px rgba(37,36,40,.07); }
+.plan-card--focus .card-banner .family { justify-content:flex-start; }
+.popular-tag {
+  position:absolute;
+  top:0;
+  right:16px;
+  transform:translateY(-50%);
+  z-index:12;
+  display:inline-flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  padding:5px 8px;
+  margin:0;
+  background:#FFC833;
+  color:#252428;
+  border:0;
+  border-radius:4px;
+  box-shadow:0 1px 3px rgba(37,36,40,.08);
+  font-family:inherit;
+  font-size:10px;
+  line-height:1.15;
+  font-weight:750;
+  letter-spacing:0;
+  text-transform:none;
+  white-space:nowrap;
+  pointer-events:none;
+}
+.popular-star {
+  display:block;
+  width:10px;
+  height:10px;
+  flex:0 0 10px;
+  fill:#252428;
+}
+@media(max-width:720px) {
+  .mobile-selected-card .plan-card--focus { overflow:visible; }
+  .mobile-selected-card .popular-tag { right:15px; }
+}
 </style>
 </head>
 <body>
@@ -557,8 +606,9 @@ function capacities(role,t){
  return `<dl class="capacities" style="--capacity-count:${d.length}">${d.join('')}</dl>`;
 }
 function card(role,index,filtered){const g=plans[role],free=role==='free',t=free?null:g.tiers[index];const pick=filtered&&!free&&recommended[role]===index;return `<article class="plan-card ${pick?'plan-card--focus':''}" ${pick?'data-recommended="true"':''} aria-label="${safe(free?g.name:t.size)}">
+ ${pick?`<span class="popular-tag" aria-label="Popular plan"><svg class="popular-star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2 15.1 8.3 22 9.3l-5 4.9 1.18 6.9L12 17.8l-6.18 3.3L7 14.2 2 9.3l6.9-1Z"/></svg><span>Popular</span></span>`:''}
  <div class="card-banner card-banner--${role}">
-  <div class="family"><span class="persona-pill persona-pill--${role}">${safe(filtered&&!free?t.size:g.name)}</span>${pick?`<span class="pick-tag" title="${safe(recommendedReason[role])}">★ Recommended</span>`:''}</div>
+  <div class="family"><span class="persona-pill persona-pill--${role}">${safe(filtered&&!free?t.size:g.name)}</span></div>
   <div class="plan-heading"><h2>${safe(g.headline)}</h2><p>${safe(g.audience)}</p></div>
  </div>
  <p class="inherits ${free?'is-free':''}">${free?'Free forever':'Everything in Free, plus'}</p>
@@ -578,13 +628,13 @@ function renderMobilePlan(){
   const amount=state.billing==='yearly'?t.annual/12:t.monthly;
   const displayName=role==='music' && i>0?t.size.replace('Music Pro ',''):t.size;
   return `<button type="button" class="mobile-tier-option" data-mobile-tier="${i}" aria-pressed="${i===choice}" aria-label="${t.size}, ${money(amount)} per month${state.billing==='yearly'?' equivalent on annual billing':''}, ${t.storage}">
-    <span class="mobile-tier-name">${displayName}${i===recommended[role]?'<span class="tiny-pick">Recommended</span>':''}</span>
+    <span class="mobile-tier-name">${displayName}</span>
     <div class="mobile-tier-price">${money(amount)}<small class="tier-per">/mo</small></div>
     <span class="mobile-tier-storage">${state.billing==='yearly'?money(t.annual)+' /yr':t.storage}</span>
   </button>`;
  }).join('');
  panel.innerHTML=`<div class="mobile-tier-picker" style="--tier-count:${g.tiers.length}" role="group" aria-label="Choose ${safe(g.name)} plan">${buttons}</div>
- <p class="mobile-why"><strong>${choice===recommended[role]?'Recommended.':'More capacity.'}</strong> ${safe(choice===recommended[role]?recommendedReason[role]:(role==='creator'?'More music to showcase on Bridge Talents.':role==='music'?'More capacity for your catalog and your team.':'More room for large projects and music libraries.'))}</p>
+ <p class="mobile-why"><strong>${choice===recommended[role]?'Popular choice.':'More capacity.'}</strong> ${safe(choice===recommended[role]?recommendedReason[role]:(role==='creator'?'More music to showcase on Bridge Talents.':role==='music'?'More capacity for your catalog and your team.':'More room for large projects and music libraries.'))}</p>
  <div class="mobile-selected-card">${card(role,choice,true)}</div>
  <button class="mobile-free-alt" id="mobileFree" type="button" aria-label="Explore Free plan">
   <span><strong>Free · €0/month</strong><small>2 GB · 2 members · 50 tracks</small></span><span class="free-link">Explore Free →</span>
