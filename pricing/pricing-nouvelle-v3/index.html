@@ -586,6 +586,16 @@ body.modal-is-open{overflow:hidden}
  .purchase-row .card-cta{width:100%;flex:auto}
  .purchase-row .card-cta button{width:100%}
 }
+
+/* V49: concise yearly price line, savings pill and transparent billing cadence. */
+.purchase-row .price-alt--inline{display:flex;flex-wrap:nowrap;align-items:center;gap:5px;margin-top:5px;white-space:nowrap}
+.purchase-row .annual-total{font-size:10px;color:#65636C;font-weight:600;letter-spacing:-.015em;white-space:nowrap}
+.purchase-row .price-savings{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;margin:0;padding:3px 6px;border-radius:999px;background:#E9ECFF;color:#2F43DE;font-size:9px;font-weight:700;line-height:1.1}
+.purchase-row .price-block{min-width:0}
+.purchase-row .price-alt{min-height:0}
+.billing-wrap .savings-hint:not([hidden]){display:inline-flex;align-items:center;white-space:nowrap;font-size:11px;color:#706E78;font-weight:550}
+@media(max-width:720px){.billing-wrap .savings-hint:not([hidden]){max-width:none;white-space:nowrap;font-size:10px}}
+@media(max-width:390px){.purchase-row .annual-total{font-size:11px}.purchase-row .price-savings{font-size:10px}}
 </style>
 </head>
 <body>
@@ -747,9 +757,9 @@ function priceBlock(t){
  if(!t) return `<div class="price-block"><div class="price-line"><span class="price-main">€0</span><span class="price-unit">/ month</span></div><p class="price-alt">Free forever</p></div>`;
  if(state.billing==='yearly'){
   const save=Math.round((1-t.annual/(12*t.monthly))*100);
-  return `<div class="price-block"><div class="price-line"><span class="price-main">${money(t.annual/12)}</span><span class="price-unit">/ month</span></div><div class="price-alt price-alt--inline"><span><strong>${money(t.annual)}</strong> billed yearly</span><span class="price-savings">Save ${save}%</span></div></div>`;
+  return `<div class="price-block"><div class="price-line"><span class="price-main">${money(t.annual/12)}</span><span class="price-unit">/ month</span></div><div class="price-alt price-alt--inline"><span class="annual-total">${money(t.annual)}/year</span><span class="price-savings">Save ${save}%</span></div></div>`;
  }
- return `<div class="price-block"><div class="price-line"><span class="price-main">${money(t.monthly)}</span><span class="price-unit">/ month</span></div><p class="price-alt">Billed monthly</p></div>`;
+ return `<div class="price-block"><div class="price-line"><span class="price-main">${money(t.monthly)}</span><span class="price-unit">/ month</span></div></div>`;
 }
 function sizeBlock(role,index,filtered){if(role==='free')return `<div class="size-slot"><span class="size-label">Free forever</span></div>`;
  if(filtered)return `<div class="size-slot"><span class="size-label">${plans[role].tiers[index].size}</span></div>`;
@@ -823,7 +833,9 @@ function renderMobilePlan(){
 function updateSavings(){
  const roles=state.role==='all'?['creator','music','buyer']:[state.role];
  const max=Math.max(...roles.flatMap(k=>plans[k].tiers.map(t=>Math.round((1-t.annual/(12*t.monthly))*100))));
- $('#savingsHint').textContent=`Save up to ${max}% yearly`;
+ const billingNote=$('#savingsHint');
+ billingNote.textContent='Billed annually';
+ billingNote.hidden=state.billing!=='yearly';
 }
 function renderCards(){
  const roles=state.role==='all'
