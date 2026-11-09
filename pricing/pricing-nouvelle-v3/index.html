@@ -45,7 +45,6 @@ button:focus-visible,a:focus-visible,.compare-scroll:focus-visible{outline:2px s
 .hero-kicker{margin:0 0 18px;color:var(--grey);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase}
 .hero h1{font-size:clamp(48px,5.35vw,76px);font-weight:400;margin:0 auto;}
 .hero p{font-size:17px;max-width:720px;line-height:1.57;color:var(--grey);margin:18px auto 0;letter-spacing:-.012em}
-.hero-subline{max-width:760px;font-size:15px!important;line-height:1.5!important;color:#63616B!important;margin:16px auto 0!important}
 .controls{display:flex;align-items:center;gap:20px;}
 .switch{display:flex;align-items:center;gap:3px;padding:4px;background:var(--surface);border-radius:999px;border:1px solid var(--line-soft)}
 .switch button{border-radius:999px;color:var(--grey);background:transparent;font-size:12px;font-weight:700;white-space:nowrap;padding:11px 17px;transition:background-color .16s,color .16s}
@@ -285,10 +284,10 @@ button:focus-visible,a:focus-visible,.compare-scroll:focus-visible{outline:2px s
 }
 
 body{background:#EEEFF2}
-.hero{padding-block:74px 41px}
-.hero h1{max-width:1000px;letter-spacing:-.064em;line-height:1.06}
-.persona-navigation{display:flex;flex-direction:column;align-items:center;gap:14px;margin:33px auto 0}
-.persona-navigation-label{margin:0!important;color:#706E78;font-size:12px!important;font-weight:600;letter-spacing:0;line-height:1.4!important}
+.hero{padding-block:63px 30px}
+.hero h1{max-width:none;font-size:clamp(35px,4.1vw,60px);letter-spacing:-.055em;line-height:1.1;text-wrap:balance}
+.persona-navigation{display:flex;flex-direction:row;align-items:center;justify-content:center;flex-wrap:wrap;gap:14px;margin:29px auto 0}
+.persona-navigation-label{margin:0!important;color:#706E78;font-size:12px!important;font-weight:600;letter-spacing:0;line-height:1.4!important;white-space:nowrap}
 .role-switch{background:transparent;border:0;padding:0;display:flex;justify-content:center;align-items:center;gap:9px;max-width:100%;overflow:visible}
 .role-switch button{background:#FFFFFF;color:#44434A;border:1px solid #D5D5DC;box-shadow:none;border-radius:999px;font-weight:650;font-size:12.5px;padding:12px 19px;min-height:43px;transition:background-color .2s,color .2s,border-color .2s,transform .2s}
 .role-switch button:hover{border-color:#8F909A;transform:translateY(-1px)}
@@ -320,7 +319,7 @@ body{background:#EEEFF2}
 .compare-table thead tr:last-child th{color:#55535A}
 
 @media(max-width:840px){.hero{padding-block:50px 34px}.persona-navigation{margin-top:28px}}
-@media(max-width:720px){.role-switch{display:flex;flex-wrap:wrap;gap:7px;width:100%}.role-switch button{flex:0 0 auto;white-space:normal;padding:10px 13px;font-size:12px;min-height:41px}.persona-navigation{gap:12px}.controls{align-items:flex-end;margin-bottom:19px}.billing-wrap{width:auto}.card-banner{margin:-20px -17px 0;padding:21px 17px 15px}.cards .plan-card{border:0}.compare-head{padding:0}}
+@media(max-width:720px){.role-switch{display:flex;flex-wrap:wrap;gap:7px;width:100%}.role-switch button{flex:0 0 auto;white-space:normal;padding:10px 13px;font-size:12px;min-height:41px}.persona-navigation{flex-direction:column;gap:12px;margin-top:25px}.controls{align-items:flex-end;margin-bottom:19px}.billing-wrap{width:auto}.card-banner{margin:-20px -17px 0;padding:21px 17px 15px}.cards .plan-card{border:0}.compare-head{padding:0}}
 @media(max-width:390px){.role-switch{display:flex;grid-template-columns:none}.role-switch button{padding:9px 10px;font-size:11px}.card-banner .family{font-size:11px}}
 
 body.modal-is-open{overflow:hidden}
@@ -596,6 +595,10 @@ body.modal-is-open{overflow:hidden}
  .ecosystem-community .ecosystem-logo-grid{gap:5px}
  .ecosystem-community .ecosystem-logo-grid img{height:clamp(42px,12.5vw,53px)}
 }
+
+/* Responsive adaptation for the compact Pricing hero. */
+@media(min-width:1200px){.hero h1{white-space:nowrap}}
+@media(max-width:720px){.hero h1{font-size:clamp(30px,7.4vw,43px);white-space:normal}.hero{padding-block:47px 30px}}
 </style>
 </head>
 <body>
@@ -603,10 +606,9 @@ body.modal-is-open{overflow:hidden}
 <main id="top">
   <section class="wrap hero">
     <p class="hero-kicker">PRICING</p>
-    <h1>Connecting music<br>&amp; entertainment.</h1>
-    <p class="hero-subline">One shared platform for creators, music pros and entertainment teams.</p>
+    <h1>Connecting creators, music pros &amp; entertainment.</h1>
     <div class="persona-navigation" aria-label="Explore plans by role">
-      <p class="persona-navigation-label">Explore plans for</p>
+      <span class="persona-navigation-label">Explore plans for:</span>
       <div class="switch role-switch" role="group" aria-label="Choose who you are">
         <button type="button" data-role="all" aria-pressed="true">Everyone</button>
         <button type="button" data-role="creator" aria-pressed="false">Creators</button>
