@@ -518,7 +518,7 @@ body.modal-is-open{overflow:hidden}
 .ecosystem-community .ecosystem-logo-grid img{display:block;width:100%;height:91px;object-fit:contain;object-position:center}
 .ecosystem-bridge{display:none}
 .ecosystem-connections{position:absolute;inset:0;width:100%;height:100%;z-index:1;overflow:visible;pointer-events:none}
-.ecosystem-connections>path{fill:none;stroke:#777781;stroke-width:2.2;vector-effect:non-scaling-stroke;stroke-linecap:round;marker-start:url(#ecosystem-tip);marker-end:url(#ecosystem-tip)}
+.ecosystem-connections>path{fill:none;stroke:#B5B5BD;stroke-width:1.5;vector-effect:non-scaling-stroke;stroke-linecap:round}.ecosystem-connections>circle{fill:#FFFFFF;stroke:#92929D;stroke-width:1.5;vector-effect:non-scaling-stroke}
 @media(max-width:1000px){
   .ecosystem-proof{padding:30px 18px}
   .ecosystem-community-grid{grid-template-rows:165px 165px;row-gap:71px;column-gap:26px}
@@ -537,7 +537,7 @@ body.modal-is-open{overflow:hidden}
   .ecosystem-community .ecosystem-logo-grid{gap:6px;margin-top:11px}
   .ecosystem-community .ecosystem-logo-grid img{height:67px}
   .ecosystem-connections{display:none}
-  .ecosystem-community:not(:last-child)::after{content:"↕";position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);font-size:25px;line-height:28px;color:#777781;font-weight:400}
+  .ecosystem-community:not(:last-child)::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);height:39px;width:1.5px;background:#B5B5BD}.ecosystem-community:not(:last-child)::before{content:"";position:absolute;z-index:3;left:50%;bottom:-23px;transform:translateX(-50%);height:7px;width:7px;border-radius:50%;background:#FFFFFF;border:1.5px solid #92929D}
 }
 @media(max-width:400px){.ecosystem-community .ecosystem-logo-grid img{height:53px}}
 </style>
@@ -586,12 +586,12 @@ body.modal-is-open{overflow:hidden}
     <div class="ecosystem-proof-heading"><h2>Already bringing together <strong>100K+ people</strong> across music &amp; entertainment.</h2></div>
     <div class="ecosystem-community-grid" aria-label="Connected music and entertainment communities">
       <svg class="ecosystem-connections" viewBox="0 0 1000 460" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-        <defs>
-          <marker id="ecosystem-tip" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse"><path d="M 7 1 L 1 4 L 7 7" fill="none" stroke="#777781" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
-        </defs>
-        <path d="M 492 98 H 508" />
-        <path d="M 245 196 L 380 266" />
-        <path d="M 755 196 L 620 266" />
+        <path d="M 485 95 H 515" />
+        <path d="M 245 191 L 380 268" />
+        <path d="M 755 191 L 620 268" />
+        <circle cx="500" cy="95" r="4" />
+        <circle cx="312.5" cy="229.5" r="4" />
+        <circle cx="687.5" cy="229.5" r="4" />
       </svg>
       <div class="ecosystem-community ecosystem-community--creators">
         <h3>Creators &amp; artists</h3>
