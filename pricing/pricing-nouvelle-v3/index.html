@@ -426,6 +426,22 @@ body.modal-is-open{overflow:hidden}
  .plan-card .capacity dd,.mobile-selected-card .capacity dd{font-size:12.5px;line-height:1.4}
  .plan-card .card-cta{margin-top:12px}
 }
+
+/* V40: restored community proof, retaining the supplied social proof logos and reducing copy. */
+.ecosystem-proof{max-width:var(--content);padding:66px 34px 0;margin-inline:auto;text-align:center}
+.ecosystem-proof-kicker{font-size:11px;letter-spacing:.12em;font-weight:750;color:#777781;margin:0 0 20px;text-transform:uppercase}
+.ecosystem-proof-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;text-align:left}
+.ecosystem-stat{padding:27px 23px 26px;background:#fff;border-radius:18px;min-width:0;box-shadow:0 6px 18px rgba(37,36,40,.035)}
+.ecosystem-stat-number{font-size:clamp(30px,3.5vw,45px);line-height:1.08;font-weight:750;letter-spacing:-.055em;color:#252428}
+.ecosystem-stat:nth-child(1) .ecosystem-stat-number{color:#FA3064}
+.ecosystem-stat:nth-child(2) .ecosystem-stat-number{color:#2F43DE}
+.ecosystem-stat-title{font-size:13px;font-weight:700;color:#252428;margin-top:5px;min-height:34px}
+.ecosystem-logo-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:center;gap:8px;margin-top:18px}
+.ecosystem-logo-grid img{display:block;width:100%;aspect-ratio:1;object-fit:contain;mix-blend-mode:multiply}
+.ecosystem-logo-grid img:not([src]){display:none}
+@media(max-width:900px){.ecosystem-proof{padding:52px 25px 0}.ecosystem-proof-stats{gap:10px}.ecosystem-stat{padding:20px 14px}.ecosystem-logo-grid{gap:5px}}
+@media(max-width:720px){.ecosystem-proof{padding:48px 19px 0}.ecosystem-proof-stats{grid-template-columns:1fr;gap:11px}.ecosystem-stat{display:grid;grid-template-columns:1fr auto;column-gap:12px;align-items:center;padding:17px 19px}.ecosystem-stat-number{font-size:33px;grid-column:1}.ecosystem-stat-title{grid-column:1;margin:4px 0 0;min-height:0}.ecosystem-logo-grid{grid-column:2;grid-row:1 / span 2;width:clamp(115px,42vw,180px);margin:0;gap:5px}.ecosystem-proof-kicker{margin-bottom:15px}}
+@media(max-width:370px){.ecosystem-logo-grid{width:115px;gap:2px}.ecosystem-stat{padding:14px 11px}}
 </style>
 </head>
 <body>
@@ -468,6 +484,44 @@ body.modal-is-open{overflow:hidden}
       <a class="enterprise-cta" href="https://meetings.hubspot.com/clement-souchier" target="_blank" rel="noopener noreferrer">Talk to our team ↗</a>
     </div>
   </section>
+  <section aria-label="Bridge.audio ecosystem proof" class="ecosystem-proof">
+    <p class="ecosystem-proof-kicker">Selected community examples</p>
+    <div class="ecosystem-proof-stats">
+      <div class="ecosystem-stat">
+        <div class="ecosystem-stat-number">50K+</div>
+        <div class="ecosystem-stat-title">Creators &amp; artists</div>
+        <div class="ecosystem-logo-grid" aria-label="Creators &amp; artists community examples">
+          <img src="https://www.bridge.audio/images/pricing/creators/1.png" alt="" loading="lazy" decoding="async">
+          <img src="https://www.bridge.audio/images/pricing/creators/2.png" alt="" loading="lazy" decoding="async">
+          <img src="https://www.bridge.audio/images/pricing/creators/3.png" alt="" loading="lazy" decoding="async">
+          <img src="https://www.bridge.audio/images/pricing/creators/4.png" alt="" loading="lazy" decoding="async">
+          <img src="https://www.bridge.audio/images/pricing/creators/5.png" alt="" loading="lazy" decoding="async">
+        </div>
+      </div>
+      <div class="ecosystem-stat">
+        <div class="ecosystem-stat-number">5K+</div>
+        <div class="ecosystem-stat-title">Music professionals</div>
+        <div class="ecosystem-logo-grid" aria-label="Music professionals community examples">
+          <img src="https://www.bridge.audio/images/pricing/professionals/1.jpg" alt="" loading="lazy" decoding="async">
+          <img src="https://www.bridge.audio/images/pricing/professionals/2.jpg" alt="" loading="lazy" decoding="async">
+          <img src="https://www.bridge.audio/images/pricing/professionals/3.jpg" alt="" loading="lazy" decoding="async">
+          <img src="https://www.bridge.audio/images/pricing/professionals/4.jpg" alt="" loading="lazy" decoding="async">
+          <img src="https://www.bridge.audio/images/pricing/professionals/5.jpg" alt="" loading="lazy" decoding="async">
+        </div>
+      </div>
+      <div class="ecosystem-stat">
+        <div class="ecosystem-stat-number">600+</div>
+        <div class="ecosystem-stat-title">Buyers &amp; creative teams</div>
+        <div class="ecosystem-logo-grid" aria-label="Buyers &amp; creative teams community examples">
+          <img src="https://www.bridge.audio/images/pricing/buyers/1.jpg" alt="" loading="lazy" decoding="async">
+          <img src="https://www.bridge.audio/images/pricing/buyers/2.jpg" alt="" loading="lazy" decoding="async">
+          <img src="https://www.bridge.audio/images/pricing/buyers/3.jpg" alt="" loading="lazy" decoding="async">
+          <img src="https://www.bridge.audio/images/pricing/buyers/4.jpg" alt="" loading="lazy" decoding="async">
+          <img src="https://www.bridge.audio/images/pricing/buyers/5.jpg" alt="" loading="lazy" decoding="async">
+        </div>
+      </div>
+    </div>
+  </section>
   <section class="wrap compare" id="compare" aria-label="Compare all plans">
     <div class="compare-head"><h2 id="compareHeading">Compare plans.</h2></div>
     <p class="compare-swipe-hint" aria-hidden="true">Swipe horizontally to compare plans <span>↔</span></p>
@@ -506,17 +560,17 @@ const plans={
   ['eye','Reach entertainment pros','Search your own catalog fast. Stay discoverable 24/7 by supervisors, film, TV & advertising...'],
   ['people','Bring your team together','More people, one shared music workspace.']
  ],tiers:[
-  {size:'Music Pro',annual:348,monthly:49,storage:'1 TB',members:'5',indexed:'2,500',publish:250},
-  {size:'Music Pro Plus',annual:468,monthly:65,storage:'2 TB',members:'7',indexed:'5,000',publish:500},
-  {size:'Music Pro Max',annual:588,monthly:79,storage:'3 TB',members:'10',indexed:'10,000',publish:1000}
+  {size:'Music Pro',annual:348,monthly:39,storage:'1 TB',members:'5',indexed:'2,500',publish:250},
+  {size:'Music Pro Plus',annual:468,monthly:54,storage:'2 TB',members:'7',indexed:'5,000',publish:500},
+  {size:'Music Pro Max',annual:588,monthly:69,storage:'3 TB',members:'10',indexed:'10,000',publish:1000}
  ]},
  buyer:{name:'Supervisor / Entertainment Pro',headline:'Find the right music. Move forward.',audience:'Music supervisors, filmmakers and entertainment teams',benefits:[
   ['infinity','Unlimited tracks & files','Keep music, references and creative assets together.'],
   ['search','Find the perfect fit','Search by mood, sound and similarity across Bridge Hubs.'],
   ['people','Keep your crew in sync','From brief to shortlist, together.']
  ],tiers:[
-  {size:'Supervisor',annual:348,monthly:49,storage:'2 TB',members:'5',indexed:'20,000',publish:null},
-  {size:'Supervisor Max',annual:588,monthly:79,storage:'5 TB',members:'10',indexed:'100,000',publish:null}
+  {size:'Supervisor',annual:348,monthly:39,storage:'2 TB',members:'5',indexed:'20,000',publish:null},
+  {size:'Supervisor Max',annual:588,monthly:69,storage:'5 TB',members:'10',indexed:'100,000',publish:null}
  ]}
 };
 const state={role:'all',billing:'yearly',selected:{creator:0,music:0,buyer:0}};
