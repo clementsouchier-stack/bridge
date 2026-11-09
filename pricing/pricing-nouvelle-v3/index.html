@@ -540,6 +540,52 @@ body.modal-is-open{overflow:hidden}
   .ecosystem-community:not(:last-child)::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);height:39px;width:1.5px;background:repeating-linear-gradient(to bottom,#B5B5BD 0 3px,transparent 3px 8px)}
 }
 @media(max-width:400px){.ecosystem-community .ecosystem-logo-grid img{height:53px}}
+
+/* V48: Option D. Select a tier, review clear capacities, then decide beside the price. */
+.plan-card{
+ grid-template-rows:167px 22px 274px minmax(0,1fr);
+}
+.purchase-shell{min-width:0;display:flex;flex-direction:column;gap:0;padding-top:10px}
+.purchase-shell .size-slot{min-height:41px;margin:0 0 15px}
+.purchase-shell .size-control{width:100%}
+.purchase-shell .capacities{display:flex;flex-direction:column;gap:10px;align-items:stretch;margin:0;padding:0;min-height:0}
+.purchase-shell .capacity{min-height:0}
+.purchase-shell .capacity dd{font-size:12px;line-height:1.45;font-weight:550;gap:9px}
+.purchase-row{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-top:auto;padding-top:25px;min-width:0}
+.purchase-row .price-block{padding:0;min-width:0;flex:1 1 52%}
+.purchase-row .price-line{gap:4px;white-space:nowrap}
+.purchase-row .price-main{font-size:clamp(25px,2.3vw,34px);letter-spacing:-.065em}
+.purchase-row .price-unit{font-size:10px;font-weight:550}
+.purchase-row .price-alt{min-height:0;font-size:10px;line-height:1.4;white-space:normal}
+.purchase-row .price-alt--inline{gap:3px 5px}
+.purchase-row .price-savings{font-size:9px}
+.purchase-row .card-cta{flex:0 1 44%;min-width:0;align-self:center;align-items:stretch;margin:0;padding:0}
+.purchase-row .card-cta button{width:100%;min-width:0;min-height:44px;padding:10px 7px;font-size:11px;white-space:normal}
+@media(min-width:721px) and (max-width:1200px){
+ .plan-card{grid-template-rows:167px 22px 274px minmax(0,1fr)}
+ .purchase-row .price-main{font-size:clamp(29px,3vw,36px)}
+ .purchase-row .card-cta button{font-size:12px}
+}
+@media(max-width:720px){
+ .cards .plan-card,.mobile-selected-card{grid-template-rows:none}
+ .purchase-shell{padding-top:15px}
+ .purchase-shell .size-slot{margin-bottom:12px}
+ .purchase-shell .capacities{gap:10px;margin:0}
+ .purchase-shell .capacity dd{font-size:12.5px;line-height:1.45}
+ .purchase-row{margin-top:0;padding-top:20px;align-items:flex-start}
+ .purchase-row .price-main{font-size:35px}
+ .purchase-row .price-unit{font-size:11px}
+ .purchase-row .card-cta{flex:0 1 48%;margin:0}
+ .purchase-row .card-cta button{min-height:47px;font-size:12px}
+ .mobile-selected-card .purchase-shell .size-slot{display:none}
+ .mobile-selected-card .purchase-shell{padding-top:13px}
+}
+@media(max-width:390px){
+ .purchase-row{flex-direction:column;align-items:stretch;gap:14px}
+ .purchase-row .price-block{width:100%}
+ .purchase-row .card-cta{width:100%;flex:auto}
+ .purchase-row .card-cta button{width:100%}
+}
 </style>
 </head>
 <body>
@@ -723,8 +769,8 @@ function capacities(role,t){
  const d=role==='free'?
   [capacity('cloud','Storage','2 GB storage'),capacity('users','Members','2 members included'),capacity('sparkles','AI-tagged tracks','50 tracks, AI-tagged')]:
   [capacity('cloud','Storage',`${t.storage} storage`),capacity('users','Members',`${t.members} members included`),capacity('sparkles','AI-tagged tracks',`${t.indexed} AI-tagged tracks`)];
- if(role==='creator') d.push(capacity('eye','Bridge Talents publishing',`${t.publish} tracks to publish to Bridge Talents*`));
- if(role==='music') d.push(capacity('eye','Discovery Hubs publishing',`${t.publish.toLocaleString('en-IE')} tracks to publish to Discovery Hubs`));
+ if(role==='creator') d.push(capacity('eye','Bridge Talents publishing',`Up to ${t.publish} tracks to publish to Bridge Talents*`));
+ if(role==='music') d.push(capacity('eye','Discovery Hubs publishing',`Up to ${t.publish.toLocaleString('en-IE')} tracks to publish to Discovery Hubs`));
  if(role==='buyer') d.push(capacity('eye','Discovery Hub search','Discovery Hub search included'));
  return `<dl class="capacities ${role==='free'?'capacities--free':''}">${d.join('')}</dl>`;
 }
@@ -737,10 +783,14 @@ function card(role,index,filtered){const g=plans[role],free=role==='free',t=free
  <p class="inherits ${free?'is-free':''}">${free?'Free forever':'Everything in Free, plus'}</p>
  ${benefits(g.benefits,role,t)}
  ${free?'<p class="mobile-free-summary">Unlimited projects · Beautiful sharing · Create together</p>':''}
- ${priceBlock(t)}
- ${sizeBlock(role,index,filtered)}
- ${capacities(role,t)}
- <div class="card-cta"><button type="button" class="${free?'btn-secondary':'btn-primary'}" data-choose="${role}${free?'':':'+index}" aria-label="${free?'Start for free':'Choose '+t.size}">${free?'Start for free':'Choose '+t.size}</button></div>
+ <div class="purchase-shell">
+  ${sizeBlock(role,index,filtered)}
+  ${capacities(role,t)}
+  <div class="purchase-row">
+   ${priceBlock(t)}
+   <div class="card-cta"><button type="button" class="${free?'btn-secondary':'btn-primary'}" data-choose="${role}${free?'':':'+index}" aria-label="${free?'Start for free':'Choose '+t.size}">${free?'Start free':'Choose plan'}</button></div>
+  </div>
+ </div>
  </article>`;}
 function renderMobilePlan(){
  const panel=$('#mobilePlanUI');
