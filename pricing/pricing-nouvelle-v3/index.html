@@ -504,6 +504,42 @@ body.modal-is-open{overflow:hidden}
 @media(max-width:1000px){.ecosystem-proof{padding:29px 19px 23px}.ecosystem-community{padding:17px 9px}.ecosystem-community .ecosystem-logo-grid img{height:57px}.ecosystem-bridge{right:-17px}}
 @media(max-width:720px){.ecosystem-proof{margin:45px 16px 0;padding:26px 16px 18px;border-radius:19px}.ecosystem-proof-heading{margin-bottom:19px}.ecosystem-proof-heading h2{font-size:clamp(24px,6vw,31px);line-height:1.19}.ecosystem-community-grid{gap:11px}.ecosystem-community{padding:15px 12px 16px}.ecosystem-community h3{min-height:0}.ecosystem-community .ecosystem-logo-grid img{height:58px}.ecosystem-bridge{right:50%;bottom:-17px}}
 @media(max-width:400px){.ecosystem-proof{padding:23px 12px 16px}.ecosystem-community .ecosystem-logo-grid img{height:47px}}
+
+/* V44: triangular, bidirectional ecosystem diagram matching the three community relationships. */
+.ecosystem-proof{max-width:var(--content);padding:38px 24px 34px}
+.ecosystem-proof-heading{margin-bottom:31px}
+.ecosystem-community-grid{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:190px 190px;gap:80px 28px;align-items:stretch}
+.ecosystem-community{position:relative;z-index:2;min-width:0;background:#F7F7F9;border-radius:20px;padding:23px 20px 20px;box-shadow:none}
+.ecosystem-community--creators{grid-column:1;grid-row:1}
+.ecosystem-community--music{grid-column:2;grid-row:1}
+.ecosystem-community--entertainment{grid-column:1/-1;grid-row:2;justify-self:center;width:calc(50% - 14px)}
+.ecosystem-community h3{min-height:33px;font-size:15px;line-height:1.35;white-space:normal}
+.ecosystem-community .ecosystem-logo-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:15px}
+.ecosystem-community .ecosystem-logo-grid img{display:block;width:100%;height:91px;object-fit:contain;object-position:center}
+.ecosystem-bridge{display:none}
+.ecosystem-connections{position:absolute;inset:0;width:100%;height:100%;z-index:1;overflow:visible;pointer-events:none}
+.ecosystem-connections>path{fill:none;stroke:#777781;stroke-width:2.2;vector-effect:non-scaling-stroke;stroke-linecap:round;marker-start:url(#ecosystem-tip);marker-end:url(#ecosystem-tip)}
+@media(max-width:1000px){
+  .ecosystem-proof{padding:30px 18px}
+  .ecosystem-community-grid{grid-template-rows:165px 165px;row-gap:71px;column-gap:26px}
+  .ecosystem-community{padding:18px 11px}
+  .ecosystem-community--entertainment{width:calc(50% - 13px)}
+  .ecosystem-community h3{font-size:13px;min-height:32px}
+  .ecosystem-community .ecosystem-logo-grid{gap:5px;margin-top:12px}
+  .ecosystem-community .ecosystem-logo-grid img{height:77px}
+}
+@media(max-width:720px){
+  .ecosystem-proof{padding:26px 14px 23px}
+  .ecosystem-community-grid{display:flex;flex-direction:column;gap:39px}
+  .ecosystem-community{width:100%;min-height:151px;padding:17px 12px}
+  .ecosystem-community--entertainment{width:100%}
+  .ecosystem-community h3{min-height:0;font-size:13px}
+  .ecosystem-community .ecosystem-logo-grid{gap:6px;margin-top:11px}
+  .ecosystem-community .ecosystem-logo-grid img{height:67px}
+  .ecosystem-connections{display:none}
+  .ecosystem-community:not(:last-child)::after{content:"↕";position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);font-size:25px;line-height:28px;color:#777781;font-weight:400}
+}
+@media(max-width:400px){.ecosystem-community .ecosystem-logo-grid img{height:53px}}
 </style>
 </head>
 <body>
@@ -549,8 +585,16 @@ body.modal-is-open{overflow:hidden}
   <section aria-label="Bridge.audio community" class="ecosystem-proof">
     <div class="ecosystem-proof-heading"><h2>Already bringing together <strong>100K+ people</strong> across music &amp; entertainment.</h2></div>
     <div class="ecosystem-community-grid" aria-label="Connected music and entertainment communities">
-      <div class="ecosystem-community">
-        <h3>Creators &amp; artists</h3><span class="ecosystem-bridge" aria-hidden="true">↔</span>
+      <svg class="ecosystem-connections" viewBox="0 0 1000 460" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <defs>
+          <marker id="ecosystem-tip" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse"><path d="M 7 1 L 1 4 L 7 7" fill="none" stroke="#777781" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        </defs>
+        <path d="M 492 98 H 508" />
+        <path d="M 245 196 L 380 266" />
+        <path d="M 755 196 L 620 266" />
+      </svg>
+      <div class="ecosystem-community ecosystem-community--creators">
+        <h3>Creators &amp; artists</h3>
         <div class="ecosystem-logo-grid" aria-label="Creators &amp; artists community examples">
           <img src="https://www.bridge.audio/images/pricing/creators/1.png" alt="" loading="lazy" decoding="async">
           <img src="https://www.bridge.audio/images/pricing/creators/2.png" alt="" loading="lazy" decoding="async">
@@ -559,8 +603,8 @@ body.modal-is-open{overflow:hidden}
           <img src="https://www.bridge.audio/images/pricing/creators/5.png" alt="" loading="lazy" decoding="async">
         </div>
       </div>
-      <div class="ecosystem-community">
-        <h3>Music professionals</h3><span class="ecosystem-bridge" aria-hidden="true">↔</span>
+      <div class="ecosystem-community ecosystem-community--music">
+        <h3>Music professionals</h3>
         <div class="ecosystem-logo-grid" aria-label="Music professionals community examples">
           <img src="https://www.bridge.audio/images/pricing/professionals/1.jpg" alt="" loading="lazy" decoding="async">
           <img src="https://www.bridge.audio/images/pricing/professionals/2.jpg" alt="" loading="lazy" decoding="async">
@@ -569,7 +613,7 @@ body.modal-is-open{overflow:hidden}
           <img src="https://www.bridge.audio/images/pricing/professionals/5.jpg" alt="" loading="lazy" decoding="async">
         </div>
       </div>
-      <div class="ecosystem-community">
+      <div class="ecosystem-community ecosystem-community--entertainment">
         <h3>Supervisors, film, TV &amp; advertising</h3>
         <div class="ecosystem-logo-grid" aria-label="Supervisors &amp; entertainment teams community examples">
           <img src="https://www.bridge.audio/images/pricing/buyers/1.jpg" alt="" loading="lazy" decoding="async">
@@ -616,7 +660,7 @@ const plans={
  ]},
  music:{name:'Music Pro',headline:'Your catalog. More opportunities.',audience:'Labels, publishers, managers and music businesses',benefits:[
   ['infinity','Unlimited tracks & files','Keep every release, version and creative asset together.'],
-  ['eye','Reach entertainment pros','Search your own catalog fast. Stay discoverable 24/7 by supervisors, film, TV & advertising...'],
+  ['eye','Reach entertainment pros','Search your catalog fast. Get discovered 24/7 by supervisors across ads, film & TV.'],
   ['people','Bring your team together','More people, one shared music workspace.']
  ],tiers:[
   {size:'Music Pro',annual:348,monthly:39,storage:'1 TB',members:'5',indexed:'2,500',publish:250},
@@ -653,7 +697,7 @@ const storageBenefit={
 function benefits(items,role,tier){
  return `<ul class="benefits">${items.map(([k,title,copy],i)=>{
   const displayedCopy=(i===0 && tier && storageBenefit[role])?storageBenefit[role](tier.storage):copy;
-  return `<li class="benefit" data-icon="${safe(k)}"><span class="icon-wrap">${svg(k)}</span><div><h3>${safe(title)}</h3><p>${role==='music'&&i===1?'Search your own catalog fast.<br>Stay discoverable <strong>24/7</strong> by supervisors, film, TV &amp; advertising...':safe(displayedCopy)}</p></div></li>`;
+  return `<li class="benefit" data-icon="${safe(k)}"><span class="icon-wrap">${svg(k)}</span><div><h3>${safe(title)}</h3><p>${role==='music'&&i===1?'Search your catalog fast. Get discovered <strong>24/7</strong> by supervisors across ads, film &amp; TV.':safe(displayedCopy)}</p></div></li>`;
  }).join('')}</ul>`;
 }
 function priceBlock(t){
