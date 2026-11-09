@@ -489,6 +489,21 @@ body.modal-is-open{overflow:hidden}
 @media(max-width:1000px){.ecosystem-community-grid{gap:12px}.ecosystem-community{padding:22px 11px}.ecosystem-community .ecosystem-logo-grid img{height:60px}.ecosystem-bridge{right:-18px}}
 @media(max-width:720px){.ecosystem-proof{padding-top:45px}.ecosystem-proof-heading{margin-bottom:20px}.ecosystem-proof-heading h2{font-size:23px;margin-top:11px}.ecosystem-proof-heading p{font-size:12px}.ecosystem-community{padding:15px 15px 17px}.ecosystem-community h3{min-height:unset;font-size:13px}.ecosystem-community .ecosystem-logo-grid{margin-top:8px;gap:7px}.ecosystem-community .ecosystem-logo-grid img{height:60px}.ecosystem-bridge{top:auto;right:50%;bottom:-18px;transform:translateX(50%) rotate(90deg);height:25px;width:25px}}
 @media(max-width:400px){.ecosystem-community .ecosystem-logo-grid img{height:48px}}
+
+/* V43: one unified social-proof surface, with a single validated headline. */
+.ecosystem-proof{max-width:var(--content);padding:39px 34px 32px;margin:64px auto 0;border-radius:24px;background:#FFFFFF;box-shadow:0 4px 24px rgba(37,36,40,.035)}
+.ecosystem-proof-heading{margin:0 auto 28px;max-width:880px}
+.ecosystem-proof-heading h2{margin:0 auto;color:#252428;font-size:clamp(26px,3.2vw,42px);font-weight:540;line-height:1.17;letter-spacing:-.045em;text-wrap:balance}
+.ecosystem-proof-heading h2 strong{display:inline;font:inherit;font-weight:740;letter-spacing:inherit;color:#252428}
+.ecosystem-community-grid{gap:12px}
+.ecosystem-community{background:#F7F7F9;border:0;box-shadow:none;border-radius:15px;padding:22px 13px 19px}
+.ecosystem-community h3{font-size:13px;min-height:38px;font-weight:660}
+.ecosystem-community .ecosystem-logo-grid{margin-top:8px;gap:4px}
+.ecosystem-community .ecosystem-logo-grid img{height:72px}
+.ecosystem-bridge{background:#FFFFFF;border-color:#E9E9ED;right:-19px}
+@media(max-width:1000px){.ecosystem-proof{padding:29px 19px 23px}.ecosystem-community{padding:17px 9px}.ecosystem-community .ecosystem-logo-grid img{height:57px}.ecosystem-bridge{right:-17px}}
+@media(max-width:720px){.ecosystem-proof{margin:45px 16px 0;padding:26px 16px 18px;border-radius:19px}.ecosystem-proof-heading{margin-bottom:19px}.ecosystem-proof-heading h2{font-size:clamp(24px,6vw,31px);line-height:1.19}.ecosystem-community-grid{gap:11px}.ecosystem-community{padding:15px 12px 16px}.ecosystem-community h3{min-height:0}.ecosystem-community .ecosystem-logo-grid img{height:58px}.ecosystem-bridge{right:50%;bottom:-17px}}
+@media(max-width:400px){.ecosystem-proof{padding:23px 12px 16px}.ecosystem-community .ecosystem-logo-grid img{height:47px}}
 </style>
 </head>
 <body>
@@ -532,8 +547,7 @@ body.modal-is-open{overflow:hidden}
     </div>
   </section>
   <section aria-label="Bridge.audio community" class="ecosystem-proof">
-    <p class="ecosystem-proof-kicker">Selected community examples</p>
-    <div class="ecosystem-proof-heading"><strong>100K+ <span>users</span></strong><h2>Music people, connected to each other and to entertainment.</h2><p>From artists and rights holders to supervisors, film, TV and advertising teams.</p></div>
+    <div class="ecosystem-proof-heading"><h2>Already bringing together <strong>100K+ people</strong> across music &amp; entertainment.</h2></div>
     <div class="ecosystem-community-grid" aria-label="Connected music and entertainment communities">
       <div class="ecosystem-community">
         <h3>Creators &amp; artists</h3><span class="ecosystem-bridge" aria-hidden="true">↔</span>
