@@ -628,6 +628,47 @@ body.modal-is-open{overflow:hidden}
  .ecosystem-community:not(:last-child)::after{height:33px}
 }
 @media(max-width:400px){.ecosystem-community .ecosystem-logo-grid img{height:46px}}
+
+/* V51: differentiated Enterprise offer and more compact mobile ecosystem proof. */
+.enterprise-strip{width:100%;max-width:min(var(--content),680px);padding:0 24px;margin:26px auto 0}
+.enterprise-inner{background:#252428;color:#FFFFFF;border:1px solid #252428;border-radius:19px;padding:26px 29px;gap:18px;box-shadow:0 10px 26px rgba(37,36,40,.08)}
+.enterprise-copy{min-width:0}
+.enterprise-kicker{color:#C7C5CE}
+.enterprise-title{color:#FFFFFF;font-weight:550}
+.enterprise-subtitle{color:#D2D0D8;max-width:39ch}
+.enterprise-cta{flex:0 0 auto;background:#FFFFFF;color:#252428;border:1px solid #FFFFFF;border-radius:10px;min-height:45px;transition:background .15s ease,color .15s ease}
+.enterprise-cta:hover{background:#ECECF0;color:#252428}
+.enterprise-cta:focus-visible{outline:3px solid #FFC833;outline-offset:3px}
+@media(min-width:721px) and (max-width:1000px){
+ .enterprise-strip{max-width:610px;padding-inline:20px}
+ .enterprise-inner{padding:24px}
+}
+@media(max-width:720px){
+ .enterprise-strip{max-width:540px;width:100%;padding:0 22px;margin:21px auto 0}
+ .enterprise-inner{padding:22px 22px 21px;gap:17px;border-radius:17px}
+ .enterprise-kicker{font-size:10px}
+ .enterprise-title{font-size:22px;margin-top:7px}
+ .enterprise-subtitle{font-size:12.5px}
+ .enterprise-cta{width:100%;min-height:46px}
+ /* Three clearly distinguished but compact communities. */
+ .ecosystem-proof{margin:37px 12px 0;width:calc(100% - 24px);max-width:none;padding:25px 14px 20px}
+ .ecosystem-proof-heading{margin-bottom:20px}
+ .ecosystem-proof-heading h2{font-size:clamp(22px,5.8vw,29px);line-height:1.18;text-wrap:balance}
+ .ecosystem-community-grid{gap:31px}
+ .ecosystem-community{min-height:0;padding:16px 13px 15px;border-radius:13px}
+ .ecosystem-community h3{font-size:13px;line-height:1.3;font-weight:650}
+ .ecosystem-community .ecosystem-logo-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:12px;align-items:center}
+ .ecosystem-community .ecosystem-logo-grid img{width:100%;height:clamp(43px,14vw,69px);max-height:69px;object-fit:contain}
+ .ecosystem-community:not(:last-child)::after{content:"↕";position:absolute;top:calc(100% + 4px);bottom:auto;left:50%;transform:translateX(-50%);height:24px;width:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid #DEDEE5;background:#FFFFFF;color:#777780;font-size:17px;line-height:1}
+ .ecosystem-bridge,.ecosystem-connections{display:none}
+}
+@media(max-width:390px){
+ .enterprise-strip{padding-inline:17px}
+ .ecosystem-proof{padding:21px 10px 17px}
+ .ecosystem-community{padding:14px 10px}
+ .ecosystem-community .ecosystem-logo-grid{gap:5px}
+ .ecosystem-community .ecosystem-logo-grid img{height:clamp(42px,12.5vw,53px)}
+}
 </style>
 </head>
 <body>
