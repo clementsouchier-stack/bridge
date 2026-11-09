@@ -596,6 +596,38 @@ body.modal-is-open{overflow:hidden}
 .billing-wrap .savings-hint:not([hidden]){display:inline-flex;align-items:center;white-space:nowrap;font-size:11px;color:#706E78;font-weight:550}
 @media(max-width:720px){.billing-wrap .savings-hint:not([hidden]){max-width:none;white-space:nowrap;font-size:10px}}
 @media(max-width:390px){.purchase-row .annual-total{font-size:11px}.purchase-row .price-savings{font-size:10px}}
+
+/* V50: compact social proof (~15%), preserving image clarity and triangular layout. */
+.ecosystem-proof{max-width:calc(var(--content) * .87);padding:32px 20px 29px;margin-top:54px;border-radius:21px}
+.ecosystem-proof-heading{margin-bottom:25px}
+.ecosystem-proof-heading h2{font-size:clamp(23px,2.75vw,36px);max-width:700px}
+.ecosystem-community-grid{grid-template-rows:162px 162px;gap:68px 24px}
+.ecosystem-community{border-radius:17px;padding:19px 16px 17px}
+.ecosystem-community--entertainment{width:calc(50% - 12px)}
+.ecosystem-community h3{font-size:13px;min-height:28px}
+.ecosystem-community .ecosystem-logo-grid{gap:8px;margin-top:12px}
+.ecosystem-community .ecosystem-logo-grid img{height:77px}
+@media(max-width:1000px) and (min-width:721px){
+ .ecosystem-proof{padding:26px 16px}
+ .ecosystem-community-grid{grid-template-rows:141px 141px;row-gap:60px;column-gap:22px}
+ .ecosystem-community{padding:15px 10px}
+ .ecosystem-community--entertainment{width:calc(50% - 11px)}
+ .ecosystem-community h3{font-size:12px;min-height:26px}
+ .ecosystem-community .ecosystem-logo-grid{gap:4px;margin-top:10px}
+ .ecosystem-community .ecosystem-logo-grid img{height:65px}
+}
+@media(max-width:720px){
+ .ecosystem-proof{width:calc(100% - 24px);max-width:none;padding:23px 12px 20px;margin-top:42px}
+ .ecosystem-proof-heading{margin-bottom:20px}
+ .ecosystem-proof-heading h2{font-size:clamp(21px,5.4vw,29px)}
+ .ecosystem-community-grid{gap:33px}
+ .ecosystem-community{min-height:130px;padding:14px 11px;border-radius:15px}
+ .ecosystem-community h3{font-size:12px}
+ .ecosystem-community .ecosystem-logo-grid{margin-top:9px;gap:5px}
+ .ecosystem-community .ecosystem-logo-grid img{height:57px}
+ .ecosystem-community:not(:last-child)::after{height:33px}
+}
+@media(max-width:400px){.ecosystem-community .ecosystem-logo-grid img{height:46px}}
 </style>
 </head>
 <body>
@@ -622,7 +654,6 @@ body.modal-is-open{overflow:hidden}
           <button type="button" data-billing="yearly" aria-pressed="true">Yearly</button>
           <button type="button" data-billing="monthly" aria-pressed="false">Monthly</button>
         </div>
-        <span class="savings-hint" id="savingsHint" hidden></span>
       </div>
     </div>
     <div id="mobilePlanUI" class="mobile-plan-ui" hidden></div>
@@ -692,7 +723,7 @@ body.modal-is-open{overflow:hidden}
 'use strict';
 const ICON={
   infinity:'<path d="M12 12C8.2 6.9 2.5 8.1 2.5 12s5.7 5.1 9.5 0c3.8-5.1 9.5-3.9 9.5 0s-5.7 5.1-9.5 0"/>',
-  people:'<circle cx="7.5" cy="7.8" r="2.8"/><circle cx="16.5" cy="7.8" r="2.8"/><path d="M2 20v-1.5a5.5 5.5 0 0 1 11 0V20M11 20v-1.5a5.5 5.5 0 0 1 11 0V20"/>',
+  people:'<path d="M16 20v-1.3a4.3 4.3 0 0 0-4.3-4.3H6.3A4.3 4.3 0 0 0 2 18.7V20"/><circle cx="9" cy="7" r="3.3"/><path d="M22 20v-1.3a4.3 4.3 0 0 0-3.2-4.15M16.5 3.7a3.3 3.3 0 0 1 0 6.5"/>',
   eye:'<path d="M1.5 12s4-6.5 10.5-6.5S22.5 12 22.5 12 18.5 18.5 12 18.5 1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3"/>',
   search:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',
   network:'<circle cx="5" cy="12" r="2.1"/><circle cx="19" cy="5" r="2.1"/><circle cx="19" cy="19" r="2.1"/><path d="M7 11 17 6M7 13 17 18"/>',
@@ -831,11 +862,7 @@ function renderMobilePlan(){
  $('#mobileFree').addEventListener('click',()=>openModal('free'));
 }
 function updateSavings(){
- const roles=state.role==='all'?['creator','music','buyer']:[state.role];
- const max=Math.max(...roles.flatMap(k=>plans[k].tiers.map(t=>Math.round((1-t.annual/(12*t.monthly))*100))));
- const billingNote=$('#savingsHint');
- billingNote.textContent='Billed annually';
- billingNote.hidden=state.billing!=='yearly';
+ // The selected billing mode and /year totals already communicate the cadence.
 }
 function renderCards(){
  const roles=state.role==='all'
@@ -846,7 +873,7 @@ function renderCards(){
  ).join('');
  $('#cards').classList.toggle('is-filtered',state.role!=='all');
  $('#cards').classList.toggle('cards--three',roles.length===3);
- renderMobilePlan();updateSavings();
+ renderMobilePlan();
  $('#cards').querySelectorAll('[data-size]').forEach(b=>b.addEventListener('click',()=>{
    const [r,i]=b.dataset.size.split(':');state.selected[r]=Number(i);
    track('tier_change',{tier:plans[r].tiers[Number(i)].size,source:'desktop'});
