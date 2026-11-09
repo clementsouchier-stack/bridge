@@ -442,6 +442,37 @@ body.modal-is-open{overflow:hidden}
 @media(max-width:900px){.ecosystem-proof{padding:52px 25px 0}.ecosystem-proof-stats{gap:10px}.ecosystem-stat{padding:20px 14px}.ecosystem-logo-grid{gap:5px}}
 @media(max-width:720px){.ecosystem-proof{padding:48px 19px 0}.ecosystem-proof-stats{grid-template-columns:1fr;gap:11px}.ecosystem-stat{display:grid;grid-template-columns:1fr auto;column-gap:12px;align-items:center;padding:17px 19px}.ecosystem-stat-number{font-size:33px;grid-column:1}.ecosystem-stat-title{grid-column:1;margin:4px 0 0;min-height:0}.ecosystem-logo-grid{grid-column:2;grid-row:1 / span 2;width:clamp(115px,42vw,180px);margin:0;gap:5px}.ecosystem-proof-kicker{margin-bottom:15px}}
 @media(max-width:370px){.ecosystem-logo-grid{width:115px;gap:2px}.ecosystem-stat{padding:14px 11px}}
+
+/* V41: global ecosystem reassurance instead of three silo-specific audience counts. */
+.ecosystem-proof{padding-top:52px;text-align:center}
+.ecosystem-proof-kicker{margin-bottom:13px}
+.ecosystem-proof-heading{margin:0 auto 25px}
+.ecosystem-proof-heading strong{display:block;color:#252428;font-size:clamp(36px,5vw,58px);font-weight:680;line-height:1.08;letter-spacing:-.055em}
+.ecosystem-proof-heading strong span{font-weight:520}
+.ecosystem-proof-heading p{margin:11px auto 0;max-width:580px;color:#6d6b75;font-size:14px;line-height:1.5}
+.ecosystem-community-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;text-align:left}
+.ecosystem-community{background:#fff;border-radius:17px;padding:23px 20px 21px;min-width:0;box-shadow:0 3px 15px rgba(37,36,40,.025)}
+.ecosystem-community h3{color:#252428;font-size:14px;line-height:1.4;letter-spacing:-.015em;font-weight:660;margin:0}
+.ecosystem-community .ecosystem-logo-grid{margin-top:16px;gap:9px;grid-template-columns:repeat(5,minmax(0,1fr))}
+.ecosystem-community .ecosystem-logo-grid img{height:45px;width:100%;object-fit:contain;aspect-ratio:auto;border-radius:5px}
+@media(max-width:900px){.ecosystem-community-grid{gap:10px}.ecosystem-community{padding:18px 13px}.ecosystem-community .ecosystem-logo-grid{gap:4px}.ecosystem-community .ecosystem-logo-grid img{height:39px}}
+@media(max-width:720px){.ecosystem-proof{padding:43px 16px 0}.ecosystem-proof-heading{margin-bottom:22px}.ecosystem-proof-heading p{font-size:12.5px;max-width:320px}.ecosystem-community-grid{grid-template-columns:1fr;gap:10px}.ecosystem-community{padding:17px 19px;display:flex;flex-direction:column;gap:9px}.ecosystem-community .ecosystem-logo-grid{width:100%;margin-top:0;gap:10px;grid-column:auto;grid-row:auto;max-width:none}.ecosystem-community .ecosystem-logo-grid img{height:35px}.ecosystem-community h3{font-size:13px}}
+/* V41: reduce dead space between benefit rows without compressing copy or the CTA. */
+@media(min-width:721px){
+  .plan-card{grid-template-rows:167px 22px 274px 90px 38px 111px 62px}
+  .plan-card .benefit{padding-top:8px}
+  .plan-card .benefit p{margin-top:4px;line-height:1.45}
+  .plan-card .capacities{gap:6px;margin-top:9px;margin-bottom:8px}
+}
+@media(min-width:721px) and (max-width:1120px){
+  .plan-card{grid-template-rows:172px 24px 274px 90px 38px 119px 62px}
+}
+@media(max-width:720px){
+  .mobile-selected-card .benefits{gap:13px;margin-top:13px}
+  .cards:not(.is-filtered) .benefits{gap:12px;margin-top:12px}
+  .mobile-selected-card .price-block{padding-top:20px}
+  .cards:not(.is-filtered) .price-block{padding-top:19px}
+}
 </style>
 </head>
 <body>
@@ -484,12 +515,12 @@ body.modal-is-open{overflow:hidden}
       <a class="enterprise-cta" href="https://meetings.hubspot.com/clement-souchier" target="_blank" rel="noopener noreferrer">Talk to our team ↗</a>
     </div>
   </section>
-  <section aria-label="Bridge.audio ecosystem proof" class="ecosystem-proof">
+  <section aria-label="Bridge.audio community" class="ecosystem-proof">
     <p class="ecosystem-proof-kicker">Selected community examples</p>
-    <div class="ecosystem-proof-stats">
-      <div class="ecosystem-stat">
-        <div class="ecosystem-stat-number">50K+</div>
-        <div class="ecosystem-stat-title">Creators &amp; artists</div>
+    <div class="ecosystem-proof-heading"><strong>100K+ <span>users</span></strong><p>Creators, music professionals and entertainment teams. All connected on Bridge.</p></div>
+    <div class="ecosystem-community-grid">
+      <div class="ecosystem-community">
+        <h3>Creators &amp; artists</h3>
         <div class="ecosystem-logo-grid" aria-label="Creators &amp; artists community examples">
           <img src="https://www.bridge.audio/images/pricing/creators/1.png" alt="" loading="lazy" decoding="async">
           <img src="https://www.bridge.audio/images/pricing/creators/2.png" alt="" loading="lazy" decoding="async">
@@ -498,9 +529,8 @@ body.modal-is-open{overflow:hidden}
           <img src="https://www.bridge.audio/images/pricing/creators/5.png" alt="" loading="lazy" decoding="async">
         </div>
       </div>
-      <div class="ecosystem-stat">
-        <div class="ecosystem-stat-number">5K+</div>
-        <div class="ecosystem-stat-title">Music professionals</div>
+      <div class="ecosystem-community">
+        <h3>Music professionals</h3>
         <div class="ecosystem-logo-grid" aria-label="Music professionals community examples">
           <img src="https://www.bridge.audio/images/pricing/professionals/1.jpg" alt="" loading="lazy" decoding="async">
           <img src="https://www.bridge.audio/images/pricing/professionals/2.jpg" alt="" loading="lazy" decoding="async">
@@ -509,10 +539,9 @@ body.modal-is-open{overflow:hidden}
           <img src="https://www.bridge.audio/images/pricing/professionals/5.jpg" alt="" loading="lazy" decoding="async">
         </div>
       </div>
-      <div class="ecosystem-stat">
-        <div class="ecosystem-stat-number">600+</div>
-        <div class="ecosystem-stat-title">Buyers &amp; creative teams</div>
-        <div class="ecosystem-logo-grid" aria-label="Buyers &amp; creative teams community examples">
+      <div class="ecosystem-community">
+        <h3>Supervisors &amp; entertainment teams</h3>
+        <div class="ecosystem-logo-grid" aria-label="Supervisors &amp; entertainment teams community examples">
           <img src="https://www.bridge.audio/images/pricing/buyers/1.jpg" alt="" loading="lazy" decoding="async">
           <img src="https://www.bridge.audio/images/pricing/buyers/2.jpg" alt="" loading="lazy" decoding="async">
           <img src="https://www.bridge.audio/images/pricing/buyers/3.jpg" alt="" loading="lazy" decoding="async">
