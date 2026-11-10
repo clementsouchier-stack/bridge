@@ -502,6 +502,7 @@ body.modal-is-open{overflow:hidden}
  .cards .plan-card,.mobile-selected-card{grid-template-rows:none}
  .purchase-shell{padding-top:15px}
  .purchase-shell .size-slot{margin-bottom:12px}
+ .purchase-shell .size-slot--free{display:none}
  .purchase-shell .capacities{gap:10px;margin:0}
  .purchase-shell .capacity dd{font-size:12.5px;line-height:1.45}
  .purchase-row{margin-top:0;padding-top:20px;align-items:flex-start}
@@ -783,7 +784,7 @@ function priceBlock(t){
  }
  return `<div class="price-block"><div class="price-line"><span class="price-main">${money(t.monthly)}</span><span class="price-unit">/ month</span></div></div>`;
 }
-function sizeBlock(role,index,filtered){if(role==='free')return '';
+function sizeBlock(role,index,filtered){if(role==='free')return '<div class="size-slot size-slot--free" aria-hidden="true"></div>';
  if(filtered)return `<div class="size-slot"><span class="size-label">${plans[role].tiers[index].size}</span></div>`;
  const tiers=plans[role].tiers;
  return `<div class="size-slot"><div class="size-control" style="--tier-count:${tiers.length}" role="group" aria-label="${plans[role].name} plan">${tiers.map((t,i)=>`<button type="button" data-size="${role}:${i}" aria-pressed="${i===index}">${t.size}</button>`).join('')}</div></div>`;
