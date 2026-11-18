@@ -57,7 +57,7 @@
 .v81-picker-footer button{width:100%;padding:9px;text-align:left;border:0;border-radius:7px;font-size:12px;background:transparent;font-weight:650;color:#394bd1;cursor:pointer}
 .v81-picker-footer button:hover{background:#f4f4f8}
 .v81-picker-backdrop{position:fixed;inset:0;background:transparent;z-index:2147483003}
-.v81-player-host{min-height:72px!important;background:var(--secondarySurface,#fff);border-top:1px solid var(--secondaryBorder,#e7e7e9);box-shadow:none!important}
+.v81-player-host{position:relative;min-height:72px!important;background:var(--secondarySurface,#fff);border-top:1px solid var(--secondaryBorder,#e7e7e9);box-shadow:none!important}
 .v81-player-host>audio{display:none}
 .v81-player{display:flex;align-items:center;gap:12px;width:100%;min-height:72px;padding:10px 22px;color:var(--primaryDarkContent,#252428);font-family:Manrope,sans-serif}
 .v81-player-play{width:38px;height:38px;border:0;border-radius:50%;background:var(--primaryBg,#333cdf);color:white;flex:none;display:grid;place-items:center;cursor:pointer}
