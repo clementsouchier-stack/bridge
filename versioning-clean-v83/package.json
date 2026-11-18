@@ -1,0 +1,22 @@
+{
+  "name": "bridge-versioning-clean-v83",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite --host"
+  },
+  "dependencies": {
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "clsx": "2.1.1"
+  },
+  "devDependencies": {
+    "vite": "7.1.0",
+    "typescript": "5.9.2",
+    "tailwindcss": "3.4.17",
+    "postcss": "8.5.6",
+    "autoprefixer": "10.4.21"
+  }
+}
