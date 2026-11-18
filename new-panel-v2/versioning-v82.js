@@ -248,7 +248,7 @@ function init(){
     const foot=elm("div","v82-modal-footer");const cancel=button("","Cancel",closeModal),ok=button("v82-confirm","Link to main track",()=>{
       const kind=type.value==="Stem"?"stem":"version";
       const added=api.linkTrack({trackId:"demo-tv-mix",name,kind,type:type.value});
-      if(added){closeModal();setExpanded(true);window.bridgeV82OpenVersions?.();toast("The existing track is now linked under "+parentTrackName+".");}
+      if(added){closeModal();setExpanded(true);toast("Linked under "+parentTrackName+". The secondary version is now visible in the Library.");}
       else toast("This track is already linked.");
     });
     foot.append(cancel,ok);dialog.append(foot);shade.append(dialog);document.body.append(shade);type.focus();
