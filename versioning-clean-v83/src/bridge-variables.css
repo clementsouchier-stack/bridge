@@ -1,0 +1,116 @@
+:root {
+  /* Content */
+  --primaryWhiteContent: theme(colors.grey.25);
+  --primaryDarkContent: theme(colors.grey.500);
+  --primaryXtraDarkContent: theme(colors.grey.800);
+  --primarySoftContent: theme(colors.indigo.200);
+  --secondaryContent: theme(colors.grey.300);
+  --tertiaryContent: theme(colors.grey.200);
+  --accentContent: theme(colors.indigo.400);
+  --disabledContent: theme(colors.grey.100);
+  --successContent: theme(colors.green.400);
+  --informationContent: theme(colors.blue.300);
+  --warningContent: theme(colors.gold.400);
+  --dangerContent: theme(colors.red.400);
+  --dangerSoftContent: theme(colors.red.200);
+
+  /* Content - reversed */
+  --reversedPrimaryContent: theme(colors.grey.25);
+  --reversedSecondaryContent: theme(colors.grey.100);
+  --reversedTertiaryContent: theme(colors.grey.200);
+  --reversedDarkContent: theme(colors.grey.600);
+
+  /* Surface */
+  --primarySurface: theme(colors.grey.50);
+  --secondarySurface: theme(colors.grey.25);
+  --overlaySurface: theme(colors.grey.400);
+
+  /* Icon */
+  --primaryIcon: theme(colors.indigo.400);
+  --neutralPrimaryIcon: theme(colors.grey.600);
+  --neutralSecondaryIcon: theme(colors.grey.400);
+  --neutralTertiaryIcon: theme(colors.grey.300);
+  --libraryIcon: theme(colors.indigo.400);
+  --projectIcon: theme(colors.yellow.300);
+  --shareIcon: theme(colors.magenta.300);
+  --inboxIcon: theme(colors.purple.300);
+  --settingsIcon: theme(colors.orange.300);
+  --analyticsIcon: theme(colors.green.200);
+  --informationIcon: theme(colors.blue.200);
+  --warningIcon: theme(colors.gold.200);
+  --dangerIcon: theme(colors.red.200);
+  --successIcon: theme(colors.green.200);
+  --primarySoftIcon: theme(colors.indigo.300);
+  --neutralPrimarySoftIcon: theme(colors.grey.200);
+
+  /* Icon - reversed */
+  --reverseWhiteIcon: theme(colors.grey.25);
+  --reverseDarkIcon: theme(colors.grey.600);
+
+  /* Border */
+  --darkBorder: theme(colors.grey.700);
+  --accentBorder: theme(colors.indigo.400);
+  --primaryBorder: theme(colors.grey.200);
+  --secondaryBorder: theme(colors.grey.100);
+  --tertiaryBorder: theme(colors.grey.300);
+  --dangerBorder: theme(colors.red.200);
+  --warningBorder: theme(colors.gold.200);
+  --successBorder: theme(colors.green.200);
+
+  /* Border - reversed */
+  --reversedNeutralDividerBorder: theme(colors.grey.400);
+  --reversedNeutralBorder: theme(colors.grey.100);
+
+  /* Background */
+  --whiteBg: theme(colors.grey.0);
+  --primaryBg: theme(colors.indigo.400);
+  --primaryDarkBg: theme(colors.indigo.500);
+  --primarySoftBg: theme(colors.indigo.300);
+  --primaryXlSoftBg: theme(colors.indigo.100);
+  --primary2XlSoftBg: theme(colors.indigo.50);
+  --primary3XlSoftBg: theme(colors.indigo.25);
+  --secondaryBg: theme(colors.yellow.300);
+  --secondaryDarkBg: theme(colors.yellow.400);
+  --secondarySoftBg: theme(colors.yellow.200);
+  --neutralSoftBg: theme(colors.grey.50);
+  --neutralSofterBg: theme(colors.grey.25);
+  --neutralBg: theme(colors.grey.100);
+  --neutralDarkBg: theme(colors.grey.400);
+  --neutralXlDarkBg: theme(colors.grey.600);
+  --neutral2XlDarkBg: theme(colors.grey.700);
+  --informationBg: theme(colors.blue.50);
+  --successBg: theme(colors.green.50);
+  --warningBg: theme(colors.gold.50);
+  --dangerBg: theme(colors.red.200);
+  --dangerSoftBg: theme(colors.red.50);
+  --dangerDarkBg: theme(colors.red.300);
+  --librarySoftBg: theme(colors.indigo.50);
+  --libraryBg: theme(colors.indigo.400);
+  --shareSoftBg: theme(colors.magenta.50);
+  --shareBg: theme(colors.magenta.300);
+  --inboxSoftBg: theme(colors.purple.50);
+  --inboxBg: theme(colors.purple.300);
+  --settingsSoftBg: theme(colors.orange.50);
+  --settingsBg: theme(colors.orange.300);
+  --projectSoftBg: theme(colors.yellow.50);
+  --projectBg: theme(colors.yellow.300);
+  --analyticsSoftBg: theme(colors.green.50);
+  --analyticsBg: theme(colors.green.300);
+  --disabledBg: theme(colors.grey.50);
+  --tabSelectedBg: theme(colors.grey.25);
+  --tabUnselectedBg: theme(colors.grey.50);
+  --tabCounterBg: theme(colors.grey.100);
+  --navBg: theme(colors.indigo.100);
+  --listBg: theme(colors.grey.25);
+  /* --sectionBg !!!!!!!!!!!!!!!!!! */
+
+  /* Background - reversed */
+  --reversedDarkBg: theme(colors.grey.600);
+  --reversedWhiteBg: theme(colors.grey.100);
+  --reversedWhiteSoftBg: theme(colors.grey.25);
+
+  /* !!!! DELETE ME Covers  !!!! */
+  --bgCover: #e7e7e9;
+  --borderCover: #e7e7e9;
+  --iconCover: #777481;
+}
