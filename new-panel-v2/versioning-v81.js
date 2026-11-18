@@ -31,12 +31,12 @@ function init(){
   function btn(cls,label,onClick){const b=el("button",cls,label);b.type="button";b.addEventListener("click",onClick);return b;}
   let seq=1;
   const versions=[
-   {id:"original",name:"Original mix",kind:"original",duration:"2:59",format:"FLAC",origin:"Original file",url:null},
-   {id:"instrumental",name:"Instrumental",kind:"version",duration:"2:59",format:"WAV",origin:"Example file",url:null},
-   {id:"acappella",name:"A cappella",kind:"version",duration:"2:57",format:"WAV",origin:"Example file",url:null},
-   {id:"cutdown",name:"30-second edit",kind:"version",duration:"0:30",format:"MP3",origin:"Example file",url:null},
-   {id:"stem-drums",name:"Drums",kind:"stem",duration:"2:59",format:"WAV",origin:"Example stem",url:null},
-   {id:"stem-bass",name:"Bass",kind:"stem",duration:"2:59",format:"WAV",origin:"Example stem",url:null}
+   {id:"original",name:"Original mix",kind:"original",type:"Main",duration:"2:59",format:"FLAC",origin:"Original file",url:null},
+   {id:"instrumental",name:"Instrumental",kind:"version",type:"Instrumental",duration:"2:59",format:"WAV",origin:"Example file",url:null},
+   {id:"acappella",name:"A cappella",kind:"version",type:"A cappella",duration:"2:57",format:"WAV",origin:"Example file",url:null},
+   {id:"cutdown",name:"30-second edit",kind:"version",type:"Cutdown",duration:"0:30",format:"MP3",origin:"Example file",url:null},
+   {id:"stem-drums",name:"Drums",kind:"stem",type:"Stem",duration:"2:59",format:"WAV",origin:"Example stem",url:null},
+   {id:"stem-bass",name:"Bass",kind:"stem",type:"Stem",duration:"2:59",format:"WAV",origin:"Example stem",url:null}
   ];
   let activeId="original",addOpen=false,addMode="upload",addKind="version";
   let editId=null,menuId=null,picker=null,backdrop=null,player=null,feedback=null;
@@ -48,7 +48,7 @@ function init(){
   const stemCount=()=>versions.filter(v=>v.kind==="stem").length;
   const totalCount=()=>versions.length-1;
   function inform(msg){if(feedback){feedback.textContent=msg;feedback.hidden=false;clearTimeout(inform.timer);inform.timer=setTimeout(()=>{if(feedback)feedback.hidden=true;},4300);}const note=$("v81-management-status");if(note)note.textContent=msg;}
-  function formatMeta(v){return (v.duration||"--:--")+" · "+(v.format||"Audio")+(v.origin==="Linked from library"?" · Linked track":"");}
+  function formatMeta(v){return (v.type&&v.kind!=="original"?v.type+" · ":"")+(v.duration||"--:--")+" · "+(v.format||"Audio")+(v.origin==="Linked from library"?" · Linked track":"");}
   function choose(v,autoplay){
     if(!v)return;
     activeId=v.id;audio.pause();
@@ -128,6 +128,7 @@ function init(){
   }
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&picker){e.preventDefault();closePicker(true);}});
   function openFile(){
+    if(typeof window.bridgeV82OpenVersions==="function"){window.bridgeV82OpenVersions();return;}
     const launcher=$("v63-open-meta");const tab=document.querySelector('[data-v62-section="file"]');
     if(launcher)launcher.click();
     if(tab)tab.click();
@@ -171,17 +172,27 @@ function init(){
     added.forEach(file=>{
       const name=detectName(file.name);
       const kind=/drums?|bass|vocals?|guitar|keys|piano|percussion|stem/i.test(name)?"stem":addKind;
-      versions.push({id:"uploaded-"+seq++,name,kind,duration:"--:--",format:(file.name.split(".").pop()||"audio").toUpperCase(),origin:"Local upload",url:URL.createObjectURL(file),fileName:file.name});
+      versions.push({id:"uploaded-"+seq++,name,kind,type:kind==="stem"?"Stem":"Mix",duration:"--:--",format:(file.name.split(".").pop()||"audio").toUpperCase(),origin:"Local upload",url:URL.createObjectURL(file),fileName:file.name});
     });
     addOpen=false;renderManager();updateBadge();inform(added.length+" audio file(s) linked. They can now be played in the demo player.");
   }
   function listAvailable(){
     return Array.from(document.querySelectorAll('[data-testid="list-track-name"]')).map(e=>e.textContent.trim()).filter((n,i,a)=>n&&n!==trackName&&a.indexOf(n)===i&&!versions.some(v=>v.origin==="Linked from library"&&v.sourceName===n));
   }
+  function linkTrack({trackId,name,kind="version",type=""}){
+    if(!name||name===trackName)return false;
+    if(versions.some(v=>v.origin==="Linked from library"&&(v.sourceId===trackId||v.sourceName===name)))return false;
+    const group=kind==="stem"?"stem":"version";
+    versions.push({id:"linked-"+seq++,name:name,kind:group,type:type|| (group==="stem"?"Stem":"Mix"),duration:"--:--",format:"Library",origin:"Linked from library",sourceName:name,sourceId:trackId||name,url:null});
+    renderManager();updateBadge();
+    inform('Linked "'+name+'" to '+trackName+'. The source remains in your Library.');
+    return true;
+  }
   function linkExisting(name){
     if(!name)return;
-    versions.push({id:"linked-"+seq++,name:name,kind:addKind,duration:"--:--",format:"Library",origin:"Linked from library",sourceName:name,url:null});
-    addOpen=false;renderManager();updateBadge();inform('Linked "'+name+'" to '+trackName+'. Source remains in the Library.');
+    const linked=linkTrack({trackId:"name:"+name,name,kind:addKind,type:addKind==="stem"?"Stem":"Mix"});
+    if(!linked){inform("This track is already linked, or is the main track.");return;}
+    addOpen=false;renderManager();
   }
   function renderAddForm(){
     const form=el("div","v81-add-panel");form.setAttribute("aria-label","Add versions");
@@ -228,7 +239,8 @@ function init(){
     section.append(btn("v81-add-button",addOpen?"Close":"＋ Add versions",()=>{addOpen=!addOpen;menuId=null;renderManager();}));
     if(addOpen)renderAddForm();
     const note=el("div","v81-status");note.id="v81-management-status";note.setAttribute("role","status");section.append(note);
-    section.append(el("p","v81-note","V81 prototype · No live uploads or library changes."));
+    section.append(el("p","v81-note","V82 prototype · Linking, uploads and library relations are simulated locally."));
+    window.dispatchEvent(new Event("bridge:versions-changed"));
   }
   function updateBadge(){
     const count=totalCount();
@@ -258,7 +270,9 @@ function init(){
   }
   window.bridgeVersioningV81={
     version:"V81",prototypeOnly:true,selected:()=>current().name,
-    list:()=>versions.map(v=>({id:v.id,name:v.name,kind:v.kind,source:v.origin,playable:!!v.url})),
+    list:()=>versions.map(v=>({id:v.id,name:v.name,kind:v.kind,type:v.type||"",source:v.origin,sourceName:v.sourceName||null,sourceId:v.sourceId||null,playable:!!v.url})),
+    linkTrack,
+    playVersion:name=>{const v=versions.find(v=>v.name===name);if(v)choose(v,true);return !!v;},
     openFile,openVersions:()=>openPicker(document.querySelector("[data-v81-anchor]")||player.querySelector("[data-v81-switch]")),
     selectVersion:name=>{const v=versions.find(v=>v.name===name);if(v)choose(v,false);return !!v;}
   };
