@@ -240,6 +240,7 @@ function init(){
         badge=btn("v81-row-badge","",()=>openPicker(badge));badge.dataset.v81Anchor="true";
         badge.setAttribute("aria-haspopup","dialog");
         badge.setAttribute("aria-label","Browse linked versions of "+trackName);
+        badge.addEventListener("click",e=>e.stopPropagation());
         badge.addEventListener("mousedown",e=>e.stopPropagation());
         badge.addEventListener("dblclick",e=>e.stopPropagation());
         place.append(badge);
