@@ -77,3 +77,6 @@
  .v82-modal{border-radius:18px 18px 0 0;padding:20px 18px 24px;width:100%;max-height:90dvh}
 }
 @media(prefers-reduced-motion:reduce){.v82-row-expand svg{transition:none!important}}
+
+[data-testid="list-row"].v82-processed[hidden],.v82-standalone[hidden],.v82-nested[hidden]{display:none!important}
+@media(min-width:768px){.v82-standalone{display:grid!important}.v82-nested{display:grid!important}}
