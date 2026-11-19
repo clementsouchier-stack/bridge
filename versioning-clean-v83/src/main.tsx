@@ -23,7 +23,7 @@ function App(){
  const[query,setQuery]=useState(""),[sort,setSort]=useState("recent"),[filters,setFilters]=useState(false),[onlyGroups,setOnlyGroups]=useState(false),[showStems,setShowStems]=useState(true);
  const[panel,setPanel]=useState(false),[section,setSection]=useState("metadata"),[panelReady,setPanelReady]=useState(false);
  const[modal,setModal]=useState<{parentId:string;childId:string;type:string}|null>(null);
- const[menu,setMenu]=useState<{id:string;x:number;y:number}|null>(null),[message,setMessage]=useState(""),[mobile,setMobile]=useState(window.innerWidth<=767);
+ const[menu,setMenu]=useState<{id:string;x:number;y:number}|null>(null),[message,setMessage]=useState(""),[mobile,setMobile]=useState(window.innerWidth<=767),[hoverId,setHoverId]=useState<string|null>(null);
  const audioRef=useRef<HTMLAudioElement>(null),frameRef=useRef<HTMLIFrameElement>(null),uploadRef=useRef<HTMLInputElement>(null),cache=useRef<Record<string,string>>({});
  const byId=useMemo(()=>new Map(tracks.map(x=>[x.id,x])),[tracks]);
  const roots=useMemo(()=>tracks.filter(t=>!relations.some(r=>r.childId===t.id)),[tracks,relations]);
@@ -56,11 +56,11 @@ function App(){
  const row=(t:Track,r?:Rel)=>{
   const group=children(t.id),nested=!!r,current=active===t.id,sel=selected.has(t.id),has=group.length>0;
   const cls="library-row"+(nested?" is-child":"")+(sel?" is-selected":"")+(has?" has-versions":"");
-  return <div className={cls} data-track-id={t.id} key={t.id} role="row"
+  return <div className={cls} data-track-id={t.id} key={t.id} role="row" onMouseEnter={()=>setHoverId(t.id)} onMouseLeave={()=>setHoverId(null)}
    onDoubleClick={e=>{if(!(e.target as HTMLElement).closest("button,input"))play(t.id)}}
    onClick={e=>{if(!(e.target as HTMLElement).closest("button,input,[data-testid='list-togglePlay-icon']"))toggleSelected(t.id)}}>
     {mobile?<MobileTrackListRow data={t as any} isPlaying={playing} isActiveTrack={current} canStream={true} canDownload={true} canAccessTrackMetadata={true} togglePlayCallback={play} openActionModalCallback={()=>showMenu(t.id,window.innerWidth-210,90)}/>
-    :<ListRowShare data={t as any} isLibrary={true} isHover={true} isPlaying={playing} isInError={false} isActiveTrack={current?1:0} isSelected={sel} canStream={true} togglePlay={(({trackId}:{trackId:string})=>play(trackId)) as any} toggleSelect={()=>toggleSelected(t.id)}
+    :<ListRowShare data={t as any} isLibrary={true} isHover={hoverId===t.id} isPlaying={playing} isInError={false} isActiveTrack={current?1:0} isSelected={sel} canStream={true} togglePlay={(({trackId}:{trackId:string})=>play(trackId)) as any} toggleSelect={()=>toggleSelected(t.id)}
      menuOptions={[{label:"More actions",action:()=>showMenu(t.id,window.innerWidth-210,80)}] as any}
      handleOpenMenu={({x,y})=>showMenu(t.id,x,y)} actionsList={[{icon:IconComponents.Share,tooltipLabel:"Share",action:()=>flash("Sharing is simulated in this demo.")},{icon:IconComponents.Info,tooltipLabel:"Track information",action:()=>openPanel("metadata")}] as any} redirectTo={()=>flash("Navigation is outside this prototype.")}/>}
     {has&&<button className="v83-caret" title="Expand or collapse linked versions" aria-label={(expanded.has(t.id)?"Collapse ":"Expand ")+group.length+" versions"} aria-expanded={expanded.has(t.id)} onClick={e=>{e.stopPropagation();toggle(t.id)}}><I n="right" size={13}/></button>}
