@@ -1,1 +1,2 @@
-import { defineConfig } from "vite";import path from "node:path";export default defineConfig({resolve:{alias:{"~":path.resolve(__dirname,"src/bridge-commons"),"@bridge-types":path.resolve(__dirname,"src/bridge-types.ts")}},build:{outDir:"dist"}});
+import { defineConfig } from "vite";import {fileURLToPath,URL} from "node:url";
+export default defineConfig({resolve:{alias:{"~":fileURLToPath(new URL("./src/bridge-commons",import.meta.url)),"@bridge-types":fileURLToPath(new URL("./src/bridge-types.ts",import.meta.url))}},build:{outDir:"dist"}});
