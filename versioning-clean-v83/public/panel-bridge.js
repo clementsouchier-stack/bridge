@@ -10,11 +10,13 @@ const send=(type,data={})=>parent.postMessage({bridgeV83:true,type,...data},loca
 const style=doc.createElement("link");style.rel="stylesheet";style.href="/panel-bridge.css";doc.head.append(style);
 function init(){
  const tabs=$("v62-main-tabs"),file=$("bridge-file-panel"),launcher=$("v63-open-meta");
- if(!tabs||!file||!launcher){send("PANEL_ERROR",{message:"V80 original tabs/file/launcher not found"});return;}
- launcher.click();
- const shell=$("v63-metadata-shell");
+ if(!tabs||!file){send("PANEL_ERROR",{message:"Canonical V80 tabs/file not found"});return;}
+ const shell=$("v63-metadata-shell")||doc.querySelector(".v83-panel-host > div");
+ if(shell&&!shell.id)shell.id="v63-metadata-shell";
+ if(launcher)launcher.click();
  if(shell){shell.style.display="block";shell.style.visibility="visible";shell.style.width="100%";shell.style.right="0";shell.style.top="0";}
- const close=shell?.querySelector(".v63-meta-close");
+ let close=shell?.querySelector(".v63-meta-close");
+ if(!close&&shell){close=doc.createElement("button");close.type="button";close.className="v83-panel-close";close.textContent="×";close.setAttribute("aria-label","Close metadata panel");shell.append(close);}
  if(close)close.addEventListener("click",e=>{e.preventDefault();e.stopImmediatePropagation();send("PANEL_CLOSE");},true);
  const versionsTab=doc.createElement("li");versionsTab.id="bridge-v83-version-tab";
  versionsTab.className="group relative flex h-12 cursor-pointer items-center px-xs hover:bg-neutralSoftBg";
@@ -71,6 +73,44 @@ function init(){
     const span=tab.querySelector("span");if(span){span.classList.toggle("text-accentContent",active);span.classList.toggle("text-secondaryContent",!active);}
   });pane.hidden=false;render();
  }
+ 
+ // Single native V80 tab controller. The original legacy scripts are intentionally excluded.
+ const metaViews={information:"bridge-details-panel",lyrics:"bridge-lyrics-panel",credits:"bridge-credits-panel"};
+ const descriptionViews={tags:"bridge-tags-panel",pitch:"bridge-pitch-panel"};
+ let metaView="information",descriptionView="tags";
+ const allPanels=["bridge-details-panel","bridge-lyrics-panel","bridge-credits-panel","bridge-tags-panel","bridge-pitch-panel","bridge-file-panel","bridge-projects-panel","bridge-hubs-panel"];
+ function showNative(which){
+  activeSection=which;
+  const chosen=which==="metadata"?metaViews[metaView]:which==="description"?descriptionViews[descriptionView]:"bridge-file-panel";
+  allPanels.forEach(id=>{const el=$(id);if(el)el.hidden=id!==chosen;});
+  pane.hidden=true;
+  const mn=$("v62-content-nav"),dn=$("v65-description-nav");
+  if(mn)mn.hidden=which!=="metadata";if(dn)dn.hidden=which!=="description";
+  tabs.querySelectorAll('[role="tab"]').forEach(tab=>{
+   const active=tab.dataset.v62Section===which;
+   tab.setAttribute("aria-selected",String(active));tab.tabIndex=active?0:-1;
+   tab.classList.toggle("bridge-active-tab",active);tab.classList.toggle("bg-primary3XlSoftBg",active);
+   const span=tab.querySelector("span");if(span){span.classList.toggle("text-accentContent",active);span.classList.toggle("text-secondaryContent",!active);}
+  });
+  for(const [id,val] of [["v62-pitch","information"],["v62-lyrics","lyrics"],["v65-credits","credits"]]){
+   const b=$(id);if(b){b.setAttribute("aria-selected",String(metaView===val));b.classList.toggle("is-active",metaView===val);}
+  }
+  for(const [id,val] of [["v65-tags","tags"],["v65-pitch","pitch"]]){
+   const b=$(id);if(b){b.setAttribute("aria-selected",String(descriptionView===val));b.classList.toggle("is-active",descriptionView===val);}
+  }
+ }
+ for(const tab of tabs.querySelectorAll("[data-v62-section]")){
+  tab.addEventListener("click",()=>showNative(tab.dataset.v62Section));
+  tab.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();showNative(tab.dataset.v62Section);}});
+ }
+ for(const [id,val] of [["v62-pitch","information"],["v62-lyrics","lyrics"],["v65-credits","credits"]]){
+  $(id)?.addEventListener("click",()=>{metaView=val;showNative("metadata");});
+ }
+ for(const [id,val] of [["v65-tags","tags"],["v65-pitch","pitch"]]){
+  $(id)?.addEventListener("click",()=>{descriptionView=val;showNative("description");});
+ }
+ showNative("metadata");
+
  versionsTab.addEventListener("click",selectVersions);
  versionsTab.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selectVersions();}});
  for(const tab of tabs.querySelectorAll('[data-v62-section]'))tab.addEventListener("click",()=>{
@@ -82,7 +122,7 @@ function init(){
   const data=e.data;
   if(data.type==="PANEL_DATA"){master=data.master||master;children=Array.isArray(data.children)?data.children:children;if(activeSection==="versions")render();}
   if(data.type==="OPEN_SECTION"){
-    launcher.click();
+    if(launcher)launcher.click();
     if(data.section==="versions")selectVersions();
     else if(data.section==="file")fileTab.click();
     else if(data.section==="description")tabs.querySelector('[data-v62-section="description"]')?.click();
