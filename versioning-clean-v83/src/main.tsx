@@ -60,7 +60,7 @@ function App(){
    onDoubleClick={e=>{if(!(e.target as HTMLElement).closest("button,input"))play(t.id)}}
    onClick={e=>{if(!(e.target as HTMLElement).closest("button,input,[data-testid='list-togglePlay-icon']"))toggleSelected(t.id)}}>
     {mobile?<MobileTrackListRow data={t as any} isPlaying={playing} isActiveTrack={current} canStream={true} canDownload={true} canAccessTrackMetadata={true} togglePlayCallback={play} openActionModalCallback={()=>showMenu(t.id,window.innerWidth-210,90)}/>
-    :<ListRowShare data={t as any} isLibrary={true} isHover={true} isPlaying={playing} isInError={false} isActiveTrack={current?1:0} isSelected={sel} canStream={true} togglePlay={play as any} toggleSelect={()=>toggleSelected(t.id)}
+    :<ListRowShare data={t as any} isLibrary={true} isHover={true} isPlaying={playing} isInError={false} isActiveTrack={current?1:0} isSelected={sel} canStream={true} togglePlay={(({trackId}:{trackId:string})=>play(trackId)) as any} toggleSelect={()=>toggleSelected(t.id)}
      menuOptions={[{label:"More actions",action:()=>showMenu(t.id,window.innerWidth-210,80)}] as any}
      handleOpenMenu={({x,y})=>showMenu(t.id,x,y)} actionsList={[{icon:IconComponents.Share,tooltipLabel:"Share",action:()=>flash("Sharing is simulated in this demo.")},{icon:IconComponents.Info,tooltipLabel:"Track information",action:()=>openPanel("metadata")}] as any} redirectTo={()=>flash("Navigation is outside this prototype.")}/>}
     {has&&<button className="v83-caret" title="Expand or collapse linked versions" aria-label={(expanded.has(t.id)?"Collapse ":"Expand ")+group.length+" versions"} aria-expanded={expanded.has(t.id)} onClick={e=>{e.stopPropagation();toggle(t.id)}}><I n="right" size={13}/></button>}
